@@ -3,6 +3,27 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-brand-primary: oklch(76.61% 0.151 117.41);
+  --color-brand-dark: oklch(59.04% 0.114 117.67);
+  --color-brand-light: oklch(83.41% 0.114 115.74);
+  --color-brand-soft: oklch(95.15% 0.033 114.41);
+  --color-success: oklch(70.93% 0.200 143.10);
+  --color-warning: oklch(81.99% 0.157 88.28);
+  --color-error: oklch(59.80% 0.198 25.52);
+  --color-info: oklch(69.09% 0.124 234.92);
+  --color-light-bg: oklch(100.00% 0.000 0);
+  --color-light-muted: oklch(96.12% 0.000 0);
+  --color-light-border: oklch(92.49% 0.000 0);
+  --color-light-text: oklch(21.78% 0.000 0);
+  --color-light-subtle: oklch(51.03% 0.000 0);
+  --color-dark-bg: oklch(19.13% 0.000 0);
+  --color-dark-surface: oklch(26.86% 0.000 0);
+  --color-dark-muted: oklch(37.15% 0.000 0);
+  --color-dark-text: oklch(96.12% 0.000 0);
+  --color-dark-subtle: oklch(72.52% 0.000 0);
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
