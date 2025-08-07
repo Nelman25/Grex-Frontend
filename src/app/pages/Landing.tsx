@@ -1,4 +1,4 @@
 export default function Landing() {
-  return <div>Landing page :3</div>;
+  return <div className="text-3xl bg-info">Landing page</div>;
 }
   
