@@ -4,8 +4,8 @@ const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 export const UserSchema = yup.object().shape({
-  firstName: yup.string().required("Required"),
-  lastName: yup.string().required("Required"),
+  first_name: yup.string().required("Required"),
+  last_name: yup.string().required("Required"),
   email: yup.string().email("Please enter a valid email.").required("Required"),
   password: yup
     .string()
@@ -15,7 +15,7 @@ export const UserSchema = yup.object().shape({
         "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
     })
     .required("Required"),
-  confirmPassword: yup
+  confirm_password: yup
     .string()
     .oneOf([yup.ref("password")], "Password must match")
     .required("Required"),
