@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -8,20 +10,24 @@
   --color-brand-dark: oklch(59.04% 0.114 117.67);
   --color-brand-light: oklch(83.41% 0.114 115.74);
   --color-brand-soft: oklch(95.15% 0.033 114.41);
-  --color-success: oklch(70.93% 0.200 143.10);
+  --color-success: oklch(70.93% 0.2 143.1);
   --color-warning: oklch(81.99% 0.157 88.28);
-  --color-error: oklch(59.80% 0.198 25.52);
+  --color-error: oklch(59.8% 0.198 25.52);
   --color-info: oklch(69.09% 0.124 234.92);
-  --color-light-bg: oklch(100.00% 0.000 0);
-  --color-light-muted: oklch(96.12% 0.000 0);
-  --color-light-border: oklch(92.49% 0.000 0);
-  --color-light-text: oklch(21.78% 0.000 0);
-  --color-light-subtle: oklch(51.03% 0.000 0);
-  --color-dark-bg: oklch(19.13% 0.000 0);
-  --color-dark-surface: oklch(26.86% 0.000 0);
-  --color-dark-muted: oklch(37.15% 0.000 0);
-  --color-dark-text: oklch(96.12% 0.000 0);
-  --color-dark-subtle: oklch(72.52% 0.000 0);
+  --color-light-bg: oklch(100% 0 0);
+  --color-light-muted: oklch(96.12% 0 0);
+  --color-light-border: oklch(92.49% 0 0);
+  --color-light-text: oklch(21.78% 0 0);
+  --color-light-subtle: oklch(51.03% 0 0);
+  --color-dark-bg: oklch(0.1149 0 0);
+  --color-dark-surface: oklch(26.86% 0 0);
+  --color-dark-muted: oklch(37.15% 0 0);
+  --color-dark-text: oklch(96.12% 0 0);
+  --color-dark-subtle: oklch(72.52% 0 0);
+
+  /* FONT */
+  --font-inter: "Inter";
+  --font-k2d: "K2D";
 }
 
 @theme inline {
@@ -129,6 +135,12 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+
+@-moz-document url-prefix() {
+  .firefox-blur {
+    filter: blur(1000px); /* Bigger than Edge’s to match spread */
+  }
 }
 
 @layer base {

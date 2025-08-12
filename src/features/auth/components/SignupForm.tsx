@@ -1,0 +1,147 @@
+import { Form, Formik } from "formik";
+import { AUTH_SOCIALS } from "../constants";
+import type { CreateAccountHandler, IUserCredentials } from "../types/auth";
+import { UserSchema } from "@/schemas/authSchema";
+import FormField from "./FormField";
+import { BsPersonCircle } from "react-icons/bs";
+import { CiMail, CiLock } from "react-icons/ci";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
+import { Loader2 } from "lucide-react";
+
+const initialValues: IUserCredentials = {
+  first_name: "",
+  last_name: "",
+  email: "",
+  password: "",
+  confirm_password: "",
+};
+
+export default function SignupForm() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAccountCreation = async ({
+    values,
+    setErrors,
+  }: CreateAccountHandler) => {
+    setIsLoading(true);
+
+    try {
+      // TODO: send to backend
+      console.log(values);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Account creation failed";
+      setErrors({ email: errorMessage });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex-1 bg-gradient-to-br from-[#F2F2F2]/15 to-[#7E7E7E]/15 rounded py-16 px-14">
+      <div className="flex justify-center">
+        <p className="text-dark-text block">Register with:</p>
+      </div>
+
+      <div className="flex justify-between space-x-2 mt-4">
+        {AUTH_SOCIALS.map((social) => (
+          <div className="bg-[#D9D9D9]/20 rounded-md border items-center border-[#808080] flex space-x-2 px-12 py-2">
+            <social.icon className="size-6 text-slate-950" />
+            <span className="text-dark-text">{social.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex space-x-4 items-center my-4">
+        <div className="bg-dark-subtle h-0.5 flex-1" />
+        <span className="text-dark-text text-lg">Or</span>
+        <div className="bg-dark-subtle h-0.5 flex-1" />
+      </div>
+
+      <Formik
+        initialValues={initialValues}
+        validationSchema={UserSchema}
+        onSubmit={(values, { setErrors }) =>
+          handleAccountCreation({ values, setErrors })
+        }
+      >
+        {({ handleSubmit }) => (
+          <Form onSubmit={handleSubmit}>
+            <div className="flex flex-col space-y-6">
+              <div className="grid grid-cols-2 gap-3">
+                <FormField
+                  id="first_name"
+                  name="first_name"
+                  label="First name"
+                  placeholder="Jonel"
+                  Icon={BsPersonCircle}
+                />
+                <FormField
+                  id="last_name"
+                  name="last_name"
+                  label="Last name"
+                  placeholder="Villaver"
+                  Icon={BsPersonCircle}
+                />
+              </div>
+              <FormField
+                id="email"
+                name="email"
+                label="Email"
+                type="email"
+                placeholder="jonelvillaver@gmail.com"
+                Icon={CiMail}
+              />
+              <FormField
+                id="password"
+                name="password"
+                type="password"
+                label="Password"
+                placeholder="Create Password (min. 8 characters)"
+                Icon={CiLock}
+              />
+              <FormField
+                id="confirm_password"
+                name="confirm_password"
+                type="password"
+                label="Confirm Password"
+                placeholder="Create Password (min. 8 characters)"
+                Icon={CiLock}
+              />
+
+              <Button
+                disabled={isLoading}
+                className="rounded bg-brand-primary border border-brand-light border-t border-t-brand-soft text-light-text text-sm h-9 hover:bg-brand-dark transition-colors hover:text-dark-text hover:border-e-brand-soft"
+                type="submit"
+              >
+                {isLoading && (
+                  <div className="flex space-x-2 items-center justify-center">
+                    <Loader2 className="animate-spin" />
+                    <span>Please wait</span>
+                  </div>
+                )}
+                {!isLoading && <span>Create Account</span>}
+              </Button>
+
+              <p className="text-dark-subtle text-center">
+                By creating an account, you agree to Grex's{" "}
+                <span className="text-dark-text font-semibold underline">
+                  Terms of Service and Privacy
+                </span>
+              </p>
+
+              <p className="text-center text-dark-text">
+                Already have an account?{" "}
+                <Link to={"/auth/signin"}>
+                  <span className="font-medium text-brand-primary">Login</span>
+                </Link>
+              </p>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+}
