@@ -9,12 +9,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import { Loader2 } from "lucide-react";
+import api from "@/lib/axios";
+import axios from "axios";
 
 const initialValues: IUserCredentials = {
   first_name: "",
   last_name: "",
   email: "",
-  password: "",
+  password_hash: "",
   confirm_password: "",
 };
 
@@ -27,13 +29,22 @@ export default function SignupForm() {
   }: CreateAccountHandler) => {
     setIsLoading(true);
 
+    const userCredentials = {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      email: values.email,
+      password_hash: values.password_hash,
+    };
+
     try {
-      // TODO: send to backend
-      console.log(values);
+      const response = await api.post("/auth/sign-up", userCredentials);
+      console.log("Account created: ", response.data);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Account creation failed";
-      setErrors({ email: errorMessage });
+      if (axios.isAxiosError(error)) {
+        const serverMessage =
+          error.response?.data?.message || "Account creation failed.";
+        setErrors(serverMessage);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -44,16 +55,14 @@ export default function SignupForm() {
       <div className="flex justify-center">
         <p className="text-dark-text block">Register with:</p>
       </div>
-
-      <div className="flex justify-between space-x-2 mt-4">
+      <div className="flex space-x-2 mt-4">
         {AUTH_SOCIALS.map((social) => (
-          <div className="bg-[#D9D9D9]/20 rounded-md border items-center border-[#808080] flex space-x-2 px-12 py-2">
-            <social.icon className="size-6 text-slate-950" />
+          <Button className="bg-[#D9D9D9]/20 rounded-md border items-center hover:bg-[#D9D9D9]/10  border-[#808080] px-12 flex-1 py-6">
+            <social.icon className="size-6 text-white/60" />
             <span className="text-dark-text">{social.label}</span>
-          </div>
+          </Button>
         ))}
       </div>
-
       <div className="flex space-x-4 items-center my-4">
         <div className="bg-dark-subtle h-0.5 flex-1" />
         <span className="text-dark-text text-lg">Or</span>
@@ -95,8 +104,8 @@ export default function SignupForm() {
                 Icon={CiMail}
               />
               <FormField
-                id="password"
-                name="password"
+                id="password_hash"
+                name="password_hash"
                 type="password"
                 label="Password"
                 placeholder="Create Password (min. 8 characters)"

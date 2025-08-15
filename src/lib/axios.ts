@@ -2,7 +2,6 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true, // optional for cookies
 });
 
 api.interceptors.request.use((config) => {
@@ -11,6 +10,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// put interceptors for responses (e.g., auto refresh access tokens, depending on authentication type.) 
+// put interceptors for responses (e.g., auto refresh access tokens, depending on authentication type.)
 
 export default api;

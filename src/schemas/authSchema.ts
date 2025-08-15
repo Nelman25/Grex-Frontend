@@ -7,7 +7,7 @@ export const UserSchema = yup.object().shape({
   first_name: yup.string().required("Required"),
   last_name: yup.string().required("Required"),
   email: yup.string().email("Please enter a valid email.").required("Required"),
-  password: yup
+  password_hash: yup
     .string()
     .min(8, "Password must be at least 8 characters long.")
     .matches(PASSWORD_REGEX, {
@@ -17,6 +17,6 @@ export const UserSchema = yup.object().shape({
     .required("Required"),
   confirm_password: yup
     .string()
-    .oneOf([yup.ref("password")], "Password must match")
+    .oneOf([yup.ref("password_hash")], "Password must match")
     .required("Required"),
 });
