@@ -24,6 +24,7 @@ export default function FormField({
       <Label className="text-dark-text" htmlFor={id}>
         {label}
       </Label>
+      
       <div className="relative flex items-center mt-2">
         {Icon && <Icon className="absolute text-gray-300 size-5 left-5" />}
         <Field

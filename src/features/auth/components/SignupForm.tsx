@@ -1,6 +1,5 @@
-import { Form, Formik } from "formik";
-import { AUTH_SOCIALS } from "../constants";
-import type { CreateAccountHandler, IUserCredentials } from "../types/auth";
+import { Form, Formik, type FormikErrors } from "formik";
+import type { IUserCredentials } from "../types/auth";
 import { UserSchema } from "@/schemas/authSchema";
 import FormField from "./FormField";
 import { BsPersonCircle } from "react-icons/bs";
@@ -11,6 +10,12 @@ import { Link } from "react-router";
 import { Loader2 } from "lucide-react";
 import api from "@/lib/axios";
 import axios from "axios";
+import SocialButtonsContainer from "./SocialButtonsContainer";
+
+export interface CreateAccountHandler {
+  values: IUserCredentials;
+  setErrors: (errors: FormikErrors<IUserCredentials>) => void;
+}
 
 const initialValues: IUserCredentials = {
   first_name: "",
@@ -55,14 +60,9 @@ export default function SignupForm() {
       <div className="flex justify-center">
         <p className="text-dark-text block">Register with:</p>
       </div>
-      <div className="flex space-x-2 mt-4">
-        {AUTH_SOCIALS.map((social) => (
-          <Button className="bg-[#D9D9D9]/20 rounded-md border items-center hover:bg-[#D9D9D9]/10  border-[#808080] px-12 flex-1 py-6">
-            <social.icon className="size-6 text-white/60" />
-            <span className="text-dark-text">{social.label}</span>
-          </Button>
-        ))}
-      </div>
+
+      <SocialButtonsContainer />
+
       <div className="flex space-x-4 items-center my-4">
         <div className="bg-dark-subtle h-0.5 flex-1" />
         <span className="text-dark-text text-lg">Or</span>
