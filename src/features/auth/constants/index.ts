@@ -1,17 +1,18 @@
 import { FolderKanban, RefreshCcw, UserRound } from "lucide-react";
 import { FaGoogle, FaFacebook, FaGithub } from "react-icons/fa";
+import type { IAuthSocial } from "../types/auth";
 
-export const AUTH_SOCIALS = [
+export const AUTH_SOCIALS: IAuthSocial[] = [
   {
-    label: "Google",
+    provider: "Google",
     icon: FaGoogle,
   },
   {
-    label: "Facebook",
+    provider: "Facebook",
     icon: FaFacebook,
   },
   {
-    label: "GitHub",
+    provider: "GitHub",
     icon: FaGithub,
   },
 ];

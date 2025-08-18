@@ -1,4 +1,4 @@
-import type { FormikErrors } from "formik";
+import type { IconType } from "react-icons/lib";
 
 export interface IUserCredentials {
   first_name: string;
@@ -8,7 +8,7 @@ export interface IUserCredentials {
   confirm_password: string;
 }
 
-export interface CreateAccountHandler {
-  values: IUserCredentials;
-  setErrors: (errors: FormikErrors<IUserCredentials>) => void;
+export interface IAuthSocial {
+  provider: string;
+  icon: IconType;
 }
