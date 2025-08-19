@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import api from "@/lib/axios";
 import axios from "axios";
 import SocialButtonsContainer from "./SocialButtonsContainer";
+import { useAuth } from "@/context/auth-context";
 
 export interface CreateAccountHandler {
   values: IUserCredentials;
@@ -27,6 +28,7 @@ const initialValues: IUserCredentials = {
 
 export default function SignupForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const { setToken, setUser } = useAuth();
 
   const handleAccountCreation = async ({
     values,
@@ -43,7 +45,8 @@ export default function SignupForm() {
 
     try {
       const response = await api.post("/auth/sign-up", userCredentials);
-      console.log("Account created: ", response.data);
+      setToken(response.data.access_token);
+      setUser(response.data.user);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverMessage =

@@ -4,6 +4,8 @@ import { queryClient } from "@/lib/queryClient";
 import Landing from "./pages/Landing";
 import Signin from "@/features/auth/pages/Signin";
 import Signup from "@/features/auth/pages/Signup";
+import { AuthProvider } from "@/context/AuthProvider";
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -24,11 +26,14 @@ export default function App() {
         },
       ],
     },
+    { path: "/dashboard", element: <Dashboard /> },
   ]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </AuthProvider>
   );
 }

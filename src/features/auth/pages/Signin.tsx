@@ -1,4 +1,3 @@
-// import SigninForm from "../components/SigninPanel";
 import SigninHeroPanel from "../components/SigninHeroPanel";
 import SigninPanel from "../components/SigninPanel";
 

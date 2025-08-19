@@ -5,14 +5,21 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
-import api from "@/lib/axios";
+import type { IUserCredentials } from "@/types";
+import { useAuth } from "@/context/auth-context";
+import { useNavigate } from "react-router";
 
 export default function SigninForm() {
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [userCredentials, setUserCredentials] = useState({
+  const [userCredentials, setUserCredentials] = useState<IUserCredentials>({
     email: "",
     password_hash: "",
   });
+
+  const { login } = useAuth();
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,11 +36,11 @@ export default function SigninForm() {
         return;
       }
 
-      console.log(userCredentials);
-      const response = await api.post("/auth/login", userCredentials);
-      console.log(response.data);
+      await login(userCredentials);
+      navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        setError(error.message);
         console.error(error); // TODO: better error handling
       } else {
         console.error(error); // TODO: better error handling
@@ -56,6 +63,7 @@ export default function SigninForm() {
             onChange={handleInputChange}
           />
         </div>
+        <p className="text-error text-sm">{error}</p>
       </div>
 
       <div className="w-full mt-4">
