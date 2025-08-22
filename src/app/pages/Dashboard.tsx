@@ -1,8 +1,11 @@
+import NoProject from "@/components/NoProject";
+
 export default function Dashboard() {
   return (
-    <div className="w-full h-full">
-      <h1>Testing</h1>
-      <p>Testin descriptiondhadiawda</p>
+    <div className="w-full h-full p-6 font-inter">
+      <h2 className="text-dark-text font-semibold">My Projects</h2>
+      <NoProject />
+      
     </div>
   );
 }
