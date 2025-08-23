@@ -122,8 +122,8 @@
   --color-light-text: oklch(21.78% 0 0);
   --color-light-subtle: oklch(51.03% 0 0);
   --color-dark-bg: oklch(0.1149 0 0);
-  --color-dark-surface: oklch(26.86% 0 0);
-  --color-dark-muted: oklch(37.15% 0 0);
+  --color-dark-surface: oklch(0.2046 0 0);
+  --color-dark-muted: oklch(0.3092 0 0);
   --color-dark-text: oklch(96.12% 0 0);
   --color-dark-subtle: oklch(72.52% 0 0);
 
