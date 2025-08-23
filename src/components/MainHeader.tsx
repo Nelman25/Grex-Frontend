@@ -11,6 +11,7 @@ import { unslugify } from "@/utils";
 import { Button } from "./ui/button";
 import { CiSettings } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
+import { NewProjectModal } from "../features/workspace/components/NewProjectModal";
 
 export default function MainHeader() {
   const location = useLocation();
@@ -41,10 +42,12 @@ export default function MainHeader() {
       </Breadcrumb>
 
       <div className="flex space-x-4 items-center">
-        <Button className="flex space-x-2 items-center font-inter bg-brand-primary hover:bg-brand-light">
-          <PiPlus />
-          <span>New Project</span>
-        </Button>
+        <NewProjectModal>
+          <Button className="flex space-x-2 items-center font-inter bg-brand-primary hover:bg-brand-light">
+            <PiPlus />
+            <span>New Project</span>
+          </Button>
+        </NewProjectModal>
         <FaBell />
         <CiSettings />
       </div>
