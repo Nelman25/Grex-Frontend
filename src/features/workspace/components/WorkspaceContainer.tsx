@@ -26,7 +26,7 @@ export default function WorkspaceContainer() {
               <span>List</span>
             </TabsTrigger>
           </TabsList>
-          <TabsContent className="my-12" value="Kanban">
+          <TabsContent value="Kanban">
             <KanbanContainer />
           </TabsContent>
           <TabsContent value="Calendar">Calendar</TabsContent>

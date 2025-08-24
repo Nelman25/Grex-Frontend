@@ -21,15 +21,15 @@ export default function ProjectDetails() {
         </div>
       </div>
       <div>
-        <h3 className="font-medium text-lg">{project.name}</h3>
+        <h3 className="font-medium ">{project.name}</h3>
         <div className="flex space-x-4 text">
-          <p>
+          <p className="text-sm">
             <span className="text-dark-subtle">Timeline: </span>
             <span>
               {formatDate(project.start_date)} - {formatDate(project.due_date)}
             </span>
           </p>
-          <p>
+          <p className="text-sm">
             <span className="text-dark-subtle">Status: </span>
             <span className="text-info font-medium">In Progress</span>
           </p>
