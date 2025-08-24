@@ -18,7 +18,7 @@ export default function MainHeader() {
   const pathnames = location.pathname.split("/").filter(Boolean);
 
   return (
-    <header className="w-full px-8 py-4 sticky top-0 right-0 border-b border-b-dark-muted bg-dark-bg flex items-center justify-between">
+    <header className="w-full px-8 py-4 z-20 sticky top-0 right-0 border-b border-b-dark-muted bg-dark-bg flex items-center justify-between">
       <SidebarTrigger className="absolute top-5 left-0" />
       <Breadcrumb>
         <BreadcrumbList>

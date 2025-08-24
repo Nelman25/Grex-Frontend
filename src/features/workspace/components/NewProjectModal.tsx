@@ -15,7 +15,7 @@ import { useState, type PropsWithChildren } from "react";
 import newProjectHero from "@/assets/NewProjectHero.svg";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/DatePicker";
-import type { Project } from "@/types/project";
+import type { NewProject } from "@/types/project";
 import { useProjectStore } from "@/stores/useProjectStore";
 import RHFFormField from "@/components/RHFFormField";
 
@@ -35,11 +35,11 @@ export function NewProjectModal({ children }: PropsWithChildren) {
     reset,
     control,
     formState: { errors },
-  } = useForm<Project>({ defaultValues });
+  } = useForm<NewProject>({ defaultValues });
 
   const { addProject } = useProjectStore();
 
-  const onSubmit: SubmitHandler<Project> = (project) => {
+  const onSubmit: SubmitHandler<NewProject> = (project) => {
     // TODO: add leader_id and send the data to the backend api
 
     // Add project to the project store to simulate sneding request to backend api

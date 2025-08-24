@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { Project } from "@/types/project";
-import { PROJECTS } from "@/constants";
+import { MOCK_PROJECTS } from "@/mocks/projects";
 
 // I made this store for testing purposes only while the backend api for this is not yet ready
 type ProjectStore = {
@@ -9,6 +9,6 @@ type ProjectStore = {
 };
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
-  projects: PROJECTS,
+  projects: MOCK_PROJECTS,
   addProject: (project) => set({ projects: get().projects.concat(project) }),
 }));

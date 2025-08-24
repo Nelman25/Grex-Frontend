@@ -4,6 +4,7 @@ import { queryClient } from "@/lib/queryClient";
 import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/context/AuthProvider";
 import PageLoader from "@/components/PageLoader";
+import WorkspaceContainer from "@/features/workspace/components/WorkspaceContainer";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Signup = lazy(() => import("@/features/auth/pages/Signup"));
@@ -41,7 +42,10 @@ export default function App() {
           path: "my-projects",
           children: [
             { index: true, element: withSuspense(<MyProjects />) },
-            { path: ":projectName", element: <div>Project root</div> },
+            {
+              path: ":workspace_id/:workspace_name",
+              element: withSuspense(<WorkspaceContainer />),
+            },
           ],
         },
       ],

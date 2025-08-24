@@ -24,7 +24,7 @@ import {
 } from "react-icons/io";
 import profile from "@/assets/sample_profile.svg";
 import { useAuth } from "@/context/auth-context";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import slugify from "slugify";
 import { useProjectStore } from "@/stores/useProjectStore";
 
@@ -32,7 +32,7 @@ export function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const activeTab = location.pathname.split("/")[1];
-  const activeProject = location.pathname.split("/")[2];
+  const { workspace_name: activeProject } = useParams();
   const { user } = useAuth();
   const { projects } = useProjectStore();
 
@@ -40,8 +40,13 @@ export function AppSidebar() {
     navigate(`/${slugify(item, { lower: true })}`);
   };
 
-  const handleSelectActiveProject = (projectName: string) => {
-    navigate(`/my-projects/${slugify(projectName, { lower: true })}`);
+  const handleSelectActiveProject = (
+    projectId: number,
+    projectName: string
+  ) => {
+    navigate(
+      `/my-projects/${projectId}/${slugify(projectName, { lower: true })}`
+    );
   };
 
   const getActiveClass = (tab: string) => {
@@ -107,7 +112,10 @@ export function AppSidebar() {
                           <SidebarMenuButton key={project.name}>
                             <SidebarMenuSubItem
                               onClick={() =>
-                                handleSelectActiveProject(project.name)
+                                handleSelectActiveProject(
+                                  project.workspace_id,
+                                  project.name
+                                )
                               }
                               className={`truncate text-white ${getActiveProjectClass(
                                 project.name
