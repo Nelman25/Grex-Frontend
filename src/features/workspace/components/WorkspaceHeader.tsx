@@ -5,7 +5,7 @@ import addPeople from "@/assets/bi_person-add.svg";
 
 export default function WorkspaceHeader() {
   return (
-    <header className="w-full grid grid-cols-1 p-7">
+    <header className="w-full grid grid-cols-1 p-4">
       <div className="flex justify-between">
         <ProjectDetails />
         <div className="flex space-x-4 items-center">

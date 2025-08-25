@@ -6,19 +6,19 @@ export default function WorkspaceMembers() {
     <div className="relative flex">
       <img
         src="https://avatar.iran.liara.run/public/boy"
-        className="w-10 h-10 rounded-full border-2 border-dark-muted -ml-2 first:ml-0"
+        className="size-7 rounded-full border-2 border-dark-muted -ml-2 first:ml-0"
       />
       <img
         src="https://avatar.iran.liara.run/public/girl"
-        className="w-10 h-10 rounded-full border-2 border-dark-muted -ml-2"
+        className="size-7 rounded-full border-2 border-dark-muted -ml-2"
       />
       <img
         src="https://avatar.iran.liara.run/public"
-        className="w-10 h-10 rounded-full border-2 border-dark-muted -ml-2"
+        className="size-7 rounded-full border-2 border-dark-muted -ml-2"
       />
       <img
         src="https://avatar.iran.liara.run/public/boy?username=Scott"
-        className="w-10 h-10 rounded-full border-2 border-dark-muted -ml-2"
+        className="size-7 rounded-full border-2 border-dark-muted -ml-2"
       />
     </div>
   );

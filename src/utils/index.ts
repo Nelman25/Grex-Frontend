@@ -1,4 +1,4 @@
-import type { Task, TaskPriority, TaskGroups } from "@/types/task";
+import type { Task, TaskPriority, TaskGroups, Subtask } from "@/types/task";
 
 export const unslugify = (string: string) => {
   return string.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -65,4 +65,11 @@ export const capitalizeWord = (word: string) => {
   if (!word) return "";
 
   return word[0].toUpperCase() + word.slice(1).toLowerCase();
+};
+
+export const getProgressPercentage = (subtasks: Subtask[]): number => {
+  const length = subtasks.length;
+  const noOfDone = subtasks.filter((s) => s.is_done).length;
+
+  return (noOfDone / length) * 100;
 };

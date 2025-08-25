@@ -5,13 +5,7 @@ import MainHeader from "./MainHeader";
 
 export default function AppLayout() {
   return (
-    <SidebarProvider
-      className="flex"
-      style={{
-        "--sidebar-width": "20rem",
-        "--sidebar-width-mobile": "20rem",
-      }}
-    >
+    <SidebarProvider className="flex">
       <AppSidebar />
       <main className="flex-1">
         <MainHeader />
