@@ -1,11 +1,12 @@
 export type TaskPriority = "low" | "medium" | "high";
+export type TaskStatus = "pending" | "done" | "overdue";
 
 export interface NewTask {
   title: string;
   subject: string;
   description: string;
   deadline: Date;
-  status: "pending" | "done" | "overdue";
+  status: TaskStatus;
   priority_level: TaskPriority;
   created_by: number;
 }
@@ -21,3 +22,14 @@ export type TaskGroups = {
   done: Task[];
   overdue: Task[];
 };
+
+export interface NewSubtask {
+  task_id: number;
+  description: string;
+  is_done: boolean;
+}
+
+export interface Subtask extends NewSubtask {
+  subtask_id: number;
+  created_at: Date;
+}
