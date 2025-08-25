@@ -1,6 +1,5 @@
 import type { Task } from "@/types/task";
 import { capitalizeWord, getTypeColor } from "@/utils";
-import { GoPlus } from "react-icons/go";
 import { VscKebabVertical } from "react-icons/vsc";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import KanbanTask from "./KanbanTask";
@@ -14,20 +13,17 @@ export default function KanbanColumn({ type, tasks }: Props) {
   // TODO: Better fallback for this
 
   return (
-    <div className="w-full max-w-[600px] max-h-[900px] rounded bg-surface-overlay p-4">
+    <div className="w-full max-w-[600px] max-h-[900px] rounded bg p-4">
       <div className="flex justify-between sticky top-2">
-        <div className="flex space-x-3 my-2">
-          <div className={`h-8 w-2 rounded-full ${getTypeColor(type)}`} />
-          <span>{capitalizeWord(type)}</span>
-          <div className="size-6 bg-blue-400 rounded text-center font-semibold">
-            {tasks.length}
+        <div className="flex space-x-2 my-2">
+          <div className={`h-8 w-1  ${getTypeColor(type)}`} />
+          <span className="text-lg">{capitalizeWord(type)}</span>
+          <div className="size-6  rounded-full text-center font-semibold">
+            <span className="text-sm">{tasks.length}</span>
           </div>
         </div>
 
         <div className="flex space-x-2">
-          <button>
-            <GoPlus />
-          </button>
           <button>
             <VscKebabVertical />
           </button>
