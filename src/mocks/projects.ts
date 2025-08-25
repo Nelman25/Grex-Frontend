@@ -67,4 +67,15 @@ export const MOCK_PROJECTS: Project[] = [
     workspace_id: 6,
     created_at: new Date(),
   },
+  {
+    name: "Grex - A Collaboration Platform",
+    description:
+      "A team collaboration platform designed to streamline communication and task management. Grex provides Kanban boards, real-time chat, and document sharing to help teams stay aligned and productive.",
+    project_nature: "Web Development / Collaboration Tool",
+    start_date: new Date("2025-07-21"),
+    due_date: new Date("2025-10-15"),
+    leader_id: "c047a880-2ea0-4cbb-92ca-ed2b42044809",
+    workspace_id: 7,
+    created_at: new Date(),
+  },
 ];

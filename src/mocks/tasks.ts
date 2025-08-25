@@ -13,6 +13,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 1,
     created_at: new Date("2025-08-20"),
     marked_done_at: new Date("2025-08-21"),
+    workspace_id: 7,
   },
   {
     title: "Design Grex UI wireframes",
@@ -26,6 +27,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 2,
     created_at: new Date("2025-08-21"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Build authentication system",
@@ -39,6 +41,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 3,
     created_at: new Date("2025-08-22"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Implement task management module",
@@ -52,6 +55,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 4,
     created_at: new Date("2025-08-23"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Integrate notifications",
@@ -65,6 +69,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 5,
     created_at: new Date("2025-08-23"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Deploy Grex to production",
@@ -78,6 +83,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 6,
     created_at: new Date("2025-08-24"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Set up CI/CD pipeline",
@@ -91,6 +97,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 7,
     created_at: new Date("2025-08-21"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Design database schema",
@@ -104,6 +111,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 8,
     created_at: new Date("2025-08-21"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Implement user profile management",
@@ -117,6 +125,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 9,
     created_at: new Date("2025-08-22"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Integrate third-party login",
@@ -130,6 +139,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 10,
     created_at: new Date("2025-08-23"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Implement activity log",
@@ -143,6 +153,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 11,
     created_at: new Date("2025-08-23"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Improve accessibility",
@@ -156,6 +167,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 12,
     created_at: new Date("2025-08-24"),
     marked_done_at: null,
+    workspace_id: 7,
   },
 
   // ✅ Extra tasks for coverage
@@ -171,6 +183,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 13,
     created_at: new Date("2025-08-21"),
     marked_done_at: new Date("2025-08-28"),
+    workspace_id: 7,
   },
   {
     title: "Fix broken UI styles",
@@ -184,6 +197,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 14,
     created_at: new Date("2025-08-22"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Update project documentation",
@@ -197,6 +211,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 15,
     created_at: new Date("2025-08-20"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Conduct team retrospective",
@@ -210,6 +225,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 16,
     created_at: new Date("2025-08-22"),
     marked_done_at: new Date("2025-08-28"),
+    workspace_id: 7,
   },
   {
     title: "Optimize database queries",
@@ -223,6 +239,7 @@ export const MOCK_TASKS: Task[] = [
     task_id: 17,
     created_at: new Date("2025-08-24"),
     marked_done_at: null,
+    workspace_id: 7,
   },
   {
     title: "Refactor state management",
@@ -236,5 +253,20 @@ export const MOCK_TASKS: Task[] = [
     task_id: 18,
     created_at: new Date("2025-08-24"),
     marked_done_at: null,
+    workspace_id: 7,
+  },
+  {
+    title: "Testing tasks",
+    subject: "Testing subject task",
+    description:
+      "This is just for testing to see if the tasks are being filtered.",
+    deadline: new Date("2025-09-07"),
+    status: "pending",
+    priority_level: "medium",
+    created_by: 1,
+    task_id: 18,
+    created_at: new Date("2025-08-24"),
+    marked_done_at: null,
+    workspace_id: 1,
   },
 ];

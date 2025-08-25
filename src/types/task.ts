@@ -15,6 +15,7 @@ export interface Task extends NewTask {
   task_id: number;
   created_at: Date;
   marked_done_at: Date | null;
+  workspace_id: number; // DELETE THIS WHEN THE API IS READY. this is just to simulate the project selection.
 }
 
 export type TaskGroups = {
