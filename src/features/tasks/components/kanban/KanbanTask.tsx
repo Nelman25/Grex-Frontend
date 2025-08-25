@@ -62,7 +62,7 @@ export default function KanbanTask({
       </div>
 
       <div className="my-2">
-        <KanbanSubtasksList task_id={task.task_id} />
+        <KanbanSubtasksList subtasks={subtasks} />
       </div>
 
       <div className="flex justify-between pt-2">

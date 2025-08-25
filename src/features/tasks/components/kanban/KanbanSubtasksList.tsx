@@ -1,15 +1,18 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useSubtaskStore } from "@/stores/useSubtasksStore";
+import type { Subtask } from "@/types/task";
 
-export default function KanbanSubtasksList({ task_id }: { task_id: number }) {
+type Props = {
+  subtasks: Subtask[];
+};
+
+export default function KanbanSubtasksList({ subtasks }: Props) {
+  // This will be a PATCH request for toggling the is_done field of a subtask
   const toggleSubtask = useSubtaskStore((state) => state.toggleSubtask);
-  const subtasks = useSubtaskStore((state) => state.subtasks).filter(
-    (subtask) => subtask.task_id === task_id
-  );
 
   return (
-    <ul className="">
+    <ul>
       {subtasks.map((subtask) => (
         <li key={subtask.subtask_id} className="flex items-center gap-2 px-4">
           <Checkbox
