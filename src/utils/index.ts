@@ -75,3 +75,31 @@ export const getProgressPercentage = (subtasks: Subtask[]): number => {
 
   return (noOfDone / length) * 100;
 };
+
+export const getStatusStyle = (status: string): string => {
+  switch (status) {
+    case "pending":
+      return "text-blue-500 bg-blue-500/15";
+    case "done":
+      return "text-success bg-success/15";
+    case "overdue":
+      return "text-error bg-error/15";
+    default:
+      return "";
+  }
+};
+
+export const getPriorityBadge = (
+  prioLevel: string
+): "secondary" | "destructive" | "default" | "outline" => {
+  switch (prioLevel) {
+    case "low":
+      return "default";
+    case "medium":
+      return "outline";
+    case "high":
+      return "destructive";
+    default:
+      return "outline";
+  }
+};

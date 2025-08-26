@@ -12,8 +12,9 @@ import { BiCommentDetail } from "react-icons/bi";
 import WorkspaceMembers from "@/features/workspace/components/WorkspaceMembers";
 import { Progress } from "@/components/ui/progress";
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
-import KanbanSubtasksList from "./KanbanSubtasksList";
 import { useSubtaskStore } from "@/stores/useSubtasksStore";
+import TaskSheet from "../TaskSheet";
+import SubtaskList from "../SubtaskList";
 
 type Props = {
   task: Task;
@@ -50,7 +51,11 @@ export default function KanbanTask({
       </div>
 
       <div>
-        <h3 className="text-dark-text text-sm font-semibold">{task.title}</h3>
+        <TaskSheet task={task}>
+          <h3 className="text-dark-text text-sm font-semibold hover:underline">
+            {task.title}
+          </h3>
+        </TaskSheet>
         <p className="text-dark-subtle text-xs">{task.subject}</p>
         <div className="text-dark-subtle flex space-x-1 items-center text-xs my-2">
           <CiCalendar className="size-4" />
@@ -62,7 +67,7 @@ export default function KanbanTask({
       </div>
 
       <div className="my-2">
-        <KanbanSubtasksList subtasks={subtasks} />
+        <SubtaskList subtasks={subtasks} />
       </div>
 
       <div className="flex justify-between pt-2">
