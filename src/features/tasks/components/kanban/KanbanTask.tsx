@@ -9,12 +9,13 @@ import { CiCalendar } from "react-icons/ci";
 import { RiDraggable } from "react-icons/ri";
 import { IoDocumentAttachOutline } from "react-icons/io5";
 import { BiCommentDetail } from "react-icons/bi";
-import WorkspaceMembers from "@/features/workspace/components/WorkspaceMembers";
 import { Progress } from "@/components/ui/progress";
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 import { useSubtaskStore } from "@/stores/useSubtasksStore";
 import TaskSheet from "../TaskSheet";
 import SubtaskList from "../SubtaskList";
+import { MOCK_TASK_ASSIGNEES } from "@/mocks/assignees";
+import UserAvatars from "@/components/UserAvatars";
 
 type Props = {
   task: Task;
@@ -27,9 +28,20 @@ export default function KanbanTask({
   isDragging,
   dragHandleProps,
 }: Props) {
+  // TODO: Data fetching for subtasks and assignees
+  // endpoints:
+  // get subtasks -> /task/${task_id}/subtask
+  // get assignees -> /task/${task_id}/assignment
+
+  // CHANGE THIS TO THE ACTUAL DATA FETCHING FOR SUBTASKS
   const subtasks = useSubtaskStore((state) => state.subtasks).filter(
     (subtask) => subtask.task_id === task.task_id
   );
+  // CHANGE THIS TO THE ACTUAL DATA FETCHING FOR TASK ASSIGNEES
+  const assignees = MOCK_TASK_ASSIGNEES.filter(
+    (i) => i.task_id === task.task_id
+  );
+  const assigneesAvatars = assignees.map((a) => a.avatar);
 
   return (
     <div
@@ -71,8 +83,7 @@ export default function KanbanTask({
       </div>
 
       <div className="flex justify-between pt-2">
-        {/* This is temporary */}
-        <WorkspaceMembers />
+        <UserAvatars images={assigneesAvatars} />
         <div className="flex space-x-2">
           <div className="bg-dark-muted text-dark-text p-1 rounded flex items-center space-x-1">
             <IoDocumentAttachOutline className="size-3" />
@@ -87,12 +98,13 @@ export default function KanbanTask({
       </div>
 
       <div className="mt-2">
-        <div className="flex justify-between my-1">
-          <span className="text-dark-text text-sm">Progress</span>
-          <span className="text-dark-subtle text-sm">
+        <div className="flex justify-between my-1 text-sm">
+          <span className="text-dark-text">Progress</span>
+          <span className="text-dark-subtle">
             {getProgressPercentage(subtasks)}%
           </span>
         </div>
+
         <Progress value={getProgressPercentage(subtasks)} />
       </div>
     </div>

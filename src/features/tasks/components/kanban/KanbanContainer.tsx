@@ -12,6 +12,9 @@ import NewTaskModal from "../NewTaskModal";
 
 export default function KanbanContainer() {
   // TODO: Actual data fetching for tasks of the selected project
+  // endpoint -> /task/${workspace_id}
+  // query keys: ["tasks", {workspace_id}]
+
   const { workspace_id } = useParams();
 
   // THIS WILL BE SERVER STATE

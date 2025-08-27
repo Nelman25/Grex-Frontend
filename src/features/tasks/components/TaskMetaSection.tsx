@@ -13,7 +13,7 @@ type Props = {
 export default function TaskMetaSection({ task, project }: Props) {
   return (
     <div className="flex flex-col space-y-4 px-4">
-      <TaskAssignees />
+      <TaskAssignees id={task.task_id} />
       <TaskDueDate task={task} />
       <TaskWorkspace project={project} />
       <TaskFields task={task} />
