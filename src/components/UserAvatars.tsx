@@ -9,9 +9,9 @@ export default function UserAvatars({ images }: Props) {
 
   return (
     <div className="relative flex items-center">
-      {images.slice(0, 5).map((image) => (
+      {images.slice(0, 5).map((image, index) => (
         <img
-          key={image}
+          key={index}
           src={image}
           className="size-7 rounded-full border-2 border-dark-muted -ml-2 first:ml-0"
         />
