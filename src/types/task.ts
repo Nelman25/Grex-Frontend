@@ -18,6 +18,16 @@ export interface Task extends NewTask {
   workspace_id: number; // DELETE THIS WHEN THE API IS READY. this is just to simulate the project selection.
 }
 
+export type EditableTaskFields = {
+  title: string;
+  subject: string;
+  description: string;
+  deadline: Date;
+  priority_level: TaskPriority;
+};
+
+export type EditTaskPayload = EditableTaskFields & { task_id: number };
+
 export type TaskGroups = {
   pending: Task[];
   done: Task[];
@@ -33,4 +43,11 @@ export interface NewSubtask {
 export interface Subtask extends NewSubtask {
   subtask_id: number;
   created_at: Date;
+}
+
+export interface TaskAssignee {
+  task_id: number;
+  user_id: number;
+  avatar: string;
+  name: string;
 }

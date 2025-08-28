@@ -4,15 +4,18 @@ import { TbLayoutKanbanFilled } from "react-icons/tb";
 import { CiBoxList, CiCalendar } from "react-icons/ci";
 import { TabsContent } from "@radix-ui/react-tabs";
 import KanbanContainer from "@/features/tasks/components/kanban/KanbanContainer";
-import { useParams } from "react-router";
-import { useProjectStore } from "@/stores/useProjectStore";
+// import { useParams } from "react-router";
+import { MOCK_SPECIFIC_WORKSPACE } from "@/mocks/projects";
 
 export default function WorkspaceContainer() {
   // TODO: Actual data fetching for the selected project
+  // endpoint -> /workspace/${workspace_id}/${user_id}
+  // query keys = ["workspace", { workspace_id }]
 
-  const { workspace_id } = useParams();
-  const projects = useProjectStore((state) => state.projects);
-  const project = projects.find((p) => p.workspace_id === Number(workspace_id));
+  // const { workspace_id } = useParams();
+  const project = MOCK_SPECIFIC_WORKSPACE;
+  // const projects = useProjectStore((state) => state.projects);
+  // const project = projects.find((p) => p.workspace_id === Number(workspace_id));
 
   if (!project) return; // TODO: Better fallback
 

@@ -1,5 +1,19 @@
 import type { Task, TaskPriority, TaskGroups, Subtask } from "@/types/task";
 
+// MOCK USER IMAGES FOR TESTING
+const USER_IMAGES = [
+  "https://randomuser.me/api/portraits/men/32.jpg",
+  "https://randomuser.me/api/portraits/women/45.jpg",
+  "https://randomuser.me/api/portraits/men/67.jpg",
+  "https://randomuser.me/api/portraits/women/12.jpg",
+  "https://randomuser.me/api/portraits/men/5.jpg",
+  "https://randomuser.me/api/portraits/women/88.jpg",
+  "https://randomuser.me/api/portraits/men/23.jpg",
+  "https://randomuser.me/api/portraits/women/61.jpg",
+  "https://randomuser.me/api/portraits/men/90.jpg",
+  "https://randomuser.me/api/portraits/women/7.jpg",
+];
+
 export const unslugify = (string: string) => {
   return string.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 };
@@ -74,4 +88,37 @@ export const getProgressPercentage = (subtasks: Subtask[]): number => {
   const noOfDone = subtasks.filter((s) => s.is_done).length;
 
   return (noOfDone / length) * 100;
+};
+
+export const getStatusStyle = (status: string): string => {
+  switch (status) {
+    case "pending":
+      return "text-blue-500 bg-blue-500/15";
+    case "done":
+      return "text-success bg-success/15";
+    case "overdue":
+      return "text-error bg-error/15";
+    default:
+      return "";
+  }
+};
+
+export const getPriorityBadge = (
+  prioLevel: string
+): "secondary" | "destructive" | "default" | "outline" => {
+  switch (prioLevel) {
+    case "low":
+      return "default";
+    case "medium":
+      return "outline";
+    case "high":
+      return "destructive";
+    default:
+      return "outline";
+  }
+};
+
+export const getRandomUserImage = (): string => {
+  const randomIndex = Math.floor(Math.random() * USER_IMAGES.length);
+  return USER_IMAGES[randomIndex];
 };

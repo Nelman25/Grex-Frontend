@@ -5,6 +5,7 @@ import { MOCK_SUBTASKS } from "@/mocks/subtasks";
 type SubtaskStore = {
   subtasks: Subtask[];
   addSubtask: (subtask: NewSubtask) => void;
+  deleteSubtask: (subtaskId: number) => void;
   toggleSubtask: (id: number) => void;
 };
 
@@ -21,6 +22,9 @@ export const useSubtaskStore = create<SubtaskStore>((set, get) => ({
 
       return { subtasks: get().subtasks.concat(newSubtask) };
     }),
+
+  deleteSubtask: (id) =>
+    set({ subtasks: get().subtasks.filter((s) => s.subtask_id !== id) }),
 
   toggleSubtask: (id) =>
     set(() => ({

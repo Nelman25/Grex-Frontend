@@ -26,9 +26,7 @@ const defaultValues = {
   subject: "",
   description: "",
   deadline: undefined,
-  status: undefined,
   priority_level: undefined,
-  created_by: undefined,
 };
 
 export default function NewTaskModal({ children }: PropsWithChildren) {
@@ -49,7 +47,7 @@ export default function NewTaskModal({ children }: PropsWithChildren) {
   const onSubmit: SubmitHandler<NewTask> = (task) => {
     // TODO: DELETE ALL THE TEMP FIELD WHEN THE API IS READY
     // send the task to the actual endpoint
-    
+
     const newTask: Task = {
       ...task,
       status: "pending",
