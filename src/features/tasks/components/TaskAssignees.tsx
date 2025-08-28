@@ -1,5 +1,5 @@
 import UserAvatars from "@/components/UserAvatars";
-import { MOCK_TASK_ASSIGNEES } from "@/mocks/assignees";
+import { useAssigneeStore } from "@/stores/useAssigneesStore";
 import { Label } from "@radix-ui/react-label";
 
 // NOTES:
@@ -14,7 +14,9 @@ export default function TaskAssignees({ id }: { id: number }) {
   // REQUEST HERE: /task/${task_id}/assignment
   // query keys -> "assignees", {task_id}
 
-  const assignees = MOCK_TASK_ASSIGNEES.filter((i) => i.task_id === id);
+  const assignees = useAssigneeStore((state) => state.assignees).filter(
+    (i) => i.task_id === id
+  );
   const avatars = assignees.map((i) => i.avatar);
   const length = avatars.length;
 

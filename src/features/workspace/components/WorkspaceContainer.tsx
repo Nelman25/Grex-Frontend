@@ -5,8 +5,7 @@ import { CiBoxList, CiCalendar } from "react-icons/ci";
 import { TabsContent } from "@radix-ui/react-tabs";
 import KanbanContainer from "@/features/tasks/components/kanban/KanbanContainer";
 // import { useParams } from "react-router";
-import { useProjectStore } from "@/stores/useProjectStore";
-import { MOCK_USER_WORKSPACES } from "@/mocks/projects";
+import { MOCK_SPECIFIC_WORKSPACE } from "@/mocks/projects";
 
 export default function WorkspaceContainer() {
   // TODO: Actual data fetching for the selected project
@@ -14,7 +13,7 @@ export default function WorkspaceContainer() {
   // query keys = ["workspace", { workspace_id }]
 
   // const { workspace_id } = useParams();
-  const project = MOCK_USER_WORKSPACES;
+  const project = MOCK_SPECIFIC_WORKSPACE;
   // const projects = useProjectStore((state) => state.projects);
   // const project = projects.find((p) => p.workspace_id === Number(workspace_id));
 

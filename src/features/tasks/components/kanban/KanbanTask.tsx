@@ -14,8 +14,8 @@ import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 import { useSubtaskStore } from "@/stores/useSubtasksStore";
 import TaskSheet from "../TaskSheet";
 import SubtaskList from "../SubtaskList";
-import { MOCK_TASK_ASSIGNEES } from "@/mocks/assignees";
 import UserAvatars from "@/components/UserAvatars";
+import { useAssigneeStore } from "@/stores/useAssigneesStore";
 
 type Props = {
   task: Task;
@@ -38,7 +38,7 @@ export default function KanbanTask({
     (subtask) => subtask.task_id === task.task_id
   );
   // CHANGE THIS TO THE ACTUAL DATA FETCHING FOR TASK ASSIGNEES
-  const assignees = MOCK_TASK_ASSIGNEES.filter(
+  const assignees = useAssigneeStore((state) => state.assignees).filter(
     (i) => i.task_id === task.task_id
   );
   const assigneesAvatars = assignees.map((a) => a.avatar);

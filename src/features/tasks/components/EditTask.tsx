@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTaskStore } from "@/stores/useTasksStore";
 import type { EditableTaskFields, Task } from "@/types/task";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import EditTaskAssignees from "./EditTaskAssignees";
 
 type Props = {
   task: Task;
@@ -34,7 +35,6 @@ export default function EditTask({ task, onCancel }: Props) {
     // but in actual api connection, we can directly send this 'editedTask' as payload to this
     // endpoint -> /${workspace_id}/${task_id}
     // NOTE: may workspace_id field na si task so no need to get this data from other source
-    console.log(editedTask);
     editTask({ ...editedTask, task_id: task.task_id });
     onCancel();
   };
@@ -116,6 +116,8 @@ export default function EditTask({ task, onCancel }: Props) {
             )}
           />
         </div>
+
+        <EditTaskAssignees id={task.task_id} />
       </div>
 
       <div className="flex justify-end space-x-4">
