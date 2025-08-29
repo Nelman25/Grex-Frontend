@@ -41,7 +41,11 @@ export default function KanbanTask({
   const assignees = useAssigneeStore((state) => state.assignees).filter(
     (i) => i.task_id === task.task_id
   );
-  const assigneesAvatars = assignees.map((a) => a.avatar);
+
+  const assigneesInfo = assignees.map((a) => ({
+    avatar: a.avatar,
+    name: a.name,
+  }));
 
   return (
     <div
@@ -83,7 +87,7 @@ export default function KanbanTask({
       </div>
 
       <div className="flex justify-between pt-2">
-        <UserAvatars images={assigneesAvatars} />
+        <UserAvatars assignees={assigneesInfo} />
         <div className="flex space-x-2">
           <div className="bg-dark-muted text-dark-text p-1 rounded flex items-center space-x-1">
             <IoDocumentAttachOutline className="size-3" />

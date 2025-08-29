@@ -6,10 +6,10 @@ import { AuthProvider } from "@/context/AuthProvider";
 import PageLoader from "@/components/PageLoader";
 import WorkspaceContainer from "@/features/workspace/components/WorkspaceContainer";
 
+// const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Landing = lazy(() => import("./pages/Landing"));
 const Signup = lazy(() => import("@/features/auth/pages/Signup"));
 const Signin = lazy(() => import("@/features/auth/pages/Signin"));
-// const Dashboard = lazy(() => import("./pages/Dashboard"));
 const AppLayout = lazy(() => import("../components/AppLayout"));
 const MyTasks = lazy(() => import("./pages/MyTasks"));
 const MyProjects = lazy(() => import("./pages/MyProjects"));

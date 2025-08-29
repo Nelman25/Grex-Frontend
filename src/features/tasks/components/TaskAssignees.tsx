@@ -1,3 +1,4 @@
+import UserAvatar from "@/components/UserAvatar";
 import UserAvatars from "@/components/UserAvatars";
 import { useAssigneeStore } from "@/stores/useAssigneesStore";
 import { Label } from "@radix-ui/react-label";
@@ -14,11 +15,15 @@ export default function TaskAssignees({ id }: { id: number }) {
   // REQUEST HERE: /task/${task_id}/assignment
   // query keys -> "assignees", {task_id}
 
-  const assignees = useAssigneeStore((state) => state.assignees).filter(
+  const tasksAssignees = useAssigneeStore((state) => state.assignees).filter(
     (i) => i.task_id === id
   );
-  const avatars = assignees.map((i) => i.avatar);
-  const length = avatars.length;
+
+  const assignees = tasksAssignees.map((i) => ({
+    avatar: i.avatar,
+    name: i.name,
+  }));
+  const length = assignees.length;
 
   return (
     <div className="grid grid-cols-2 gap-4 items-center">
@@ -28,16 +33,13 @@ export default function TaskAssignees({ id }: { id: number }) {
 
       {length === 1 && (
         <div className="flex items-center space-x-4">
-          <img
-            src={assignees[0].avatar}
-            alt="assignee's avatar"
-            className="size-8"
-          />
+          <UserAvatar name={assignees[0].name} photoUrl={assignees[0].avatar} />
+
           <p>{assignees[0].name}</p>
         </div>
       )}
 
-      {length > 2 && <UserAvatars images={avatars} />}
+      {length > 2 && <UserAvatars assignees={assignees} />}
     </div>
   );
 }

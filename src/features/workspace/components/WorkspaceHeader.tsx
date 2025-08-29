@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
 import ProjectDetails from "./ProjectDetails";
 import WorkspaceMembers from "./WorkspaceMembers";
 import addPeople from "@/assets/bi_person-add.svg";
+import InviteWorkspaceMemberModal from "./InviteWorkspaceMemberModal";
 
 export default function WorkspaceHeader() {
   return (
@@ -10,10 +10,12 @@ export default function WorkspaceHeader() {
         <ProjectDetails />
         <div className="flex space-x-4 items-center">
           <WorkspaceMembers />
-          <Button className="bg-brand-primary hover:bg-brand-light">
-            <img src={addPeople} alt="invite icon" />
-            <span>Invite</span>
-          </Button>
+          <InviteWorkspaceMemberModal>
+            <div className="bg-brand-primary hover:bg-brand-light flex space-x-2 px-4 py-1 rounded items-center">
+              <img src={addPeople} alt="invite icon" />
+              <span className="text-dark-muted">Add people</span>
+            </div>
+          </InviteWorkspaceMemberModal>
         </div>
       </div>
     </header>
