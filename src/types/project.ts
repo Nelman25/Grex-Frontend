@@ -6,13 +6,22 @@ export interface NewProject {
   project_nature: string;
   start_date: Date;
   due_date: Date;
+  created_by: number;
+}
+
+export interface WorkspacePayload {
+  name: string;
+  description: string;
+  project_nature: string;
+  start_date: string;
+  due_date: string;
   created_by: number; // from leader_id -> created_by - backend team
 }
 
 export interface Project extends NewProject {
   workspace_id: number;
   created_at: Date;
-  workspace_profile_url?: string | null;
+  workspace_profile_url: string | null;
 }
 
 // SHAPE OF GET ALL WORKSPACES OF USER RESPONSE
@@ -37,10 +46,10 @@ export interface WorkspaceResponse {
   name: string;
   project_nature: string;
   description: string;
-  start_date: Date; 
-  due_date: Date; 
+  start_date: Date;
+  due_date: Date;
   workspace_profile_url: string | null;
   created_by: number;
-  created_at: Date; 
+  created_at: Date;
   members: WorkspaceMember[];
 }
