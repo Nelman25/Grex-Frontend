@@ -9,7 +9,7 @@ type Props = {
 
 export default function UserAvatar({ name, photoUrl, className }: Props) {
   return (
-    <Avatar>
+    <Avatar className={className}>
       <AvatarImage
         className={`size-7 rounded-full ${className}`}
         src={photoUrl}
