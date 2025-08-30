@@ -1,23 +1,20 @@
-import { useProjectStore } from "@/stores/useProjectStore";
-import { useParams } from "react-router";
 import { formatDate, getInitials } from "@/utils";
+import type { WorkspaceResponse } from "@/types/project";
 
-export default function ProjectDetails() {
-  const { projects } = useProjectStore();
-  const { workspace_id } = useParams();
-  const project = projects.find((p) => p.workspace_id === Number(workspace_id));
+type Props = {
+  project: WorkspaceResponse;
+};
 
-  // TODO: Replace this mocks with real data from the API endpoint.
-  // fetch the selected project/workspace using the workspace_id from params
-  // use suspense, do not show elements until important data are fetched.
-
+export default function ProjectDetails({ project }: Props) {
   if (!project) return; // TODO: add fallback
 
   return (
     <div className="flex space-x-4">
       <div className="">
         <div className="flex items-center justify-center rounded-md size-12 bg-brand-primary">
-          <span className="text-light-text text-xl font-bold">{getInitials(project.name)}</span>
+          <span className="text-light-text text-xl font-bold">
+            {getInitials(project.name)}
+          </span>
         </div>
       </div>
       <div>

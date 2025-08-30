@@ -4,19 +4,28 @@ import { TbLayoutKanbanFilled } from "react-icons/tb";
 import { CiBoxList, CiCalendar } from "react-icons/ci";
 import { TabsContent } from "@radix-ui/react-tabs";
 import KanbanContainer from "@/features/tasks/components/kanban/KanbanContainer";
-// import { useParams } from "react-router";
-import { MOCK_SPECIFIC_WORKSPACE } from "@/mocks/projects";
+import { useFetchWorkspaceQuery } from "../hooks/queries/useFetchWorkspaceQuery";
+import { useAuth } from "@/context/auth-context";
+import { useParams } from "react-router";
+import PageLoader from "@/components/PageLoader";
 
 export default function WorkspaceContainer() {
   // TODO: Actual data fetching for the selected project
   // endpoint -> /workspace/${workspace_id}/${user_id}
   // query keys = ["workspace", { workspace_id }]
 
-  // const { workspace_id } = useParams();
-  const project = MOCK_SPECIFIC_WORKSPACE;
-  // const projects = useProjectStore((state) => state.projects);
+  // const project = MOCK_SPECIFIC_WORKSPACE;
+  const { user } = useAuth();
+  const { workspace_id } = useParams();
+  const {
+    data: project,
+    isPending,
+    error,
+  } = useFetchWorkspaceQuery(Number(workspace_id), user?.user_id);
   // const project = projects.find((p) => p.workspace_id === Number(workspace_id));
 
+  if (isPending) return <PageLoader />;
+  if (error) return <div className="text-error">{error.message}</div>; // temporary
   if (!project) return; // TODO: Better fallback
 
   return (

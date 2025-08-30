@@ -1,5 +1,6 @@
 import api from "@/lib/axios";
 import type {
+  WorkspaceResponse,
   NewProject,
   Project,
   UserWorkspacesResponse,
@@ -22,9 +23,20 @@ export const createWorkspace = async (
 
 export const getWorkspaces = async (
   user_id: number
-): Promise<UserWorkspacesResponse[]> => { 
+): Promise<UserWorkspacesResponse[]> => {
   const { data } = await api.get<UserWorkspacesResponse[]>(
     `/workspace/${user_id}`
+  );
+
+  return data;
+};
+
+export const getSelectedWorkspace = async (
+  workspace_id: number,
+  user_id: number
+): Promise<WorkspaceResponse> => {
+  const { data } = await api.get<WorkspaceResponse>(
+    `/workspace/${workspace_id}/${user_id}`
   );
 
   return data;

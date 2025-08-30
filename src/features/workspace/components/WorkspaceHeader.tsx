@@ -1,15 +1,37 @@
 import ProjectDetails from "./ProjectDetails";
-import WorkspaceMembers from "./WorkspaceMembers";
 import addPeople from "@/assets/bi_person-add.svg";
 import InviteWorkspaceMemberModal from "./InviteWorkspaceMemberModal";
+import { useFetchWorkspaceQuery } from "../hooks/queries/useFetchWorkspaceQuery";
+import { useParams } from "react-router";
+import { useAuth } from "@/context/auth-context";
+import PageLoader from "@/components/PageLoader";
+import { toast } from "sonner";
+import UserAvatars from "@/components/UserAvatars";
 
 export default function WorkspaceHeader() {
+  const { user } = useAuth();
+  const { workspace_id } = useParams();
+  const {
+    data: project,
+    isPending,
+    error,
+  } = useFetchWorkspaceQuery(Number(workspace_id), user?.user_id);
+
+  if (isPending) return <PageLoader />;
+  if (!project) return; // TODO: better fallback
+  if (error) toast(error.message);
+
+  const members = project?.members.map((member) => ({
+    avatar: member.profile_picture,
+    name: member.first_name + " " + member.last_name,
+  }));
+
   return (
     <header className="w-full grid grid-cols-1 p-4">
       <div className="flex justify-between">
-        <ProjectDetails />
+        <ProjectDetails project={project} />
         <div className="flex space-x-4 items-center">
-          <WorkspaceMembers />
+          <UserAvatars users={members} />
           <InviteWorkspaceMemberModal>
             <div className="bg-brand-primary hover:bg-brand-light flex space-x-2 px-4 py-1 rounded items-center">
               <img src={addPeople} alt="invite icon" />
