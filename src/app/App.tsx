@@ -5,6 +5,7 @@ import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/context/AuthProvider";
 import PageLoader from "@/components/PageLoader";
 import WorkspaceContainer from "@/features/workspace/components/WorkspaceContainer";
+import { Toaster } from "@/components/ui/sonner";
 
 // const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Landing = lazy(() => import("./pages/Landing"));
@@ -56,6 +57,7 @@ export default function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <Toaster />
       </QueryClientProvider>
     </AuthProvider>
   );
