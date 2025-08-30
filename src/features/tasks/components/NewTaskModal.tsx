@@ -15,11 +15,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/auth-context";
-import { useTaskStore } from "@/stores/useTasksStore";
-import type { NewTask, Task } from "@/types/task";
+import type { NewTask } from "@/types/task";
 import { useState, type PropsWithChildren } from "react";
 import { useForm, Controller, type SubmitHandler } from "react-hook-form";
 import { useParams } from "react-router";
+import { useCreateTaskMutation } from "../hooks/mutations/useCreateTaskMutation";
+import { toast } from "sonner";
 
 const defaultValues = {
   title: "",
@@ -31,7 +32,6 @@ const defaultValues = {
 
 export default function NewTaskModal({ children }: PropsWithChildren) {
   const [open, setOpen] = useState(false);
-  const addTask = useTaskStore((state) => state.addTask);
   const { user } = useAuth();
   const { workspace_id } = useParams();
   const {
@@ -43,25 +43,26 @@ export default function NewTaskModal({ children }: PropsWithChildren) {
   } = useForm<NewTask>({ defaultValues });
 
   // if (!user) throw new Error("No user authenticated.");
+  const {
+    mutate,
+    isPending,
+    error: createTaskError,
+  } = useCreateTaskMutation(Number(workspace_id));
+
+  if (createTaskError) toast(createTaskError.message);
 
   const onSubmit: SubmitHandler<NewTask> = (task) => {
-    // TODO: DELETE ALL THE TEMP FIELD WHEN THE API IS READY
-    // send the task to the actual endpoint
+    if (!user) throw new Error("No user authenticated"); // Find better solution for this, this is getting repetitive
 
-    const newTask: Task = {
+    mutate({
       ...task,
-      status: "pending",
-      created_by: user?.user_id ?? 1, //
-      task_id: Math.random(), // temp
-      created_at: new Date(), // temp
-      marked_done_at: null, // temp
-      workspace_id: Number(workspace_id),
-    };
+      created_by: user?.user_id,
+    });
 
-    addTask(newTask);
     setOpen(false);
     reset();
   };
+
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -157,11 +158,17 @@ export default function NewTaskModal({ children }: PropsWithChildren) {
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" onClick={() => reset()}>
+              <Button
+                variant="outline"
+                disabled={isPending}
+                onClick={() => reset()}
+              >
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit">Create Task</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Creating Task..." : "Create Task"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

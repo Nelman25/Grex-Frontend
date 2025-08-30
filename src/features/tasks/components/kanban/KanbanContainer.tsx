@@ -1,4 +1,3 @@
-import { useTaskStore } from "@/stores/useTasksStore";
 import KanbanColumn from "./KanbanColumn";
 import { groupTasksByStatus } from "@/utils";
 import { DragDropContext } from "@hello-pangea/dnd";
@@ -9,22 +8,22 @@ import { useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { GoPlus } from "react-icons/go";
 import NewTaskModal from "../NewTaskModal";
+import { useFetchTasksQuery } from "../../hooks/queries/useFetchTasksQuery";
+import { toast } from "sonner";
+import PageLoader from "@/components/PageLoader";
 
 export default function KanbanContainer() {
-  // TODO: Actual data fetching for tasks of the selected project
-  // endpoint -> /task/${workspace_id}
-  // query keys: ["tasks", {workspace_id}]
-
   const { workspace_id } = useParams();
+  const {
+    data: tasks,
+    isPending,
+    error,
+  } = useFetchTasksQuery(Number(workspace_id));
 
-  // THIS WILL BE SERVER STATE
-  // gets the tasks that belongs to the selected project. When the api endpoint is ready, this will be data fetching function
-  const tasks = useTaskStore((state) => state.tasks).filter(
-    (t) => t.workspace_id === Number(workspace_id)
-  );
+  if (error) toast(error.message);
 
   // THIS IS CLIENT STATE (derived), the positions of kanban items
-  const positions = useMemo(() => groupTasksByStatus(tasks), [tasks]);
+  const positions = useMemo(() => groupTasksByStatus(tasks ?? []), [tasks]);
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -64,9 +63,16 @@ export default function KanbanContainer() {
         </NewTaskModal>
       </div>
       <div className="w-full flex space-x-4">
-        {Object.entries(positions).map(([type, task]) => (
-          <KanbanColumn key={type} type={type} tasks={task} />
-        ))}
+        {isPending && (
+          <div className="flex-1 flex justify-center items-center">
+            <PageLoader />
+          </div>
+        )}
+
+        {!isPending &&
+          Object.entries(positions).map(([type, task]) => (
+            <KanbanColumn key={type} type={type} tasks={task} />
+          ))}
       </div>
     </DragDropContext>
   );
