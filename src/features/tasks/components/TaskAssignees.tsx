@@ -39,7 +39,7 @@ export default function TaskAssignees({ id }: { id: number }) {
         </div>
       )}
 
-      {length > 2 && <UserAvatars assignees={assignees} />}
+      {length > 2 && <UserAvatars users={assignees} />}
     </div>
   );
 }

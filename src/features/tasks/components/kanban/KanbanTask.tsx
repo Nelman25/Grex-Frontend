@@ -87,7 +87,7 @@ export default function KanbanTask({
       </div>
 
       <div className="flex justify-between pt-2">
-        <UserAvatars assignees={assigneesInfo} />
+        <UserAvatars users={assigneesInfo} />
         <div className="flex space-x-2">
           <div className="bg-dark-muted text-dark-text p-1 rounded flex items-center space-x-1">
             <IoDocumentAttachOutline className="size-3" />
