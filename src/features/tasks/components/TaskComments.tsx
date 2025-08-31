@@ -1,4 +1,6 @@
-import { useCommentsStore } from "@/stores/useCommentsStore";
+import PageLoader from "@/components/PageLoader";
+import { useFetchTaskCommentsQuery } from "@/features/workspace/hooks/queries/useFetchTaskCommentsQuery";
+import { toast } from "sonner";
 import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
 
@@ -7,9 +9,20 @@ type Props = {
 };
 
 export default function TaskComments({ taskId }: Props) {
-  const comments = useCommentsStore((state) => state.comments).filter(
-    (c) => c.task_id === taskId
-  );
+  const {
+    data: comments,
+    isPending,
+    error,
+  } = useFetchTaskCommentsQuery(taskId);
+
+  if (isPending) return <PageLoader />;
+  if (error) toast(error.message);
+  if (!comments)
+    return (
+      <div className="h-60 flex items-center justify-center">
+        <p className="text-error text-sm">Failed to get comments.</p>
+      </div>
+    );
 
   return (
     <div className="h-[300px] bg-dark-muted">
