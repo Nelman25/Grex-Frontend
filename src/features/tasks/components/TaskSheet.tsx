@@ -96,6 +96,7 @@ export default function TaskSheet({ children, task }: Props) {
           <div className="flex flex-col space-y-4 px-4">
             <Label>Subtasks</Label>
             <SubtaskList
+              task_id={task.task_id}
               subtasks={subtasks}
               className="flex flex-col space-y-2"
             />

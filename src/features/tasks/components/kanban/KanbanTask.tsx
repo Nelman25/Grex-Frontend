@@ -86,7 +86,7 @@ export default function KanbanTask({
       </div>
 
       <div className="my-2">
-        {subtasks && <SubtaskList subtasks={subtasks} />}
+        {subtasks && <SubtaskList task_id={task.task_id} subtasks={subtasks} />}
         {isPending && <PageLoader />}
       </div>
 

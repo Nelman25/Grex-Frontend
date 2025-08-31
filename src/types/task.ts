@@ -47,6 +47,11 @@ export interface Subtask extends NewSubtask {
   created_at: Date;
 }
 
+export interface PatchSubtask {
+  description?: string;
+  is_done?: boolean;
+}
+
 export interface TaskAssignee {
   task_id: number;
   user_id: number;
