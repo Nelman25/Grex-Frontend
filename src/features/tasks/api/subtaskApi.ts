@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { Subtask, PatchSubtask } from "@/types/task";
+import type { Subtask } from "@/types/task";
 
 export const createSubtask = async (
   task_id: number,
@@ -18,9 +18,9 @@ export const getSubtasks = async (task_id: number): Promise<Subtask[]> => {
 export const editSubtask = async (
   task_id: number,
   subtask_id: number,
-  payload: PatchSubtask
+  payload: { is_done: boolean }
 ) => {
-  await api.patch(`/task/${task_id}/subtask/${subtask_id}`, payload);
+  await api.put(`/task/${task_id}/subtask/${subtask_id}`, payload);
 };
 
 export const deleteSubtask = async (task_id: number, subtask_id: number) => {

@@ -1,3 +1,6 @@
+import PageLoader from "@/components/PageLoader";
+import { Progress } from "@/components/ui/progress";
+import UserAvatars from "@/components/UserAvatars";
 import type { Task } from "@/types/task";
 import {
   capitalizeWord,
@@ -5,19 +8,16 @@ import {
   getPrioLevelStyle,
   getProgressPercentage,
 } from "@/utils";
-import { CiCalendar } from "react-icons/ci";
-import { RiDraggable } from "react-icons/ri";
-import { IoDocumentAttachOutline } from "react-icons/io5";
-import { BiCommentDetail } from "react-icons/bi";
-import { Progress } from "@/components/ui/progress";
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
-import TaskSheet from "../TaskSheet";
-import SubtaskList from "../SubtaskList";
-import UserAvatars from "@/components/UserAvatars";
-import { useAssigneeStore } from "@/stores/useAssigneesStore";
-import { useFetchSubtasksQuery } from "../../hooks/queries/useFetchSubtasksQuery";
-import PageLoader from "@/components/PageLoader";
+import { BiCommentDetail } from "react-icons/bi";
+import { CiCalendar } from "react-icons/ci";
+import { IoDocumentAttachOutline } from "react-icons/io5";
+import { RiDraggable } from "react-icons/ri";
 import { toast } from "sonner";
+import { useFetchSubtasksQuery } from "../../hooks/queries/useFetchSubtasksQuery";
+import { useFetchTaskAssigneesQuery } from "../../hooks/queries/useFetchTaskAssigneesQuery";
+import SubtaskList from "../SubtaskList";
+import TaskSheet from "../TaskSheet";
 
 type Props = {
   task: Task;
@@ -30,18 +30,14 @@ export default function KanbanTask({
   isDragging,
   dragHandleProps,
 }: Props) {
-  // get assignees -> /task/${task_id}/assignment
-
   const {
     data: subtasks,
     isPending,
     error,
   } = useFetchSubtasksQuery(task.task_id);
+  const { data: assignees } = useFetchTaskAssigneesQuery(task.task_id);
 
-  // CHANGE THIS TO THE ACTUAL DATA FETCHING FOR TASK ASSIGNEES
-  const assignees = useAssigneeStore((state) => state.assignees).filter(
-    (i) => i.task_id === task.task_id
-  );
+  if (!assignees) return; // handle this properly
 
   const assigneesInfo = assignees.map((a) => ({
     avatar: a.avatar,

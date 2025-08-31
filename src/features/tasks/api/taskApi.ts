@@ -1,5 +1,10 @@
 import api from "@/lib/axios";
-import type { EditableTaskFields, NewTask, Task } from "@/types/task";
+import type {
+  TaskAssignee,
+  EditableTaskFields,
+  NewTask,
+  Task,
+} from "@/types/task";
 
 export const createTask = async (
   newTask: NewTask,
@@ -33,4 +38,19 @@ export const editTask = async (
 
 export const deleteTask = async (workspace_id: number, task_id: number) => {
   await api.delete(`/tasks/${workspace_id}/${task_id}`);
+};
+
+export const addAssignee = async (task_id: number, user_id: number) => {
+  await api.post(`/task/${task_id}/assignment/${user_id}`);
+};
+
+export const getAssignees = async (
+  task_id: number
+): Promise<TaskAssignee[]> => {
+  const { data } = await api.get<TaskAssignee[]>(`/task/${task_id}/assignment`);
+  return data;
+};
+
+export const deleteAssignee = async (task_id: number, user_id: number) => {
+  await api.delete(`/task/${task_id}/assignment/${user_id}`);
 };

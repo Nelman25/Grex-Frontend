@@ -8,7 +8,6 @@ import type { EditableTaskFields, Task } from "@/types/task";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { useParams } from "react-router";
 import { usePatchTaskMutation } from "../hooks/mutations/usePatchTaskMutation";
-import EditTaskAssignees from "./EditTaskAssignees";
 import { toast } from "sonner";
 
 type Props = {
@@ -124,8 +123,6 @@ export default function EditTask({ task, onCancel }: Props) {
             )}
           />
         </div>
-
-        <EditTaskAssignees id={task.task_id} />
       </div>
 
       <div className="flex justify-end space-x-4">

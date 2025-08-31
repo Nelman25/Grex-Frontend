@@ -81,6 +81,8 @@ export const capitalizeWord = (word: string) => {
   return word[0].toUpperCase() + word.slice(1).toLowerCase();
 };
 
+// TODO: When progress === 100, trigger a function that will update the task:
+// mark_done_at, and status => "done"
 export const getProgressPercentage = (subtasks: Subtask[]): number => {
   if (subtasks.length === 0) return 0;
 

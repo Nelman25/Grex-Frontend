@@ -22,6 +22,7 @@ import SubtaskList from "./SubtaskList";
 import TaskComments from "./TaskComments";
 import TaskMenu from "./TaskMenu";
 import TaskMetaSection from "./TaskMetaSection";
+import EditTaskAssignees from "./EditTaskAssignees";
 
 type Props = PropsWithChildren & {
   task: Task;
@@ -66,7 +67,12 @@ export default function TaskSheet({ children, task }: Props) {
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent>
         {isEditting && (
-          <EditTask task={task} onCancel={() => setIsEdditing(false)} />
+          <div className="pt-4">
+            <EditTask task={task} onCancel={() => setIsEdditing(false)} />
+            <div className="p-4">
+              <EditTaskAssignees id={task.task_id} />
+            </div>
+          </div>
         )}
         {!isEditting && (
           <>
