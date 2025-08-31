@@ -9,8 +9,16 @@ import collaborateHero from "@/assets/Group 69.svg";
 import collabIcon from "@/assets/Group.svg";
 import planIcon from "@/assets/Group 73.svg";
 import { FEATURE_CARDS } from "@/constants";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 export default function Landing() {
+  // TEMPORARY. REMOVE THIS WHEN AUTH IS FINALIZED, CLEAR CACHE WHEN USER LOGGED OUT
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.clear();
+  }, [queryClient]);
   return (
     <div className="min-w-screen min-h-screen bg-dark-bg scroll-smooth pb-60">
       <header className="p-4 flex justify-between">

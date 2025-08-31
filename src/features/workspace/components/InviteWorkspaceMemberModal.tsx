@@ -8,39 +8,17 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState, type PropsWithChildren } from "react";
+import { useState, type PropsWithChildren } from "react";
 import UserResultList from "./UserResultList";
-import type { User } from "@/types/user";
-import { useDebounce } from "@/hooks/useDebounce";
-import { MOCK_USERS } from "@/mocks/users";
 import ShareWorkspaceLink from "./ShareWorkspaceLink";
+import { useUserSearch } from "../hooks/queries/useUserSearch";
+import PageLoader from "@/components/PageLoader";
 
 type Props = PropsWithChildren & {};
 
 export default function InviteWorkspaceMemberModal({ children }: Props) {
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState<User[]>([]);
-
-  const debouncedQuery = useDebounce(query, 500);
-  const users = MOCK_USERS;
-
-  useEffect(() => {
-    if (debouncedQuery.trim() === "" || query.trim() === "") {
-      return setResult([]);
-    }
-
-    const filtered = users.filter(
-      (u) =>
-        u.first_name.trim().toLowerCase().includes(debouncedQuery) ||
-        u.last_name.trim().toLowerCase().includes(debouncedQuery) ||
-        u.email.trim().toLowerCase().includes(debouncedQuery)
-    );
-
-    setResult(filtered);
-  }, [users, debouncedQuery, query]);
-
-  // TODO: Request for querying users to add to the workspace
-  // name it users
+  const { data: users, error, isLoading } = useUserSearch(query);
 
   return (
     <Dialog>
@@ -54,7 +32,6 @@ export default function InviteWorkspaceMemberModal({ children }: Props) {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Input for searching a user to add  */}
         <div className="grid gap-2">
           <Label>Enter name or email </Label>
           <Input
@@ -64,10 +41,11 @@ export default function InviteWorkspaceMemberModal({ children }: Props) {
           />
         </div>
 
-        {/* Container for showing the result for searching users to add */}
-        {result && (
+        {isLoading && <PageLoader />}
+        {error && <p className="text-sm text-error">{error.message}</p>}
+        {users && (
           <div className="border-b border-b-dark-muted pb-2">
-            <UserResultList users={result} />
+            <UserResultList users={users} />
           </div>
         )}
 

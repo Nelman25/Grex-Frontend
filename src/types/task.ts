@@ -15,7 +15,7 @@ export interface Task extends NewTask {
   task_id: number;
   created_at: Date;
   marked_done_at: Date | null;
-  workspace_id: number; // DELETE THIS WHEN THE API IS READY. this is just to simulate the project selection.
+  workspace_id: number;
 }
 
 export type EditableTaskFields = {
@@ -35,14 +35,20 @@ export type TaskGroups = {
 };
 
 export interface NewSubtask {
-  task_id: number;
+  // task_id: number;
   description: string;
-  is_done: boolean;
+  // is_done: boolean;
 }
 
 export interface Subtask extends NewSubtask {
   subtask_id: number;
+  task_id: number;
+  is_done: boolean;
   created_at: Date;
+}
+
+export interface PutSubtask {
+  is_done: boolean;
 }
 
 export interface TaskAssignee {

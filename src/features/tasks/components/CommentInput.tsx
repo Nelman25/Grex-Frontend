@@ -1,31 +1,26 @@
 import { Input } from "@/components/ui/input";
-import { useCommentsStore } from "@/stores/useCommentsStore";
-import type { Comment } from "@/types/comment";
+import type { NewComment } from "@/types/comment";
 import { useRef, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { MdAttachFile } from "react-icons/md";
+import { useCreateCommentMutation } from "../hooks/mutations/useCreateCommentMutation";
+import { useAuth } from "@/context/auth-context";
 
 export default function CommentInput({ taskId }: { taskId: number }) {
   const [comment, setComment] = useState("");
   const attachmentRef = useRef<HTMLInputElement | null>(null);
-  const addComment = useCommentsStore((state) => state.addComment);
+  const { user } = useAuth();
+  const { mutate: addComment } = useCreateCommentMutation(taskId);
 
   const handleSendComment = () => {
-    // content and sender_id + task_id on url parameter are the only needed fields when posting a comment
-    // change this data on the actual testing, change the type of newComment to NewComment
-    const newComment: Comment = {
+    if (!user) return;
+
+    const newComment: NewComment = {
       content: comment,
-      sender_id: 1, // CHANGE THIS WHEN TESTING, THIS SHOULD BE THE ID OF THE AUTHENTICATED USER
-      comment_id: Math.random(),
-      task_id: taskId,
-      created_at: new Date(),
-      profile_picture: `https://randomuser.me/api/portraits/men/${Math.floor(
-        Math.random() * 10
-      )}.jpg`, // DUMMY PHOTO, CHANGE THIS TO THE PROFILE PIC OF THE AUTHENTICATED USER
-      sender_name: "Jonel Villaver",
+      sender_id: user.user_id,
     };
 
-    addComment(newComment); // temporary. This will be the actual post request for sending a new comment to the server
+    addComment(newComment);
     setComment("");
   };
 

@@ -37,11 +37,11 @@ export default function SigninForm() {
       }
 
       await login(userCredentials);
-      navigate("/");
+      navigate("/my-projects"); // TODO: Implement protected routes
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.message);
-        console.error(error); // TODO: better error handling
+        console.error(error.message); // TODO: better error handling
       } else {
         console.error(error); // TODO: better error handling
       }

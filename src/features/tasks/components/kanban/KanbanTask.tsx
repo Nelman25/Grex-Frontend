@@ -1,3 +1,6 @@
+import PageLoader from "@/components/PageLoader";
+import { Progress } from "@/components/ui/progress";
+import UserAvatars from "@/components/UserAvatars";
 import type { Task } from "@/types/task";
 import {
   capitalizeWord,
@@ -5,17 +8,16 @@ import {
   getPrioLevelStyle,
   getProgressPercentage,
 } from "@/utils";
-import { CiCalendar } from "react-icons/ci";
-import { RiDraggable } from "react-icons/ri";
-import { IoDocumentAttachOutline } from "react-icons/io5";
-import { BiCommentDetail } from "react-icons/bi";
-import { Progress } from "@/components/ui/progress";
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
-import { useSubtaskStore } from "@/stores/useSubtasksStore";
-import TaskSheet from "../TaskSheet";
+import { BiCommentDetail } from "react-icons/bi";
+import { CiCalendar } from "react-icons/ci";
+import { IoDocumentAttachOutline } from "react-icons/io5";
+import { RiDraggable } from "react-icons/ri";
+import { toast } from "sonner";
+import { useFetchSubtasksQuery } from "../../hooks/queries/useFetchSubtasksQuery";
+import { useFetchTaskAssigneesQuery } from "../../hooks/queries/useFetchTaskAssigneesQuery";
 import SubtaskList from "../SubtaskList";
-import UserAvatars from "@/components/UserAvatars";
-import { useAssigneeStore } from "@/stores/useAssigneesStore";
+import TaskSheet from "../TaskSheet";
 
 type Props = {
   task: Task;
@@ -28,24 +30,21 @@ export default function KanbanTask({
   isDragging,
   dragHandleProps,
 }: Props) {
-  // TODO: Data fetching for subtasks and assignees
-  // endpoints:
-  // get subtasks -> /task/${task_id}/subtask
-  // get assignees -> /task/${task_id}/assignment
+  const {
+    data: subtasks,
+    isPending,
+    error,
+  } = useFetchSubtasksQuery(task.task_id);
+  const { data: assignees } = useFetchTaskAssigneesQuery(task.task_id);
 
-  // CHANGE THIS TO THE ACTUAL DATA FETCHING FOR SUBTASKS
-  const subtasks = useSubtaskStore((state) => state.subtasks).filter(
-    (subtask) => subtask.task_id === task.task_id
-  );
-  // CHANGE THIS TO THE ACTUAL DATA FETCHING FOR TASK ASSIGNEES
-  const assignees = useAssigneeStore((state) => state.assignees).filter(
-    (i) => i.task_id === task.task_id
-  );
+  if (!assignees) return; // handle this properly
 
   const assigneesInfo = assignees.map((a) => ({
     avatar: a.avatar,
     name: a.name,
   }));
+
+  if (error) toast(error.message);
 
   return (
     <div
@@ -83,11 +82,12 @@ export default function KanbanTask({
       </div>
 
       <div className="my-2">
-        <SubtaskList subtasks={subtasks} />
+        {subtasks && <SubtaskList task_id={task.task_id} subtasks={subtasks} />}
+        {isPending && <PageLoader />}
       </div>
 
       <div className="flex justify-between pt-2">
-        <UserAvatars assignees={assigneesInfo} />
+        <UserAvatars users={assigneesInfo} />
         <div className="flex space-x-2">
           <div className="bg-dark-muted text-dark-text p-1 rounded flex items-center space-x-1">
             <IoDocumentAttachOutline className="size-3" />
@@ -105,11 +105,11 @@ export default function KanbanTask({
         <div className="flex justify-between my-1 text-sm">
           <span className="text-dark-text">Progress</span>
           <span className="text-dark-subtle">
-            {getProgressPercentage(subtasks)}%
+            {getProgressPercentage(subtasks ?? [])}%
           </span>
         </div>
 
-        <Progress value={getProgressPercentage(subtasks)} />
+        <Progress value={getProgressPercentage(subtasks ?? [])} />
       </div>
     </div>
   );

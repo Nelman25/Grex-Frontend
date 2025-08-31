@@ -1,22 +1,21 @@
-import type { TaskAssignee } from "@/types/task";
 import UserAvatar from "./UserAvatar";
 
 type Props = {
-  assignees: Pick<TaskAssignee, "avatar" | "name">[];
+  users: { name: string; avatar: string | null }[];
 };
 
 // TODO: improve this component by adding hover card to each avatar
 
-export default function UserAvatars({ assignees }: Props) {
-  const length = assignees.length;
+export default function UserAvatars({ users }: Props) {
+  const length = users.length;
 
   return (
     <div className="relative flex items-center">
-      {assignees.slice(0, 5).map((assignee, index) => (
+      {users.slice(0, 5).map((user, index) => (
         <UserAvatar
-          key={`${index}-${assignee.name}`}
-          name={assignee.name}
-          photoUrl={assignee.avatar}
+          key={`${index}-${user.name}`}
+          name={user.name}
+          photoUrl={user.avatar || ""}
           className="border-2 border-dark-muted -ml-2 first:ml-0"
         />
       ))}

@@ -24,9 +24,10 @@ import {
 } from "react-icons/io";
 import profile from "@/assets/sample_profile.svg";
 import { useAuth } from "@/context/auth-context";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router";
 import slugify from "slugify";
-import { useProjectStore } from "@/stores/useProjectStore";
+import { useUserWorkspaces } from "@/features/workspace/hooks/queries/useUserWorkspaces";
+import PageLoader from "./PageLoader";
 
 export function AppSidebar() {
   const location = useLocation();
@@ -34,7 +35,10 @@ export function AppSidebar() {
   const activeTab = location.pathname.split("/")[1];
   const { workspace_name: activeProject } = useParams();
   const { user } = useAuth();
-  const { projects } = useProjectStore();
+
+  const { data: projects, isLoading } = useUserWorkspaces(user?.user_id);
+
+  if (!user) return <Navigate to="/auth/signin" />;
 
   const handleSelectTab = (item: string) => {
     navigate(`/${slugify(item, { lower: true })}`);
@@ -108,23 +112,25 @@ export function AppSidebar() {
 
                     <CollapsibleContent>
                       <SidebarMenuSub>
-                        {projects.map((project) => (
-                          <SidebarMenuButton key={project.name}>
-                            <SidebarMenuSubItem
-                              onClick={() =>
-                                handleSelectActiveProject(
-                                  project.workspace_id,
+                        {isLoading && <PageLoader />}
+                        {projects &&
+                          projects.map((project) => (
+                            <SidebarMenuButton key={project.name}>
+                              <SidebarMenuSubItem
+                                onClick={() =>
+                                  handleSelectActiveProject(
+                                    project.workspace_id,
+                                    project.name
+                                  )
+                                }
+                                className={`truncate text-white ${getActiveProjectClass(
                                   project.name
-                                )
-                              }
-                              className={`truncate text-white ${getActiveProjectClass(
-                                project.name
-                              )}`}
-                            >
-                              {project.name}
-                            </SidebarMenuSubItem>
-                          </SidebarMenuButton>
-                        ))}
+                                )}`}
+                              >
+                                {project.name}
+                              </SidebarMenuSubItem>
+                            </SidebarMenuButton>
+                          ))}
                       </SidebarMenuSub>
                     </CollapsibleContent>
                   </Collapsible>

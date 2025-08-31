@@ -1,17 +1,21 @@
-import type { Subtask } from "@/types/task";
 import SubtaskItem from "./Subtask";
+import type { Subtask } from "@/types/task";
 
 type Props = {
   subtasks: Subtask[];
+  task_id: number;
   className?: string;
 };
 
-// CHANGE TO GENERAL SUBTASKSLIST COMPONENT FOR REUSABILITY
-export default function SubtaskList({ subtasks, className }: Props) {
+export default function SubtaskList({ task_id, subtasks, className }: Props) {
   return (
     <ul className={className}>
-      {subtasks.map((subtask) => (
-        <SubtaskItem key={subtask.subtask_id} subtask={subtask} />
+      {subtasks?.map((subtask) => (
+        <SubtaskItem
+          key={subtask.subtask_id}
+          task_id={task_id}
+          subtask={subtask}
+        />
       ))}
     </ul>
   );

@@ -4,10 +4,11 @@ import SelectComponent from "@/components/SelectComponent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useTaskStore } from "@/stores/useTasksStore";
 import type { EditableTaskFields, Task } from "@/types/task";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
-import EditTaskAssignees from "./EditTaskAssignees";
+import { useParams } from "react-router";
+import { usePatchTaskMutation } from "../hooks/mutations/usePatchTaskMutation";
+import { toast } from "sonner";
 
 type Props = {
   task: Task;
@@ -15,7 +16,13 @@ type Props = {
 };
 
 export default function EditTask({ task, onCancel }: Props) {
-  const editTask = useTaskStore((state) => state.editTask);
+  const { workspace_id } = useParams();
+
+  const {
+    mutate: editTask,
+    isPending,
+    error,
+  } = usePatchTaskMutation(Number(workspace_id), task.task_id);
   const {
     register,
     handleSubmit,
@@ -26,18 +33,18 @@ export default function EditTask({ task, onCancel }: Props) {
       title: task.title,
       subject: task.subject,
       description: task.description,
-      deadline: task.deadline,
+      deadline: new Date(task.deadline),
       priority_level: task.priority_level,
     },
   });
+
   const onSubmit: SubmitHandler<EditableTaskFields> = (editedTask) => {
-    // 'editedTask' is Partial<Task>, here in simulation, the task_id is needed
-    // but in actual api connection, we can directly send this 'editedTask' as payload to this
-    // endpoint -> /${workspace_id}/${task_id}
-    // NOTE: may workspace_id field na si task so no need to get this data from other source
-    editTask({ ...editedTask, task_id: task.task_id });
-    onCancel();
+    editTask(editedTask);
+
+    if (!isPending) onCancel();
   };
+
+  if (error) toast(error.message);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="px-4">
@@ -116,8 +123,6 @@ export default function EditTask({ task, onCancel }: Props) {
             )}
           />
         </div>
-
-        <EditTaskAssignees id={task.task_id} />
       </div>
 
       <div className="flex justify-end space-x-4">

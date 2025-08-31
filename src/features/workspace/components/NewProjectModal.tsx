@@ -15,10 +15,11 @@ import { useState, type PropsWithChildren } from "react";
 import newProjectHero from "@/assets/NewProjectHero.svg";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/DatePicker";
-import type { NewProject, Project } from "@/types/project";
-import { useProjectStore } from "@/stores/useProjectStore";
+import type { NewProject } from "@/types/project";
 import RHFFormField from "@/components/RHFFormField";
 import { useAuth } from "@/context/auth-context";
+import { Navigate } from "react-router";
+import { useCreateWorkspace } from "../hooks/mutations/useCreateWorkspace";
 
 const defaultValues = {
   name: "",
@@ -30,8 +31,6 @@ const defaultValues = {
 
 export function NewProjectModal({ children }: PropsWithChildren) {
   const [open, setOpen] = useState(false);
-  const addProject = useProjectStore((state) => state.addProject);
-  const { user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -40,20 +39,23 @@ export function NewProjectModal({ children }: PropsWithChildren) {
     formState: { errors },
   } = useForm<NewProject>({ defaultValues });
 
-  const onSubmit: SubmitHandler<NewProject> = (project) => {
-    // Add project to the project store to simulate sneding request to backend api
-    // change the type to NewProject when the api endpoint is ready
-    const newProject: Project = {
+  const { user } = useAuth();
+  const { mutate, isPending, error } = useCreateWorkspace();
+
+  if (!user) return <Navigate to="/auth/signin" />;
+
+  const onSubmit: SubmitHandler<NewProject> = async (project) => {
+    const newProject: NewProject = {
       ...project,
-      created_by: user?.user_id ?? 1,
-      created_at: new Date(), // temporary
-      workspace_id: Math.random(), // temporary
+      created_by: user?.user_id,
     };
 
-    addProject(newProject);
+    mutate(newProject);
 
-    setOpen(false);
-    reset();
+    if (!isPending) {
+      setOpen(false);
+      reset();
+    }
   };
 
   return (
@@ -149,6 +151,8 @@ export function NewProjectModal({ children }: PropsWithChildren) {
               </div>
             </div>
           </div>
+
+          {error && <p className="text-error text-sm">{error.message}</p>}
 
           <DialogFooter>
             <DialogClose asChild>

@@ -14,7 +14,9 @@ export default function UserAvatar({ name, photoUrl, className }: Props) {
         className={`size-7 rounded-full ${className}`}
         src={photoUrl}
       />
-      <AvatarFallback className="bg-brand-primary/30">{getInitials(name)}</AvatarFallback>
+      <AvatarFallback className="bg-brand-dark">
+        {getInitials(name)}
+      </AvatarFallback>
     </Avatar>
   );
 }

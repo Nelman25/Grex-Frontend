@@ -31,7 +31,7 @@ export function DatePicker({ label, value, onChange }: Props) {
             id="date"
             className="w-48 justify-between font-normal"
           >
-            {value ? value.toLocaleDateString() : "Select date"}
+            {value ? value?.toLocaleDateString() : "Select date"}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>

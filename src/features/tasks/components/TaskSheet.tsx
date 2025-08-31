@@ -1,24 +1,28 @@
+import PageLoader from "@/components/PageLoader";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Sheet,
+  SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetContent,
-  SheetFooter,
 } from "@/components/ui/sheet";
-import { useProjectStore } from "@/stores/useProjectStore";
 import type { Task } from "@/types/task";
 import { useState, type PropsWithChildren } from "react";
-import SubtaskList from "./SubtaskList";
-import { useSubtaskStore } from "@/stores/useSubtasksStore";
-import TaskMetaSection from "./TaskMetaSection";
-import { Input } from "@/components/ui/input";
-import TaskComments from "./TaskComments";
-import { useTaskStore } from "@/stores/useTasksStore";
-import TaskMenu from "./TaskMenu";
+import { useParams } from "react-router";
+import { toast } from "sonner";
+import { useCreateSubtaskMutation } from "../hooks/mutations/useCreateSubtaskMutation";
+import { useDeleteTaskMutation } from "../hooks/mutations/useDeleteTaskMutation";
+import { useFetchSubtasksQuery } from "../hooks/queries/useFetchSubtasksQuery";
 import EditTask from "./EditTask";
+import SubtaskList from "./SubtaskList";
+import TaskComments from "./TaskComments";
+import TaskMenu from "./TaskMenu";
+import TaskMetaSection from "./TaskMetaSection";
+import EditTaskAssignees from "./EditTaskAssignees";
 
 type Props = PropsWithChildren & {
   task: Task;
@@ -30,24 +34,18 @@ export default function TaskSheet({ children, task }: Props) {
   const [showMenu, setShowMenu] = useState(false);
   const [isEditting, setIsEdditing] = useState(false);
 
-  // TODO: CHANGE THIS TO THE ACTUAL DATA FETCHING FOR PROJECT/WORKSPACE AND SUBTASKS
-  const projects = useProjectStore((state) => state.projects);
-  const project = projects.find((p) => p.workspace_id === task.workspace_id); // DATA OF THE CURRENTLY SELECTED PROJECT
-  const subtasks = useSubtaskStore((state) => state.subtasks).filter(
-    // SUBTASKS OF THE SELECTED TASK
-    (s) => s.task_id === task.task_id
-  );
-  const addSubtask = useSubtaskStore((state) => state.addSubtask); // REQUEST FOR CREATE SUBTASK
-  const deleteTask = useTaskStore((state) => state.deleteTask); // REQUEST FOR DELETE TASK
+  const { workspace_id } = useParams();
 
-  // CHANGE THIS TO A FUNCTION THAT WILL ACTUALLY SEND THE NEW SUBTASK TO BaCKEND
+  const { mutate: deleteTask } = useDeleteTaskMutation(Number(workspace_id));
+  const { mutate } = useCreateSubtaskMutation(task.task_id);
+  const {
+    data: subtasks,
+    isPending,
+    error,
+  } = useFetchSubtasksQuery(task.task_id);
+
   const handleAddSubtask = () => {
-    addSubtask({
-      task_id: task.task_id,
-      description: newSubtask,
-      is_done: false,
-    });
-
+    mutate({ description: newSubtask });
     setIsAdding(false);
     setNewSubtask("");
   };
@@ -62,12 +60,19 @@ export default function TaskSheet({ children, task }: Props) {
     setShowMenu(false);
   };
 
+  if (error) toast(error.message);
+
   return (
     <Sheet>
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent>
         {isEditting && (
-          <EditTask task={task} onCancel={() => setIsEdditing(false)} />
+          <div className="pt-4">
+            <EditTask task={task} onCancel={() => setIsEdditing(false)} />
+            <div className="p-4">
+              <EditTaskAssignees id={task.task_id} />
+            </div>
+          </div>
         )}
         {!isEditting && (
           <>
@@ -90,38 +95,42 @@ export default function TaskSheet({ children, task }: Props) {
                 {task.description}
               </SheetDescription>
 
-              <TaskMetaSection task={task} project={project} />
+              <TaskMetaSection task={task} />
             </SheetHeader>
           </>
         )}
 
-        <div className="flex flex-col space-y-4 px-4">
-          <Label>Subtasks</Label>
-          <SubtaskList
-            subtasks={subtasks}
-            className="flex flex-col space-y-2"
-          />
-
-          {isAdding && (
-            <Input
-              className="w-2/3 mx-4"
-              value={newSubtask}
-              onChange={(e) => setNewSubtask(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleAddSubtask();
-                }
-              }}
+        {isPending && <PageLoader />}
+        {subtasks && (
+          <div className="flex flex-col space-y-4 px-4">
+            <Label>Subtasks</Label>
+            <SubtaskList
+              task_id={task.task_id}
+              subtasks={subtasks}
+              className="flex flex-col space-y-2"
             />
-          )}
-          <button
-            className="max-w-[150px] text-medium"
-            onClick={() => setIsAdding(!isAdding)}
-          >
-            + Add Subtask
-          </button>
-        </div>
+
+            {isAdding && (
+              <Input
+                className="w-2/3 mx-4"
+                value={newSubtask}
+                onChange={(e) => setNewSubtask(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddSubtask();
+                  }
+                }}
+              />
+            )}
+            <button
+              className="max-w-[150px] text-medium"
+              onClick={() => setIsAdding(!isAdding)}
+            >
+              + Add Subtask
+            </button>
+          </div>
+        )}
 
         <SheetFooter className="p-0">
           <TaskComments taskId={task.task_id} />
