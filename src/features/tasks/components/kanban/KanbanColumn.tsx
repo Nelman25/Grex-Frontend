@@ -14,9 +14,9 @@ export default function KanbanColumn({ type, tasks }: Props) {
 
   return (
     <div className="w-full max-w-[600px] max-h-[900px] rounded bg p-4">
-      <div className="flex justify-between sticky top-2">
-        <div className="flex space-x-2 my-2">
-          <div className={`h-8 w-1  ${getTypeColor(type)}`} />
+      <div className="flex justify-between sticky top-2 border-b border-b-dark-muted">
+        <div className="flex items-center space-x-2 my-2">
+          <div className={`size-3 rounded-full  ${getTypeColor(type)}`} />
           <span className="text-lg">{capitalizeWord(type)}</span>
           <div className="size-6  rounded-full text-center font-semibold">
             <span className="text-sm">{tasks.length}</span>

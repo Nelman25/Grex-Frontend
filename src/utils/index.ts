@@ -1,3 +1,4 @@
+import type { CalendarEvent } from "@/types";
 import type { Task, TaskPriority, TaskGroups, Subtask } from "@/types/task";
 
 // MOCK USER IMAGES FOR TESTING
@@ -65,11 +66,11 @@ export const groupTasksByStatus = (tasks: Task[]) => {
 export const getPrioLevelStyle = (priority_level: TaskPriority) => {
   switch (priority_level) {
     case "low":
-      return "text-blue-500 bg-blue-500/15";
+      return "text-blue-500 bg-blue-500/15 border border-blue-500/30";
     case "medium":
-      return "text-amber-500 bg-amber-500/15";
+      return "text-amber-500 bg-amber-500/15 border border-amber-500/30";
     case "high":
-      return "text-rose-500 bg-rose-500/15";
+      return "text-rose-500 bg-rose-500/15 border border-rose-500/30";
     default:
       return "";
   }
@@ -123,4 +124,19 @@ export const getPriorityBadge = (
 export const getRandomUserImage = (): string => {
   const randomIndex = Math.floor(Math.random() * USER_IMAGES.length);
   return USER_IMAGES[randomIndex];
+};
+
+export const mapTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
+  return tasks.map((task) => {
+    const start = new Date(task.created_at).toISOString().split("T")[0];
+    const end = new Date(task.deadline).toISOString().split("T")[0];
+
+    return {
+      id: task.task_id,
+      title: task.title,
+      start,
+      end,
+      description: task.description,
+    };
+  });
 };

@@ -37,9 +37,7 @@ export default function KanbanTask({
   } = useFetchSubtasksQuery(task.task_id);
   const { data: assignees } = useFetchTaskAssigneesQuery(task.task_id);
 
-  if (!assignees) return; // handle this properly
-
-  const assigneesInfo = assignees.map((a) => ({
+  const assigneesInfo = assignees?.map((a) => ({
     avatar: a.avatar,
     name: a.name,
   }));
@@ -48,13 +46,13 @@ export default function KanbanTask({
 
   return (
     <div
-      className={`w-full p-2 bg-[#262626] my-2 rounded border border-dark-muted ${
+      className={`w-full p-3 bg-[#262626] my-2 rounded border border-dark-muted ${
         isDragging ? "shadow-lg scale-105 transform rotate-2 bg-[#3a3a3a]" : ""
       } transition-all duration-200`}
     >
       <div className="flex justify-between">
         <div
-          className={`px-4 py-1 rounded-sm text-xs  ${getPrioLevelStyle(
+          className={`px-2 py-1 rounded-sm text-xs  ${getPrioLevelStyle(
             task.priority_level
           )}`}
         >
@@ -67,17 +65,17 @@ export default function KanbanTask({
 
       <div>
         <TaskSheet task={task}>
-          <h3 className="text-dark-text text-sm font-semibold hover:underline">
+          <h3 className="text-dark-text font-semibold hover:underline">
             {task.title}
           </h3>
         </TaskSheet>
-        <p className="text-dark-subtle text-xs">{task.subject}</p>
+        <p className="text-dark-subtle text-sm">{task.subject}</p>
         <div className="text-dark-subtle flex space-x-1 items-center text-xs my-2">
           <CiCalendar className="size-4" />
           <p>{formatDate(task.deadline)}</p>
         </div>
         <div className="p-2">
-          <p className="text-xs text-dark-subtle">{task.description}</p>
+          <p className="text-sm text-white/70">{task.description}</p>
         </div>
       </div>
 
@@ -87,7 +85,7 @@ export default function KanbanTask({
       </div>
 
       <div className="flex justify-between pt-2">
-        <UserAvatars users={assigneesInfo} />
+        {assigneesInfo && <UserAvatars users={assigneesInfo} />}
         <div className="flex space-x-2">
           <div className="bg-dark-muted text-dark-text p-1 rounded flex items-center space-x-1">
             <IoDocumentAttachOutline className="size-3" />

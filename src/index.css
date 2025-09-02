@@ -7,35 +7,39 @@
 @import "tw-animate-css";
 
 .sx__calendar {
-  width: "100px" !important;
+  max-width: 1600px !important;
   height: 700px;
   max-height: 85vh;
   margin: 20px auto;
-  border: 10px solid #ccc;
+  border: 1px solid #404040 !important;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(64, 64, 64, 0.1) !important;
 }
 
 * {
   font-family: "karla" !important;
 }
 
-.sx__view-container {
-  background-color: #303030;
+
+.sx__week-header {
+  background-color: rgba(64, 64, 64, 0.1) !important;
 }
 
 .sx__week-grid {
-  background-color: #171717;
+  background-color: rgba(64, 64, 64, 0.1) !important;
 }
 
 .sx__date-input-label {
-  background-color: #171717 !important;
+  background-color: #262626 !important;
   color: #f2f2f2 !important;
+  border-radius: 2px;
 }
 
 .sx__date-input {
-  background-color: #404040 !important;
+  background-color: #262626 !important;
   color: #f2f2f2 !important;
+  border: 1px solid #404040 !important;
 }
 
 .sx__date-picker-popup {
@@ -43,8 +47,48 @@
   border-radius: 10px;
 }
 
+.sx__month-grid-day {
+  height: 200px !important;
+  background-color: transparent !important;
+  color: #f2f2f2;
+  border-right: 1px solid #404040 !important;
+}
+
+.sx__event {
+  background-color: rgba(138, 166, 36, 0.2) !important;
+  border-inline-start: 4px solid rgba(138, 166, 36, 0.5) !important;
+  color: rgba(138, 166, 36) !important;
+}
+.sx__month-grid-week {
+  border-top: 1px solid #404040 !important;
+}
+
 .sx__week-grid__day-name {
   color: #f2f2f2 !important;
+}
+
+.sx__calendar-header .sx__today-button {
+  border: 1px solid #404040 !important;
+  background-color: #262626 !important;
+}
+
+.sx__view-selection-selected-item {
+  background-color: #262626 !important;
+  color: #f2f2f2;
+  border: 1px solid #404040 !important;
+}
+
+.sx__view-selection-items {
+  background-color: #404040 !important;
+  color: #f2f2f2 !important;
+}
+
+.sx__view-selection-item:hover {
+  background-color: #78862d !important;
+}
+
+.sx__view-selection-item.is-selected {
+  background-color: #78862d !important;
 }
 
 .sx__week-grid__date-number {
@@ -57,7 +101,11 @@
 }
 
 .sx__chevron-wrapper {
-  background-color: #303030 !important;
+  background-color: transparent !important;
+}
+
+.sx__chevron-wrapper .sx__chevron {
+  border-color: #f2f2f2 !important;
 }
 
 .sx__range-heading {
@@ -82,6 +130,10 @@
 
 .sx__date-grid-day {
   grid-gap: 25px !important;
+}
+
+.sx__view-container {
+  background-color: rgba(64, 64, 64, 0.1) !important;
 }
 
 @custom-variant dark (&:is(.dark *));

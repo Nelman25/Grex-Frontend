@@ -179,7 +179,10 @@ export default function Landing() {
 
       <div className="max-w-[800px] mx-auto flex flex-col justify-center gap-4 mt-32 font-inter">
         {FEATURE_CARDS.map((feature) => (
-          <div className="bg-dark-surface/60 rounded border border-dark-muted p-8">
+          <div
+            key={feature.description}
+            className="bg-dark-surface/60 rounded border border-dark-muted p-8"
+          >
             <div className="size-14 rounded bg-brand-dark p-4 mb-4">
               <feature.icon className="size-6 text-brand-light" />
             </div>

@@ -27,15 +27,14 @@ export default function MainHeader() {
             const isLast = lastIndex === index;
 
             return (
-              <>
+              <div key={path}>
                 <BreadcrumbItem
-                  key={path}
                   className={`${isLast && "font-semibold text-dark-text"}`}
                 >
                   {unslugify(path)}
                 </BreadcrumbItem>
                 {!isLast && <BreadcrumbSeparator />}
-              </>
+              </div>
             );
           })}
         </BreadcrumbList>

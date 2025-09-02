@@ -19,7 +19,7 @@ export default function SignupHeroPanel() {
       </div>
 
       {SIGNUP_TEXTS.map((f) => (
-        <div className="my-13">
+        <div key={f.description} className="my-13">
           <f.icon className="text-brand-primary size-14" />
           <div className="mt-4">
             <h3 className="text-dark-text text-lg">{f.title}</h3>

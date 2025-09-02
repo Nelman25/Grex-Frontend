@@ -11,6 +11,10 @@ import NewTaskModal from "../NewTaskModal";
 import { useFetchTasksQuery } from "../../hooks/queries/useFetchTasksQuery";
 import { toast } from "sonner";
 import PageLoader from "@/components/PageLoader";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import { CiFilter } from "react-icons/ci";
+import { BsSortDownAlt } from "react-icons/bs";
 
 export default function KanbanContainer() {
   const { workspace_id } = useParams();
@@ -54,13 +58,29 @@ export default function KanbanContainer() {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="my-2">
-        <NewTaskModal>
-          <Button className="text-sm bg-brand-primary hover:bg-brand-dark">
-            <GoPlus />
-            <span>Add New Task</span>
+      <div className="flex justify-between items-center  my-2">
+        <div className="flex space-x-2">
+          <NewTaskModal>
+            <Button className="text-sm bg-brand-primary hover:bg-brand-dark">
+              <GoPlus />
+              <span>Add New Task</span>
+            </Button>
+          </NewTaskModal>
+
+          <Button className="bg-dark-muted hover:bg-dark-surface text-dark-text border border-dark-muted">
+            <CiFilter />
+            <span>Filter</span>
           </Button>
-        </NewTaskModal>
+          <Button className="bg-dark-muted hover:bg-dark-surface text-dark-text border border-dark-muted">
+            <BsSortDownAlt />
+            <span>Sort by</span>
+          </Button>
+        </div>
+
+        <div className="relative">
+          <Input className="pl-8" />
+          <Search className="text-dark-subtle absolute top-2 left-2 size-5" />
+        </div>
       </div>
       <div className="w-full flex space-x-4">
         {isPending && (

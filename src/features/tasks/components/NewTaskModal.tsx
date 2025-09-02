@@ -21,6 +21,7 @@ import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { useParams } from "react-router";
 import { toast } from "sonner";
 import { useCreateTaskMutation } from "../hooks/mutations/useCreateTaskMutation";
+import { MOCK_TASKS } from "@/mocks/tasks";
 
 const defaultValues = {
   title: "",
@@ -50,6 +51,8 @@ export default function NewTaskModal({ children }: PropsWithChildren) {
   } = useCreateTaskMutation(Number(workspace_id));
 
   if (createTaskError) toast(createTaskError.message);
+
+
 
   const onSubmit: SubmitHandler<NewTask> = (task) => {
     if (!user) throw new Error("No user authenticated"); // Find better solution for this, this is getting repetitive
