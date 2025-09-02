@@ -2,6 +2,7 @@ import { useState, useLayoutEffect, type PropsWithChildren } from "react";
 import { AuthContext } from "./auth-context";
 import api from "@/lib/axios";
 import type { IUserCredentials } from "@/types";
+import { Navigate } from "react-router";
 
 export interface IUser {
   email: string;
@@ -14,8 +15,13 @@ export interface IUser {
 }
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<IUser | null>(null);
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem("access_token")
+  );
+  const [user, setUser] = useState<IUser | null>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   useLayoutEffect(() => {
     const authInterceptor = api.interceptors.request.use((config) => {
@@ -67,14 +73,33 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       const response = await api.post("/auth/login", credentials);
       setToken(response.data.access_token);
       setUser(response.data.user);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem(
+        "access_token",
+        JSON.stringify(response.data.access_token)
+      );
     } catch (error) {
-      console.error(error); // TODO: Better error handling
-      throw error;
+      throw new Error(
+        `Login failed, please check your credentials. \nError: ${
+          (error as Error).message
+        }`
+      );
     }
   };
 
+  const logout = () => {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user");
+
+    <Navigate to="/auth/signin" />;
+  };
+
   return (
-    <AuthContext.Provider value={{ token, setToken, user, setUser, login }}>
+    <AuthContext.Provider
+      value={{ token, setToken, user, setUser, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -8,6 +8,7 @@ interface AuthContextType {
   setToken: (value: React.SetStateAction<string | null>) => void;
   setUser: (value: React.SetStateAction<IUser | null>) => void;
   login: (credentials: IUserCredentials) => Promise<void>;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
