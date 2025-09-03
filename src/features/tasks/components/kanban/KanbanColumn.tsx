@@ -13,7 +13,7 @@ export default function KanbanColumn({ type, tasks }: Props) {
   // TODO: Better fallback for this
 
   return (
-    <div className="w-full max-w-[600px] max-h-[900px] rounded bg p-4">
+    <div className="w-full max-w-[600px] max-h-[650px] rounded bg p-4">
       <div className="flex justify-between sticky top-2 border-b border-b-dark-muted">
         <div className="flex items-center space-x-2 my-2">
           <div className={`size-3 rounded-full  ${getTypeColor(type)}`} />
@@ -35,7 +35,7 @@ export default function KanbanColumn({ type, tasks }: Props) {
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`max-h-[700px] overflow-y-scroll ${
+            className={`max-h-[580px] overflow-y-scroll ${
               snapshot.isDraggingOver
                 ? "bg-[#2e2e2e] border-2 border-brand-primary"
                 : ""

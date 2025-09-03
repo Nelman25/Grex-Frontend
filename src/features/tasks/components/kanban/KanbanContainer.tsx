@@ -1,20 +1,15 @@
-import KanbanColumn from "./KanbanColumn";
-import { groupTasksByStatus } from "@/utils";
-import { DragDropContext } from "@hello-pangea/dnd";
-import { useMemo } from "react";
-import type { DropResult } from "@hello-pangea/dnd";
-import type { TaskGroups } from "@/types/task";
-import { useParams } from "react-router";
-import { Button } from "@/components/ui/button";
-import { GoPlus } from "react-icons/go";
-import NewTaskModal from "../NewTaskModal";
-import { useFetchTasksQuery } from "../../hooks/queries/useFetchTasksQuery";
-import { toast } from "sonner";
 import PageLoader from "@/components/PageLoader";
 import { Input } from "@/components/ui/input";
+import type { TaskGroups } from "@/types/task";
+import { groupTasksByStatus } from "@/utils";
+import type { DropResult } from "@hello-pangea/dnd";
+import { DragDropContext } from "@hello-pangea/dnd";
 import { Search } from "lucide-react";
-import { CiFilter } from "react-icons/ci";
-import { BsSortDownAlt } from "react-icons/bs";
+import { useMemo } from "react";
+import { useParams } from "react-router";
+import { toast } from "sonner";
+import { useFetchTasksQuery } from "../../hooks/queries/useFetchTasksQuery";
+import KanbanColumn from "./KanbanColumn";
 
 export default function KanbanContainer() {
   const { workspace_id } = useParams();
@@ -58,8 +53,8 @@ export default function KanbanContainer() {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="flex justify-between items-center  my-2">
-        <div className="flex space-x-2">
+      <div className="flex justify-between items-center my-2">
+        {/* <div className="flex space-x-2">
           <NewTaskModal>
             <Button className="text-sm bg-brand-primary hover:bg-brand-dark">
               <GoPlus />
@@ -75,7 +70,7 @@ export default function KanbanContainer() {
             <BsSortDownAlt />
             <span>Sort by</span>
           </Button>
-        </div>
+        </div> */}
 
         <div className="relative">
           <Input className="pl-8" />
