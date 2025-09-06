@@ -1,10 +1,10 @@
 import UserAvatar from "@/components/UserAvatar";
-import type { AnyChatMessage } from "@/types/chat";
+import type { ChatMessage } from "@/types/chat";
 import { getRandomUserImage } from "@/utils";
 import { LuDot } from "react-icons/lu";
 
 type Props = {
-  message: AnyChatMessage;
+  message: ChatMessage;
   showMetadata: boolean;
   isUsersMessage: boolean;
 };

@@ -1,17 +1,16 @@
 import { useState, useRef } from "react";
 import { Plus } from "lucide-react";
 import { MdOutlineAttachFile } from "react-icons/md";
-import { useMessageStore } from "@/stores/useMessagesStore";
 import { getRandomUserImage } from "@/utils";
 import UserAvatar from "@/components/UserAvatar";
 import { useAuth } from "@/context/auth-context";
 import { useParams } from "react-router";
 import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceQuery";
+import { useWebsocket } from "../hooks/useWebsocket";
 
 export default function ChatInput() {
   const [mentionQuery, setMentionQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const addMessage = useMessageStore((state) => state.addMessages);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const { user } = useAuth();
@@ -20,6 +19,11 @@ export default function ChatInput() {
     Number(workspace_id),
     user?.user_id
   );
+
+  const { sendMessage } = useWebsocket({
+    workspaceId: Number(workspace_id),
+    userId: user?.user_id ?? 0,
+  });
 
   const members = project?.members.map((member) => ({
     avatar: member.profile_picture,
@@ -30,19 +34,10 @@ export default function ChatInput() {
   const handleSendChat = () => {
     if (!textareaRef.current?.value.trim()) return;
 
-    addMessage({
-      message_id: Math.random(),
-      workspace_id: 1,
-      sender_id: 1,
-      nickname: "Jonel Villaver",
-      profile_picture: getRandomUserImage(),
-      message_type: "text",
-      reply_to: null,
-      sent_at: new Date().toISOString(),
+    sendMessage({
+      type: "text",
       content: textareaRef.current.value,
-      file_url: null,
-      file_type: null,
-      question: null,
+      reply_to: null,
     });
 
     textareaRef.current.value = "";
