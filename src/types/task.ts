@@ -9,6 +9,8 @@ export interface NewTask {
   status: TaskStatus;
   priority_level: TaskPriority;
   created_by: number;
+  start_date: Date;
+  category: string;
 }
 
 export interface Task extends NewTask {
@@ -23,21 +25,17 @@ export type EditableTaskFields = {
   subject: string;
   description: string;
   deadline: Date;
+  start_date: Date;
   priority_level: TaskPriority;
+  category?: string;
 };
 
 export type EditTaskPayload = EditableTaskFields & { task_id: number };
 
-export type TaskGroups = {
-  pending: Task[];
-  done: Task[];
-  overdue: Task[];
-};
+export type TaskGroups = Record<string, Task[]>;
 
 export interface NewSubtask {
-  // task_id: number;
   description: string;
-  // is_done: boolean;
 }
 
 export interface Subtask extends NewSubtask {
@@ -56,4 +54,11 @@ export interface TaskAssignee {
   user_id: number;
   avatar: string;
   name: string;
+}
+
+export interface Category {
+  name: string;
+  workspace_id: number;
+  category_id: number;
+  created_at: Date;
 }
