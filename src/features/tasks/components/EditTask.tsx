@@ -22,7 +22,7 @@ export default function EditTask({ task, onCancel }: Props) {
     mutate: editTask,
     isPending,
     error,
-  } = usePatchTaskMutation(Number(workspace_id), task.task_id);
+  } = usePatchTaskMutation(Number(workspace_id));
   const {
     register,
     handleSubmit,
@@ -33,13 +33,14 @@ export default function EditTask({ task, onCancel }: Props) {
       title: task.title,
       subject: task.subject,
       description: task.description,
+      start_date: new Date(task.start_date),
       deadline: new Date(task.deadline),
       priority_level: task.priority_level,
     },
   });
 
   const onSubmit: SubmitHandler<EditableTaskFields> = (editedTask) => {
-    editTask(editedTask);
+    editTask({ id: task.task_id, payload: editedTask });
 
     if (!isPending) onCancel();
   };
@@ -90,6 +91,23 @@ export default function EditTask({ task, onCancel }: Props) {
         <div className="flex justify-between">
           <Controller
             control={control}
+            name="start_date"
+            rules={{ required: "Start date is required" }}
+            render={({ field }) => (
+              <div className="flex-1">
+                <DatePicker
+                  label="Start date"
+                  value={field.value}
+                  onChange={(date) => field.onChange(date)}
+                />
+                <p className="text-error text-xs">
+                  {errors.start_date?.message}
+                </p>
+              </div>
+            )}
+          />
+          <Controller
+            control={control}
             name="deadline"
             rules={{ required: "Deadline is required" }}
             render={({ field }) => (
@@ -103,26 +121,26 @@ export default function EditTask({ task, onCancel }: Props) {
               </div>
             )}
           />
-          <Controller
-            control={control}
-            name="priority_level"
-            rules={{ required: "Priority level is required" }}
-            render={({ field }) => (
-              <div className="flex-1">
-                <SelectComponent
-                  label="Priority level"
-                  value={field.value}
-                  values={["low", "medium", "high"]}
-                  placeholder={field.value}
-                  onChange={(val) => field.onChange(val)}
-                />
-                <p className="text-error text-xs">
-                  {errors.priority_level?.message}
-                </p>
-              </div>
-            )}
-          />
         </div>
+        <Controller
+          control={control}
+          name="priority_level"
+          rules={{ required: "Priority level is required" }}
+          render={({ field }) => (
+            <div className="flex-1">
+              <SelectComponent
+                label="Priority level"
+                value={field.value}
+                values={["low", "medium", "high"]}
+                placeholder={field.value}
+                onChange={(val) => field.onChange(val)}
+              />
+              <p className="text-error text-xs">
+                {errors.priority_level?.message}
+              </p>
+            </div>
+          )}
+        />
       </div>
 
       <div className="flex justify-end space-x-4">
