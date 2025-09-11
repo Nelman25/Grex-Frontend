@@ -91,3 +91,10 @@ export const editCategory = async (
 
   return data;
 };
+
+export const deleteCategory = async (
+  workspace_id: number,
+  category_id: number
+): Promise<void> => {
+  await api.delete(`/workspace/${workspace_id}/categories/${category_id}`);
+};
