@@ -244,3 +244,12 @@ export const formatDateForAPI = (
   if (date instanceof Date) return date.toISOString().split("T")[0];
   return undefined;
 };
+
+export const getCategoryId = (
+  name: string,
+  categories: Category[]
+): number | undefined => {
+  const cat = categories.find((category) => category.name === name);
+
+  return cat?.category_id;
+};
