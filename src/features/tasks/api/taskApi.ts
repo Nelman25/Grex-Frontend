@@ -76,3 +76,18 @@ export const addCategory = async (
 ): Promise<void> => {
   await api.post(`/workspace/${workspace_id}/categories`, { name: category });
 };
+
+export const editCategory = async (
+  workspace_id: number,
+  category_id: number,
+  name: string
+): Promise<Category> => {
+  const { data } = await api.put<Category>(
+    `/workspace/${workspace_id}/categories/${category_id}`,
+    {
+      name,
+    }
+  );
+
+  return data;
+};
