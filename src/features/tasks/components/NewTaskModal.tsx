@@ -21,17 +21,21 @@ import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { useParams } from "react-router";
 import { toast } from "sonner";
 import { useCreateTaskMutation } from "../hooks/mutations/useCreateTaskMutation";
-import { MOCK_TASKS } from "@/mocks/tasks";
 
 const defaultValues = {
   title: "",
   subject: "",
   description: "",
   deadline: undefined,
+  start_date: undefined,
   priority_level: undefined,
 };
 
-export default function NewTaskModal({ children }: PropsWithChildren) {
+type Props = PropsWithChildren & {
+  category: string;
+};
+
+export default function NewTaskModal({ children, category }: Props) {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
   const { workspace_id } = useParams();
@@ -43,7 +47,6 @@ export default function NewTaskModal({ children }: PropsWithChildren) {
     formState: { errors },
   } = useForm<NewTask>({ defaultValues });
 
-  // if (!user) throw new Error("No user authenticated.");
   const {
     mutate,
     isPending,
@@ -52,16 +55,16 @@ export default function NewTaskModal({ children }: PropsWithChildren) {
 
   if (createTaskError) toast(createTaskError.message);
 
-
-
   const onSubmit: SubmitHandler<NewTask> = (task) => {
     if (!user) throw new Error("No user authenticated"); // Find better solution for this, this is getting repetitive
 
     mutate({
       ...task,
       created_by: user?.user_id,
+      category: category,
     });
 
+    toast(`Task added to ${category}`);
     setOpen(false);
     reset();
   };
@@ -122,6 +125,23 @@ export default function NewTaskModal({ children }: PropsWithChildren) {
             <div className="flex justify-between">
               <Controller
                 control={control}
+                name="start_date"
+                rules={{ required: "Start date is required" }}
+                render={({ field }) => (
+                  <div className="flex-1">
+                    <DatePicker
+                      label="Start date"
+                      value={field.value}
+                      onChange={(date) => field.onChange(date)}
+                    />
+                    <p className="text-error text-xs">
+                      {errors.start_date?.message}
+                    </p>
+                  </div>
+                )}
+              />
+              <Controller
+                control={control}
                 name="deadline"
                 rules={{ required: "Deadline is required" }}
                 render={({ field }) => (
@@ -137,26 +157,26 @@ export default function NewTaskModal({ children }: PropsWithChildren) {
                   </div>
                 )}
               />
-              <Controller
-                control={control}
-                name="priority_level"
-                rules={{ required: "Priority level is required" }}
-                render={({ field }) => (
-                  <div className="flex-1">
-                    <SelectComponent
-                      label="Priority level"
-                      value={field.value}
-                      values={["low", "medium", "high"]}
-                      placeholder="Priority level"
-                      onChange={(val) => field.onChange(val)}
-                    />
-                    <p className="text-error text-xs">
-                      {errors.priority_level?.message}
-                    </p>
-                  </div>
-                )}
-              />
             </div>
+            <Controller
+              control={control}
+              name="priority_level"
+              rules={{ required: "Priority level is required" }}
+              render={({ field }) => (
+                <div className="flex-1">
+                  <SelectComponent
+                    label="Priority level"
+                    value={field.value}
+                    values={["low", "medium", "high"]}
+                    placeholder="Priority level"
+                    onChange={(val) => field.onChange(val)}
+                  />
+                  <p className="text-error text-xs">
+                    {errors.priority_level?.message}
+                  </p>
+                </div>
+              )}
+            />
           </div>
 
           <DialogFooter>
