@@ -2,8 +2,9 @@ import { BsPersonWorkspace } from "react-icons/bs";
 import { LuBrainCircuit } from "react-icons/lu";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FaTasks, FaComments } from "react-icons/fa";
-import { GoTasklist, GoProjectSymlink } from "react-icons/go";
+import { GoTasklist } from "react-icons/go";
 import { CiCalendar, CiMail } from "react-icons/ci";
+import { RxDashboard } from "react-icons/rx";
 
 export const FEATURE_CARDS = [
   {
@@ -39,8 +40,8 @@ export const FEATURE_CARDS = [
 ];
 
 export const SIDEBAR_ITEMS = [
-  { title: "My Projects", url: "", icon: GoProjectSymlink, collapsible: true },
-  { title: "My Tasks", url: "", icon: GoTasklist },
-  { title: "My Calendar", url: "", icon: CiCalendar },
-  { title: "My Inbox", url: "", icon: CiMail },
+  { title: "Dashboard", icon: RxDashboard },
+  { title: "Calendar", icon: CiCalendar },
+  { title: "My Tasks", icon: GoTasklist },
+  { title: "Messages", icon: CiMail },
 ];

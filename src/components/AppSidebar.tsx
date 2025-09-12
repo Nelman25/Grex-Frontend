@@ -1,3 +1,4 @@
+import profile from "@/assets/sample_profile.svg";
 import {
   Sidebar,
   SidebarContent,
@@ -9,25 +10,19 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "./ui/collapsible";
 import { SIDEBAR_ITEMS } from "@/constants";
+import { useAuth } from "@/context/auth-context";
+import { useUserWorkspaces } from "@/features/workspace/hooks/queries/useUserWorkspaces";
+import { GoPlus } from "react-icons/go";
 import {
   IoIosHelpCircleOutline,
   IoIosInformationCircleOutline,
 } from "react-icons/io";
-import profile from "@/assets/sample_profile.svg";
-import { useAuth } from "@/context/auth-context";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router";
 import slugify from "slugify";
-import { useUserWorkspaces } from "@/features/workspace/hooks/queries/useUserWorkspaces";
-import PageLoader from "./PageLoader";
+import UserAvatar from "./UserAvatar";
+import { NewProjectModal } from "@/features/workspace/components/NewProjectModal";
 
 export function AppSidebar() {
   const location = useLocation();
@@ -36,7 +31,7 @@ export function AppSidebar() {
   const { workspace_name: activeProject } = useParams();
   const { user } = useAuth();
 
-  const { data: projects, isLoading } = useUserWorkspaces(user?.user_id);
+  const { data: projects } = useUserWorkspaces(user?.user_id);
 
   if (!user) return <Navigate to="/auth/signin" />;
 
@@ -74,14 +69,14 @@ export function AppSidebar() {
         <div className="w-full flex space-x-3 rounded">
           <img
             src={profile}
-            className="size-13 rounded"
+            className="size-10 rounded"
             alt="profile picture"
           />
           <div>
-            <h3 className="font-medium text-dark-text">
+            <h3 className="font-medium text-sm text-dark-text">
               {user?.first_name ?? "Jonel"} {user?.last_name ?? "Villaver"}
             </h3>
-            <h4 className="text-sm text-dark-subtle">
+            <h4 className="text-sm text-dark-subtle text-ellipsis">
               {user?.email ?? "jonelvillaver@gmail.com"}
             </h4>
           </div>
@@ -90,63 +85,54 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sm">Main Menu</SidebarGroupLabel>
+          <SidebarGroupContent className="border-b border-b-dark-muted pb-3">
+            <SidebarMenu>
+              {SIDEBAR_ITEMS.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    onClick={() => handleSelectTab(item.title)}
+                  >
+                    <item.icon className={getActiveClass(item.title)} />
+                    <span className={getActiveClass(item.title)}>
+                      {item.title}
+                    </span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+          <SidebarGroupLabel className="text-sm mt-2 flex justify-between items-center">
+            <span>Your Projects</span>
+            <NewProjectModal>
+              <button>
+                <GoPlus />
+              </button>
+            </NewProjectModal>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {SIDEBAR_ITEMS.map((item) =>
-                item.collapsible ? (
-                  <Collapsible
-                    key={item.title}
-                    defaultOpen
-                    className="group/collapsible"
+              {projects?.map((project) => (
+                <SidebarMenuItem key={project.workspace_id}>
+                  <SidebarMenuButton
+                    onClick={() =>
+                      handleSelectActiveProject(
+                        project.workspace_id,
+                        project.name
+                      )
+                    }
                   >
-                    <CollapsibleTrigger
-                      onClick={() => handleSelectTab(item.title)}
-                      className="flex items-center space-x-3 px-2"
-                    >
-                      <item.icon className={getActiveClass(item.title)} />
-                      <span className={getActiveClass(item.title)}>
-                        {item.title}
-                      </span>
-                    </CollapsibleTrigger>
-
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {isLoading && <PageLoader />}
-                        {projects &&
-                          projects.map((project) => (
-                            <SidebarMenuButton key={project.name}>
-                              <SidebarMenuSubItem
-                                onClick={() =>
-                                  handleSelectActiveProject(
-                                    project.workspace_id,
-                                    project.name
-                                  )
-                                }
-                                className={`truncate text-white ${getActiveProjectClass(
-                                  project.name
-                                )}`}
-                              >
-                                {project.name}
-                              </SidebarMenuSubItem>
-                            </SidebarMenuButton>
-                          ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </Collapsible>
-                ) : (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      onClick={() => handleSelectTab(item.title)}
-                    >
-                      <item.icon className={getActiveClass(item.title)} />
-                      <span className={getActiveClass(item.title)}>
-                        {item.title}
-                      </span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              )}
+                    <UserAvatar
+                      name={project.name}
+                      photoUrl={project.workspace_profile_url ?? ""}
+                      className="size-6"
+                    />
+                    <span className={getActiveProjectClass(project.name)}>
+                      {project.name}
+                    </span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

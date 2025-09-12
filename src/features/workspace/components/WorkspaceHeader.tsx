@@ -1,12 +1,12 @@
-import ProjectDetails from "./ProjectDetails";
 import addPeople from "@/assets/bi_person-add.svg";
-import InviteWorkspaceMemberModal from "./InviteWorkspaceMemberModal";
-import { useFetchWorkspaceQuery } from "../hooks/queries/useFetchWorkspaceQuery";
-import { useParams } from "react-router";
-import { useAuth } from "@/context/auth-context";
 import PageLoader from "@/components/PageLoader";
-import { toast } from "sonner";
 import UserAvatars from "@/components/UserAvatars";
+import { useAuth } from "@/context/auth-context";
+import { useParams } from "react-router";
+import { toast } from "sonner";
+import { useFetchWorkspaceQuery } from "../hooks/queries/useFetchWorkspaceQuery";
+import InviteWorkspaceMemberModal from "./InviteWorkspaceMemberModal";
+import ProjectDetails from "./ProjectDetails";
 
 export default function WorkspaceHeader() {
   const { user } = useAuth();
