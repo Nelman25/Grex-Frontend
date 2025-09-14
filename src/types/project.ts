@@ -24,6 +24,14 @@ export interface Project extends NewProject {
   workspace_profile_url: string | null;
 }
 
+export interface EditProject {
+  name?: string;
+  description?: string;
+  project_nature?: string;
+  start_date?: string;
+  due_date?: string;
+  workspace_profile_url?: string | null;
+}
 // SHAPE OF GET ALL WORKSPACES OF USER RESPONSE
 export interface UserWorkspacesResponse {
   workspace_id: number;
@@ -46,8 +54,8 @@ export interface WorkspaceResponse {
   name: string;
   project_nature: string;
   description: string;
-  start_date: Date;
-  due_date: Date;
+  start_date: string;
+  due_date: string;
   workspace_profile_url: string | null;
   created_by: number;
   created_at: Date;

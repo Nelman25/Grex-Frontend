@@ -1,17 +1,6 @@
 import type { CalendarEvent } from "@/types";
-import type {
-  ChatMessage,
-  IncomingChatMessage,
-  MessageHistoryItem,
-  PendingChatMessage,
-} from "@/types/chat";
-import type {
-  Task,
-  TaskPriority,
-  Subtask,
-  Category,
-  TaskGroups,
-} from "@/types/task";
+import type { ChatMessage, IncomingChatMessage, MessageHistoryItem, PendingChatMessage } from "@/types/chat";
+import type { Task, TaskPriority, Subtask, Category, TaskGroups } from "@/types/task";
 
 // MOCK USER IMAGES FOR TESTING
 const USER_IMAGES = [
@@ -121,9 +110,7 @@ export const getStatusStyle = (status: string): string => {
   }
 };
 
-export const getPriorityBadge = (
-  prioLevel: string
-): "secondary" | "destructive" | "default" | "outline" => {
+export const getPriorityBadge = (prioLevel: string): "secondary" | "destructive" | "default" | "outline" => {
   switch (prioLevel) {
     case "low":
       return "default";
@@ -156,9 +143,7 @@ export const mapTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
   });
 };
 
-export const normalizeHistoryItem = (
-  item: MessageHistoryItem
-): IncomingChatMessage => {
+export const normalizeHistoryItem = (item: MessageHistoryItem): IncomingChatMessage => {
   return {
     message_id: item.message_id,
     workspace_id: item.workspace_id,
@@ -172,21 +157,15 @@ export const normalizeHistoryItem = (
   };
 };
 
-export function isIncomingChatMessage(
-  msg: ChatMessage
-): msg is IncomingChatMessage {
+export function isIncomingChatMessage(msg: ChatMessage): msg is IncomingChatMessage {
   return "message_id" in msg;
 }
 
-export function isPendingChatMessage(
-  msg: ChatMessage
-): msg is PendingChatMessage {
+export function isPendingChatMessage(msg: ChatMessage): msg is PendingChatMessage {
   return "temp_id" in msg;
 }
 
-export function isMessageHistoryItem(
-  msg: ChatMessage
-): msg is MessageHistoryItem {
+export function isMessageHistoryItem(msg: ChatMessage): msg is MessageHistoryItem {
   return "message_type" in msg;
 }
 
@@ -195,14 +174,10 @@ export function formatChatDate(dateString: string): string {
   const now = new Date();
 
   const isToday =
-    date.getDate() === now.getDate() &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear();
+    date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
 
   const isYesterday =
-    date.getDate() === now.getDate() - 1 &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear();
+    date.getDate() === now.getDate() - 1 && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
 
   const options: Intl.DateTimeFormatOptions = {
     hour: "numeric",
@@ -236,20 +211,20 @@ export function formatChatDate(dateString: string): string {
   );
 }
 
-export const formatDateForAPI = (
-  date: Date | string | undefined
-): string | undefined => {
+export const formatDateForAPI = (date: Date | string | undefined): string | undefined => {
   if (!date) return undefined;
   if (typeof date === "string") return date;
   if (date instanceof Date) return date.toISOString().split("T")[0];
   return undefined;
 };
 
-export const getCategoryId = (
-  name: string,
-  categories: Category[]
-): number | undefined => {
+export const getCategoryId = (name: string, categories: Category[]): number | undefined => {
   const cat = categories.find((category) => category.name === name);
 
   return cat?.category_id;
+};
+
+export const parseLocalDate = (dateStr: string) => {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day);
 };

@@ -7,14 +7,12 @@ import { GoKebabHorizontal } from "react-icons/go";
 import { useParams } from "react-router";
 import { SidebarTrigger } from "./ui/sidebar";
 import UserAvatars from "./UserAvatars";
+import WorkspaceMenu from "@/features/workspace/components/WorkspaceMenu";
 
 export default function MainHeader() {
   const { user } = useAuth();
   const { workspace_id } = useParams();
-  const { data: project } = useFetchWorkspaceQuery(
-    Number(workspace_id),
-    user?.user_id
-  );
+  const { data: project } = useFetchWorkspaceQuery(Number(workspace_id), user?.user_id);
 
   const members = project?.members.map((member) => ({
     avatar: member.profile_picture,
@@ -30,20 +28,20 @@ export default function MainHeader() {
       <div className="flex w-full justify-between pl-4">
         <div className="flex flex-col space-y-1">
           <div className="flex space-x-2 items-center">
-            <h1 className="text-xl font-semibold text-dark-text">
-              {project.name}
-            </h1>
-            <button className="size-3 flex items-center justify-center rounded-full border border-dark-subtle cursor-pointer">
-              <GoKebabHorizontal className="text-dark-subtle size-2" />
-            </button>
+            <h1 className="text-xl font-semibold text-dark-text">{project.name}</h1>
+
+            <WorkspaceMenu>
+              <button className="size-3 flex items-center justify-center rounded-full border border-dark-subtle cursor-pointer">
+                <GoKebabHorizontal className="text-dark-subtle size-2" />
+              </button>
+            </WorkspaceMenu>
           </div>
 
           <div className="flex space-x-4">
             <p className="text-sm">
               <span className="text-dark-subtle">Timeline: </span>
               <span>
-                {formatDate(project.start_date)} -{" "}
-                {formatDate(project.due_date)}
+                {formatDate(new Date(project.start_date))} - {formatDate(new Date(project.due_date))}
               </span>
             </p>
             <p className="text-sm">
