@@ -3,18 +3,28 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { MoreVertical } from "lucide-react";
 import UserAvatar from "@/components/UserAvatar";
 import type { WorkspaceMember } from "@/types/member";
+import { useKickMemberMutation } from "../hooks/mutations/useKickMemberMutation";
+import { useParams } from "react-router";
 
 export default function WorkspaceMembersList({ members }: { members: WorkspaceMember[] }) {
+  const { workspace_id } = useParams();
+  const { mutate: kickMember } = useKickMemberMutation(Number(workspace_id));
+
   return (
     <ul className="space-y-2">
       {members.map((member) => (
         <li key={member.user_id} className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <UserAvatar name={member.first_name + " " + member.last_name} photoUrl={member.profile_picture ?? ""} />
-            <span>
-              {member.first_name} {member.last_name}
-            </span>
-            {member.role === "leader" && <span className="text-xs text-primary ml-1">(Leader)</span>}
+            <div className="flex flex-col leading-tight">
+              <div>
+                <span>
+                  {member.first_name} {member.last_name}
+                </span>
+                {member.role === "leader" && <span className="text-xs text-primary ml-1">(Leader)</span>}
+              </div>
+              <span className="text-dark-subtle text-sm">{member.email}</span>
+            </div>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -24,7 +34,11 @@ export default function WorkspaceMembersList({ members }: { members: WorkspaceMe
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>Change Nickname</DropdownMenuItem>
-              {member.role !== "leader" && <DropdownMenuItem className="text-red-600">Kick Member</DropdownMenuItem>}
+              {member.role !== "leader" && (
+                <DropdownMenuItem className="text-red-600" onClick={() => kickMember(member.user_id)}>
+                  Kick Member
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </li>
