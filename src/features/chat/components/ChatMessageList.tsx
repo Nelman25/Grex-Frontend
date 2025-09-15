@@ -18,67 +18,52 @@ export default function ChatMessageList() {
   const { workspace_id } = useParams<{ workspace_id: string }>();
   const workspaceId = Number(workspace_id);
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    status,
-  } = useFetchMessagesQuery(workspaceId);
-  // Memoize flattened messages to prevent unnecessary re-renders
+  const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useFetchMessagesQuery(workspaceId);
+
   const fetchedMessages = useMemo(() => {
     return data?.pages?.flat() ?? [];
   }, [data?.pages]);
 
-  // Combine fetched messages with real-time messages from store
-  // Remove duplicates based on message_id
-
   const allMessages = useMemo(() => {
     const combined = [...fetchedMessages, ...messages];
     const uniqueMessages = combined.reduce((acc, message) => {
-      const id =
-        "message_id" in message
-          ? message.message_id
-          : "temp_id" in message
-          ? message.temp_id
-          : null;
+      const id = "message_id" in message ? message.message_id : "temp_id" in message ? message.temp_id : null;
 
-      if (
-        id &&
-        !acc.some(
-          (m) =>
-            ("message_id" in m
-              ? m.message_id
-              : "temp_id" in m
-              ? m.temp_id
-              : null) === id
-        )
-      ) {
+      if (id) {
+        const existingIndex = acc.findIndex((m) => ("message_id" in m ? m.message_id : "temp_id" in m ? m.temp_id : null) === id);
+
+        if (existingIndex !== -1) {
+          if ("message_id" in message) {
+            acc[existingIndex] = message;
+          }
+        } else {
+          acc.push(message);
+        }
+      } else {
         acc.push(message);
       }
+
       return acc;
     }, [] as typeof combined);
 
-    // Sort by timestamp or message_id to ensure proper order
+    // NOTE: this is probably not the best way to sort messages, fix this later
     return uniqueMessages.sort((a, b) => {
-      const timeA = new Date(a.sent_at).getTime();
-      const timeB = new Date(b.sent_at).getTime();
-      return timeA - timeB;
+      if ("message_id" in a && "message_id" in b) {
+        return a.message_id - b.message_id;
+      }
+      if ("message_id" in a) return -1;
+      if ("message_id" in b) return 1;
+      if ("temp_id" in a && "temp_id" in b) {
+        return a.temp_id.localeCompare(b.temp_id);
+      }
+      return 0;
     });
   }, [fetchedMessages, messages]);
 
-  // Initial load: set fetched messages to store and scroll to bottom
   useEffect(() => {
-    if (
-      !hasInitializedRef.current &&
-      status === "success" &&
-      fetchedMessages.length > 0
-    ) {
+    if (!hasInitializedRef.current && status === "success" && fetchedMessages.length > 0) {
       setMessages(fetchedMessages);
       hasInitializedRef.current = true;
-
-      // Scroll to bottom on initial load
       setTimeout(() => {
         bottomRef.current?.scrollIntoView({ behavior: "instant" });
         hasScrolledToBottomRef.current = true;
@@ -86,15 +71,11 @@ export default function ChatMessageList() {
     }
   }, [status, fetchedMessages, setMessages]);
 
-  // Auto scroll to bottom when new real-time messages arrive
   useEffect(() => {
     if (hasScrolledToBottomRef.current && messages.length > 0) {
       const container = containerRef.current;
       if (container) {
-        const isNearBottom =
-          container.scrollTop + container.clientHeight >=
-          container.scrollHeight - 100; // 100px threshold
-
+        const isNearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
         if (isNearBottom) {
           setTimeout(() => {
             bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -102,20 +83,15 @@ export default function ChatMessageList() {
         }
       }
     }
-  }, [messages.length]); // Only trigger on new messages count change
+  }, [messages.length]);
 
-  // Infinite scroll handler
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
-
-    // Load more messages when scrolled near the top
     if (container.scrollTop < 100 && hasNextPage && !isFetchingNextPage) {
       const previousScrollHeight = container.scrollHeight;
       const previousScrollTop = container.scrollTop;
-
       fetchNextPage().then(() => {
-        // Maintain scroll position after loading new messages
         requestAnimationFrame(() => {
           if (container) {
             const newScrollHeight = container.scrollHeight;
@@ -127,7 +103,6 @@ export default function ChatMessageList() {
     }
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // Attach scroll listener
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
@@ -139,7 +114,7 @@ export default function ChatMessageList() {
   if (status === "pending") {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <p>Loading messages...</p>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary" />
       </div>
     );
   }
@@ -147,7 +122,7 @@ export default function ChatMessageList() {
   if (status === "error") {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <p>Error loading messages: {error?.message}</p>
+        <p className="text-error">Error loading messages: {error?.message}</p>
       </div>
     );
   }
@@ -155,45 +130,40 @@ export default function ChatMessageList() {
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex flex-col gap-2 max-h-[540px] overflow-y-scroll py-4"
+      className="min-h-[600px] h-full max-h-[650px] flex flex-col overflow-y-auto py-4 px-2 sm:px-4 bg-dark-surface"
+      style={{ scrollBehavior: "smooth" }}
     >
-      {/* Loading indicator at the top */}
-      {isFetchingNextPage && (
-        <div ref={topRef} className="flex justify-center py-2">
-          <div className="text-sm text-gray-500">Loading older messages...</div>
-        </div>
-      )}
+      <div className="flex-1" />
 
-      {/* Show message when no more messages to load */}
-      {!hasNextPage && allMessages.length > 0 && (
-        <div className="flex justify-center py-2">
-          <div className="text-sm text-gray-400">No more messages</div>
-        </div>
-      )}
+      <div className="flex flex-col gap-2">
+        {isFetchingNextPage && (
+          <div ref={topRef} className="flex justify-center py-2">
+            <div className="text-xs text-muted-foreground animate-pulse">Loading older messages...</div>
+          </div>
+        )}
 
-      {messages.map((message, index) => {
-        const isUsersMessage = message.sender_id === user?.user_id;
-        const prevMsg = allMessages[index - 1];
-        const showMetadata =
-          !prevMsg || prevMsg.sender_id !== message.sender_id;
+        {!hasNextPage && allMessages.length > 0 && (
+          <div className="flex justify-center py-2">
+            <div className="text-xs text-muted-foreground">No more messages</div>
+          </div>
+        )}
 
-        // Create a more robust unique key
-        const key =
-          "message_id" in message && message.message_id
-            ? `msg-${message.message_id}`
-            : "temp_id" in message && message.temp_id
-            ? `temp-${message.temp_id}`
-            : `idx-${index}-${"sent_at" in message && message.sent_at}`;
+        {allMessages.map((message, index) => {
+          const isUsersMessage = message.sender_id === user?.user_id;
+          const prevMsg = allMessages[index - 1];
+          const showMetadata = !prevMsg || prevMsg.sender_id !== message.sender_id;
 
-        return (
-          <ChatMessageItem
-            key={key}
-            message={message}
-            showMetadata={showMetadata}
-            isUsersMessage={isUsersMessage}
-          />
-        );
-      })}
+          const key =
+            "message_id" in message && message.message_id
+              ? `msg-${message.message_id}`
+              : "temp_id" in message && message.temp_id
+              ? `temp-${message.temp_id}`
+              : `idx-${index}-${"sent_at" in message && message.sent_at}`;
+
+          return <ChatMessageItem key={key} message={message} showMetadata={showMetadata} isUsersMessage={isUsersMessage} />;
+        })}
+      </div>
+
       <div ref={bottomRef} />
     </div>
   );
