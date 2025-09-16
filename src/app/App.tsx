@@ -15,6 +15,7 @@ const AppLayout = lazy(() => import("../components/AppLayout"));
 const MyTasks = lazy(() => import("./pages/MyTasks"));
 const MyProjects = lazy(() => import("./pages/MyProjects"));
 const MyCalendar = lazy(() => import("./pages/MyCalendar"));
+const Profile = lazy(() => import("./pages/Profile"));
 
 const withSuspense = (node: React.ReactElement) => <Suspense fallback={<PageLoader />}>{node}</Suspense>;
 
@@ -32,6 +33,7 @@ export default function App() {
       path: "/",
       element: withSuspense(<AppLayout />),
       children: [
+        { path: "profile", element: withSuspense(<Profile />) },
         { path: "dashboard", element: withSuspense(<Dashboard />) },
         { path: "my-tasks", element: withSuspense(<MyTasks />) },
         { path: "calendar", element: withSuspense(<MyCalendar />) },
