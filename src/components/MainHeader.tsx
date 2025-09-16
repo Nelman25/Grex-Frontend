@@ -1,13 +1,14 @@
-import addPeople from "@/assets/bi_person-add.svg";
 import { useAuth } from "@/context/auth-context";
 import InviteWorkspaceMemberModal from "@/features/workspace/components/InviteWorkspaceMemberModal";
+import WorkspaceMenu from "@/features/workspace/components/WorkspaceMenu";
 import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceQuery";
 import { formatDate } from "@/utils/index";
-import { GoKebabHorizontal } from "react-icons/go";
+import { Bell, ExternalLink, Plus } from "lucide-react";
+import { VscKebabVertical } from "react-icons/vsc";
 import { useParams } from "react-router";
+import { Button } from "./ui/button";
 import { SidebarTrigger } from "./ui/sidebar";
 import UserAvatars from "./UserAvatars";
-import WorkspaceMenu from "@/features/workspace/components/WorkspaceMenu";
 
 export default function MainHeader() {
   const { user } = useAuth();
@@ -27,15 +28,7 @@ export default function MainHeader() {
 
       <div className="flex w-full justify-between pl-4">
         <div className="flex flex-col space-y-1">
-          <div className="flex space-x-2 items-center">
-            <h1 className="text-xl font-semibold text-dark-text">{project.name}</h1>
-
-            <WorkspaceMenu>
-              <button className="size-3 flex items-center justify-center rounded-full border border-dark-subtle cursor-pointer">
-                <GoKebabHorizontal className="text-dark-subtle size-2" />
-              </button>
-            </WorkspaceMenu>
-          </div>
+          <h1 className="text-xl font-semibold text-dark-text">{project.name}</h1>
 
           <div className="flex space-x-4">
             <p className="text-sm">
@@ -51,14 +44,33 @@ export default function MainHeader() {
           </div>
         </div>
 
-        <div className="flex space-x-4 items-center">
+        <div className="flex space-x-4 items-center relative">
           <UserAvatars users={members ?? []} />
           <InviteWorkspaceMemberModal>
-            <div className="bg-brand-primary hover:bg-brand-light flex space-x-2 px-4 py-1 rounded items-center">
-              <img src={addPeople} alt="invite icon" />
-              <span className="text-dark-muted">Add people</span>
+            <div className="size-[32px] rounded-full absolute bg-dark-surface bottom-[10px] left-23 z-10 border flex items-center justify-center hover:bg-dark-muted transition-colors">
+              <Plus className="size-4" />
             </div>
           </InviteWorkspaceMemberModal>
+
+          <Button className="size-8 bg-dark-surface hover:bg-dark-muted border">
+            <Bell className="text-dark-text/60" />
+          </Button>
+
+          <div className="w-[1px] h-[60%] bg-dark-muted" />
+
+          <Button className="bg-dark-surface hover:bg-dark-muted border flex items-center px-3 ">
+            <ExternalLink className="size-4 text-dark-text/60" />
+            <span className="text-dark-text">Share</span>
+          </Button>
+
+          <WorkspaceMenu>
+            <div
+              role="button"
+              className="rounded-sm size-9 bg-dark-surface hover:bg-dark-muted border flex items-center justify-center transition-colors"
+            >
+              <VscKebabVertical className="text-dark-text/60" />
+            </div>
+          </WorkspaceMenu>
         </div>
       </div>
     </header>
