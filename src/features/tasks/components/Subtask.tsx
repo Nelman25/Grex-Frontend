@@ -17,17 +17,26 @@ export default function SubtaskItem({ task_id, subtask }: Props) {
 
   if (editSubtaskError || deleteSubtaskError) toast((editSubtaskError ?? deleteSubtaskError)?.message);
 
+  const handleDeleteSubtask = () => {
+    deleteSubtask(subtask.subtask_id);
+    toast.success("Subtask deleted");
+  };
+
+  const handleToggleSubtask = () => {
+    toggleSubtask({ is_done: !subtask.is_done, subtask_id: subtask.subtask_id });
+
+    if (!subtask.is_done) {
+      toast.success("1 subtask completed");
+    } else {
+      toast.success("1 subtask marked as incomplete");
+    }
+  };
+
   return (
     <li key={subtask.subtask_id} className="group flex items-center gap-2 px-4">
-      <Checkbox
-        className="rounded-sm"
-        checked={subtask.is_done}
-        onCheckedChange={() => toggleSubtask({ is_done: !subtask.is_done, subtask_id: subtask.subtask_id })}
-      />
-      <p className={cn("text-sm line-clamp-1", subtask.is_done && "line-through text-muted-foreground")}>
-        {subtask.description}
-      </p>
-      <button onClick={() => deleteSubtask(subtask.subtask_id)}>
+      <Checkbox className="rounded-sm" checked={subtask.is_done} onCheckedChange={handleToggleSubtask} />
+      <p className={cn("text-sm line-clamp-1", subtask.is_done && "line-through text-muted-foreground")}>{subtask.description}</p>
+      <button onClick={handleDeleteSubtask}>
         <Trash className="size-4 text-error/50 hidden group-hover:block" />
       </button>
     </li>

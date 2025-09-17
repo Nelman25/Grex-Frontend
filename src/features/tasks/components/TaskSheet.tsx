@@ -2,15 +2,7 @@ import PageLoader from "@/components/PageLoader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import type { Task } from "@/types/task";
 import { useState, type PropsWithChildren } from "react";
 import { useParams } from "react-router";
@@ -40,15 +32,12 @@ export default function TaskSheet({ children, task }: Props) {
 
   const { mutate: deleteTask } = useDeleteTaskMutation(Number(workspace_id));
   const { mutate } = useCreateSubtaskMutation(task.task_id);
-  const {
-    data: subtasks,
-    isPending,
-    error,
-  } = useFetchSubtasksQuery(task.task_id);
+  const { data: subtasks, isPending, error } = useFetchSubtasksQuery(task.task_id);
 
   const handleAddSubtask = () => {
     mutate({ description: newSubtask });
     setIsAdding(false);
+    toast.success("Subtask added");
     setNewSubtask("");
   };
 
@@ -87,9 +76,7 @@ export default function TaskSheet({ children, task }: Props) {
             <SheetHeader>
               <div className="">
                 <div className="flex justify-between">
-                  <SheetTitle className="text-xl font-bold line-clamp-1">
-                    {task.title}
-                  </SheetTitle>
+                  <SheetTitle className="text-xl font-bold line-clamp-1">{task.title}</SheetTitle>
                   <TaskMenu
                     showMenu={showMenu}
                     onShowMenu={setShowMenu}
@@ -97,13 +84,9 @@ export default function TaskSheet({ children, task }: Props) {
                     onEditTask={handleEditTask}
                   />
                 </div>
-                <h3 className="text-dark-text text-medium line-clamp-1">
-                  {task.subject}
-                </h3>
+                <h3 className="text-dark-text text-medium line-clamp-1">{task.subject}</h3>
               </div>
-              <SheetDescription className="mt-2 w-[90%] line-clamp-3">
-                {task.description}
-              </SheetDescription>
+              <SheetDescription className="mt-2 w-[90%] line-clamp-3">{task.description}</SheetDescription>
 
               <TaskMetaSection task={task} />
             </SheetHeader>
@@ -114,11 +97,7 @@ export default function TaskSheet({ children, task }: Props) {
         {subtasks && (
           <div className="flex flex-col space-y-4 px-4">
             <Label>Subtasks</Label>
-            <SubtaskList
-              task_id={task.task_id}
-              subtasks={subtasks}
-              className="flex flex-col space-y-2"
-            />
+            <SubtaskList task_id={task.task_id} subtasks={subtasks} className="flex flex-col space-y-2" />
 
             {isAdding && (
               <Input
@@ -133,10 +112,7 @@ export default function TaskSheet({ children, task }: Props) {
                 }}
               />
             )}
-            <button
-              className="max-w-[150px] text-medium"
-              onClick={() => setIsAdding(!isAdding)}
-            >
+            <button className="max-w-[150px] text-medium" onClick={() => setIsAdding(!isAdding)}>
               + Add Subtask
             </button>
           </div>
