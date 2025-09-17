@@ -1,19 +1,24 @@
 import UserAvatar from "@/components/UserAvatar";
+import { useAuth } from "@/context/auth-context";
 import { useFetchTasksQuery } from "@/features/tasks/hooks/queries/useFetchTasksQuery";
+import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceQuery";
 import type { Notification } from "@/types/notification";
 import { extractTaskId, formatChatDate } from "@/utils";
 import { useParams } from "react-router";
 
 export default function NotificationItem({ notification }: { notification: Notification }) {
+  const { user } = useAuth();
   const { workspace_id } = useParams();
   const { data: tasks } = useFetchTasksQuery(Number(workspace_id));
+  const { data: workspace } = useFetchWorkspaceQuery(Number(workspace_id), user?.user_id);
+  const assignor = workspace?.members.find((m) => m.user_id === notification.user_id);
   const task_id = extractTaskId(notification.content);
   const task = tasks?.find((t) => t.task_id === task_id);
 
   return (
     <div className="w-full flex mb-2 cursor-pointer rounded">
       <div className="flex-1 flex items-center space-x-3">
-        <UserAvatar className="self-start size-9" name="Jonel Villaver" photoUrl="" />
+        <UserAvatar className="self-start size-9" name={assignor?.first_name + " " + assignor?.last_name} photoUrl="" />
         <div className="flex-1">
           <p className={`text-sm ${notification.is_read ? "text-dark-subtle" : "text-dark-text"}`}>
             {RenderWorkspaceNotification(notification.content)}

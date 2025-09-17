@@ -9,6 +9,7 @@ import { useParams } from "react-router";
 import { Button } from "./ui/button";
 import { SidebarTrigger } from "./ui/sidebar";
 import UserAvatars from "./UserAvatars";
+import NotificationContainer from "@/features/notification/components/NotificationContainer";
 
 export default function MainHeader() {
   const { user } = useAuth();
@@ -44,17 +45,19 @@ export default function MainHeader() {
           </div>
         </div>
 
-        <div className="flex space-x-4 items-center relative">
+        <div className="flex space-x-4 items-center">
           <UserAvatars users={members ?? []} />
           <InviteWorkspaceMemberModal>
-            <div className="size-[32px] rounded-full absolute bg-dark-surface bottom-[10px] left-23 z-10 border flex items-center justify-center hover:bg-dark-muted transition-colors">
+            <div className="size-[32px] rounded-full bg-dark-surface border flex items-center justify-center hover:bg-dark-muted transition-colors">
               <Plus className="size-4" />
             </div>
           </InviteWorkspaceMemberModal>
 
-          <Button className="size-8 bg-dark-surface hover:bg-dark-muted border">
-            <Bell className="text-dark-text/60" />
-          </Button>
+          <NotificationContainer>
+            <div className="size-8 flex items-center justify-center rounded  bg-dark-surface hover:bg-dark-muted border">
+              <Bell className="size-4 text-dark-text/60" />
+            </div>
+          </NotificationContainer>
 
           <div className="w-[1px] h-[60%] bg-dark-muted" />
 
