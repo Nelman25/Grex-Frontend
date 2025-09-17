@@ -38,12 +38,12 @@ export const formatDate = (date: Date): string => {
 };
 
 export const formatDateToLong = (date: Date | string): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
-  return dateObj.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+
+  return dateObj.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 };
 
@@ -237,4 +237,9 @@ export const getCategoryId = (name: string, categories: Category[]): number | un
 export const parseLocalDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-").map(Number);
   return new Date(year, month - 1, day);
+};
+
+export const extractTaskId = (content: string): number | null => {
+  const match = content.match(/Task\s+(\d+)/);
+  return match ? Number(match[1]) : null;
 };
