@@ -1,4 +1,3 @@
-import PageLoader from "@/components/PageLoader";
 import type { TaskGroups } from "@/types/task";
 import { groupTasksByCategory } from "@/utils";
 import type { DropResult } from "@hello-pangea/dnd";
@@ -16,32 +15,23 @@ import NewCategoryInput from "./NewCategoryInput";
 import { usePatchTaskMutation } from "../../hooks/mutations/usePatchTaskMutation";
 
 export default function KanbanContainer() {
-  const [activeNewCategory, setActiveNewCategory] = useState<string | null>(
-    null
-  );
+  const [activeNewCategory, setActiveNewCategory] = useState<string | null>(null);
   const [isAddNewCategory, setIsAddNewCategory] = useState(false);
 
   const { workspace_id } = useParams();
   const { data: categories } = useFetchCategoryQuery(Number(workspace_id));
-  const { data: tasks, isPending } = useFetchTasksQuery(Number(workspace_id));
+  const { data: tasks = [] } = useFetchTasksQuery(Number(workspace_id));
 
   const { mutate: editTask } = usePatchTaskMutation(Number(workspace_id));
 
-  const positions = useMemo(
-    () => groupTasksByCategory(tasks ?? [], categories ?? []),
-    [tasks, categories]
-  );
+  const positions = useMemo(() => groupTasksByCategory(tasks ?? [], categories ?? []), [tasks, categories]);
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
     if (!destination) return;
 
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    )
-      return;
+    if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
     const newPositions = { ...positions };
     const sourceColumn = newPositions[source.droppableId as keyof TaskGroups];
@@ -49,8 +39,7 @@ export default function KanbanContainer() {
 
     // If moving to a different category, update the task's category
     if (source.droppableId !== destination.droppableId) {
-      const destinationColumn =
-        newPositions[destination.droppableId as keyof TaskGroups];
+      const destinationColumn = newPositions[destination.droppableId as keyof TaskGroups];
       destinationColumn.splice(destination.index, 0, movedTask);
 
       editTask({
@@ -76,13 +65,7 @@ export default function KanbanContainer() {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="max-w-[1500px] overflow-x-auto no-scrollbar w-full flex space-x-4 h-full">
-        {isPending && (
-          <div className="flex-1 flex justify-center items-center">
-            <PageLoader />
-          </div>
-        )}
-
-        {!isPending &&
+        {tasks &&
           Object.entries(positions).map(([type, task]) => (
             <div key={type} className="flex gap-2 ">
               <div>
@@ -98,10 +81,7 @@ export default function KanbanContainer() {
               {activeNewCategory === type ? (
                 <NewCategoryInput onCancel={() => setActiveNewCategory(null)} />
               ) : (
-                <div
-                  onClick={() => setActiveNewCategory(type)}
-                  className="h-full w-[1px] bg-transparent relative group"
-                >
+                <div onClick={() => setActiveNewCategory(type)} className="h-full w-[1px] bg-transparent relative group">
                   <div className="h-full w-[4px] flex justify-center">
                     <div className="w-[1px] hidden transition-all group-hover:flex bg-brand-primary/50 relative">
                       <button className="px-2 py-1 text-xs text-light-text rounded bg-brand-primary w-[90px] flex absolute top-1/2 -left-10">

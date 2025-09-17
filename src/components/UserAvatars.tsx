@@ -16,7 +16,7 @@ export default function UserAvatars({ users }: Props) {
           key={`${index}-${user.name}`}
           name={user.name}
           photoUrl={user.avatar || ""}
-          className="border-2 border-dark-muted -ml-2 first:ml-0"
+          className="-ml-2 first:ml-0"
         />
       ))}
       {length > 5 && (

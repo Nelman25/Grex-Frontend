@@ -8,6 +8,7 @@ import { useParams } from "react-router";
 import { useAssignTaskMemberMutation } from "../hooks/mutations/useAssignTaskMemberMutation";
 import { useFetchTaskAssigneesQuery } from "../hooks/queries/useFetchTaskAssigneesQuery";
 import AssigneeItem from "./AssigneeItem";
+import { toast } from "sonner";
 
 function EditTaskAssignees({ id }: { id: number }) {
   const [newAssignee, setNewAssignee] = useState("");
@@ -15,10 +16,7 @@ function EditTaskAssignees({ id }: { id: number }) {
   const { workspace_id } = useParams();
   const { data: assignees } = useFetchTaskAssigneesQuery(id);
   const { mutate: addAssignee } = useAssignTaskMemberMutation(id);
-  const { data: project } = useFetchWorkspaceQuery(
-    Number(workspace_id),
-    user?.user_id
-  );
+  const { data: project } = useFetchWorkspaceQuery(Number(workspace_id), user?.user_id);
 
   const members = project?.members;
 
@@ -26,10 +24,7 @@ function EditTaskAssignees({ id }: { id: number }) {
     const fullname = member.first_name + " " + member.last_name;
     return (
       !assignees?.some((a) => a.user_id === member.user_id) &&
-      fullname
-        .replace(/\s+/g, "")
-        .toLowerCase()
-        .includes(newAssignee.replace(/\s+/g, "").toLowerCase())
+      fullname.replace(/\s+/g, "").toLowerCase().includes(newAssignee.replace(/\s+/g, "").toLowerCase())
     );
   });
 
@@ -39,6 +34,7 @@ function EditTaskAssignees({ id }: { id: number }) {
     if (!assignee) return;
 
     addAssignee(assignee.user_id);
+    toast.success(`Assigned ${assignee.first_name} ${assignee.last_name} to the task`);
     setNewAssignee("");
   };
 
@@ -66,14 +62,8 @@ function EditTaskAssignees({ id }: { id: number }) {
         {newAssignee && (
           <div className="flex flex-col items-start bg-dark-muted px-4 mt-1 rounded absolute">
             {availableMembers?.map((member) => (
-              <button
-                className="w-full bg-dark-muted rounded my-2 flex gap-2"
-                onClick={() => addAssignee(member.user_id)}
-              >
-                <UserAvatar
-                  photoUrl={member.profile_picture ?? undefined}
-                  name={member.first_name + " " + member.last_name}
-                />
+              <button className="w-full bg-dark-muted rounded my-2 flex gap-2" onClick={() => addAssignee(member.user_id)}>
+                <UserAvatar photoUrl={member.profile_picture ?? undefined} name={member.first_name + " " + member.last_name} />
                 <span>
                   {member.first_name} {member.last_name}
                 </span>
