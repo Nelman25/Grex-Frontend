@@ -46,7 +46,7 @@ export default function TaskSheet({ children, task }: Props) {
     toast.success("Subtask added");
     setNewSubtask("");
   };
-
+  
   const handleDeleteTask = () => {
     deleteTask(task.task_id);
   };
@@ -65,7 +65,7 @@ export default function TaskSheet({ children, task }: Props) {
           <button onClick={() => setOpen(false)}>
             <MdKeyboardDoubleArrowRight className="size-4 text-muted-foreground" />
           </button>
-          
+
           <TaskMenu onDeleteTask={handleDeleteTask} onEditTask={handleEditTask}>
             <div
               role="button"

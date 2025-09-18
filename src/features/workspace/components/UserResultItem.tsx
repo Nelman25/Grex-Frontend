@@ -5,26 +5,21 @@ import { useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/context/auth-context";
 
 export default function UserResultItem({ user }: { user: User }) {
   // TODO: Request for adding member to the workspace when clicked invite button
   const fullname = user.first_name + " " + user.last_name;
   const { workspace_id } = useParams();
-  const { mutate, error, isPending, isSuccess } = useInviteUserMutation(
-    Number(workspace_id),
-    user.email
-  );
+  const { user: userLoggedIn } = useAuth();
+  const { mutate, error, isPending, isSuccess } = useInviteUserMutation(Number(workspace_id), user.email, userLoggedIn?.user_id);
 
   if (error) toast(error.message);
 
   return (
     <div className="flex items-center justify-between px-4 hover:bg-dark-subtle/20 mb-4 transition rounded">
       <div className="flex gap-4 items-center">
-        <UserAvatar
-          name={fullname}
-          photoUrl={user.profile_picture ?? undefined}
-          className="size-9 self-center"
-        />
+        <UserAvatar name={fullname} photoUrl={user.profile_picture ?? undefined} className="size-9 self-center" />
         <div className="">
           <h3 className="text-dark-text font-medium">{fullname}</h3>
           <span className="text-sm text-dark-subtle">{user.email}</span>

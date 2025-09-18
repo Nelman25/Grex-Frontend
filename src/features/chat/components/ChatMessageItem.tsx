@@ -62,8 +62,8 @@ export default function ChatMessageItem({
             </div>
           )}
           <div className="flex space-x-2.5">
-            <div className="bg-muted p-2 text-dark-text rounded-sm">
-              <p>{message.content}</p>
+            <div className={`${isUsersMessage ? "bg-brand-primary text-light-text" : "bg-muted text-dark-text"} p-2 rounded-sm`}>
+              <p >{message.content}</p>
             </div>
           </div>
         </div>
