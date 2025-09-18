@@ -11,6 +11,7 @@ import { useAuth } from "@/context/auth-context";
 import { Label } from "@/components/ui/label";
 import NotificationItem from "./NotificationItem";
 import { useNotificationPolling } from "../hooks/useNotificationPolling";
+import emptyNotification from "@/assets/empty_notification.svg";
 
 type Props = PropsWithChildren & {};
 export default function NotificationContainer({ children }: Props) {
@@ -29,6 +30,17 @@ export default function NotificationContainer({ children }: Props) {
               <NotificationItem notification={notif} />
             </DropdownMenuItem>
           ))}
+          {notifications.length === 0 && (
+            <div className="flex flex-col justify-center items-center w-full py-12">
+              <img src={emptyNotification} className="object-contain" />
+              <div className="flex flex-col items-center mt-4">
+                <h3 className="text-dark-text font-semibold">No Notification</h3>
+                <p className="block max-w-72 text-sm text-dark-subtle text-center">
+                  Nothing to see here — we'll let you know when something happens.
+                </p>
+              </div>
+            </div>
+          )}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
