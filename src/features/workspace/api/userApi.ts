@@ -7,9 +7,6 @@ export const getUsers = async (name: string) => {
   return data;
 };
 
-export const inviteUserToWorkspace = async (
-  workspace_id: number,
-  email: string
-) => {
-  await api.post(`workspace/${workspace_id}/members?email=${email}`);
+export const inviteUserToWorkspace = async (workspace_id: number, email: string, added_by: number) => {
+  await api.post(`workspace/${workspace_id}/members?email=${email}&added_by=${added_by}`);
 };
