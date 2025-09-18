@@ -20,12 +20,14 @@ export const createWorkspace = async (workspace: NewProject): Promise<Project> =
   return data;
 };
 
+// magiging ganito na raw -> /users/{user_id}/workspaces
 export const getWorkspaces = async (user_id: number): Promise<UserWorkspacesResponse[]> => {
   const { data } = await api.get<UserWorkspacesResponse[]>(`/workspace/${user_id}`);
 
   return data;
 };
 
+// magiging ganito na raw -> /workspaces/{workspace_id}
 export const getSelectedWorkspace = async (workspace_id: number, user_id: number): Promise<WorkspaceResponse> => {
   const { data } = await api.get<WorkspaceResponse>(`/workspace/${workspace_id}/${user_id}`);
 

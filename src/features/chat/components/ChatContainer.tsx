@@ -8,6 +8,8 @@ import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFe
 import { useParams } from "react-router";
 import { useAuth } from "@/context/auth-context";
 import { formatDateToLong } from "@/utils";
+import { useChatReplyStore } from "@/stores/useChatReplyStore";
+import ReplyPreview from "./ReplyPreview";
 
 // Mock data
 const mockMembers = [
@@ -87,6 +89,7 @@ export default function ChatContainer() {
   const { workspace_id } = useParams();
   const { data: project } = useFetchWorkspaceQuery(Number(workspace_id), user?.user_id);
   const members = project?.members || [];
+  const replyingTo = useChatReplyStore((state) => state.replyingTo);
 
   return (
     <div className="shadow flex h-full w-full gap-4 overflow-hidden">
@@ -97,6 +100,7 @@ export default function ChatContainer() {
           <ChatMessageList />
         </div>
         <div className="border-t border-dark-muted px-4 py-2">
+          {replyingTo && <ReplyPreview />}
           <ChatInput />
         </div>
       </div>

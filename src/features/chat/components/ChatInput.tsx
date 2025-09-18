@@ -1,16 +1,20 @@
 import { useState, useRef } from "react";
 import { ImageIcon, PlusCircle, SendHorizontal, SmileIcon } from "lucide-react";
-import { getRandomUserImage } from "@/utils";
+import { getRandomUserImage, isIncomingChatMessage, isMessageHistoryItem } from "@/utils";
 import UserAvatar from "@/components/UserAvatar";
 import { useAuth } from "@/context/auth-context";
 import { useParams } from "react-router";
 import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceQuery";
 import { useWebsocket } from "../hooks/useWebsocket";
 import { Textarea } from "@/components/ui/textarea";
+import { useChatReplyStore } from "@/stores/useChatReplyStore";
 
 export default function ChatInput() {
   const [mentionQuery, setMentionQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const replyingTo = useChatReplyStore((state) => state.replyingTo);
+  const clearReply = useChatReplyStore((state) => state.clearReply);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const { user } = useAuth();
@@ -31,15 +35,23 @@ export default function ChatInput() {
   const handleSendChat = () => {
     if (!textareaRef.current?.value.trim()) return;
 
+    let message_id;
+
+    if (replyingTo) {
+      if (isIncomingChatMessage(replyingTo)) message_id = replyingTo.message_id;
+      if (isMessageHistoryItem(replyingTo)) message_id = replyingTo.message_id;
+    }
+
     sendMessage({
       type: "text",
       content: textareaRef.current.value,
-      reply_to: null,
+      reply_to: message_id ?? null,
     });
 
     textareaRef.current.value = "";
     setMentionQuery("");
     setShowSuggestions(false);
+    clearReply();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
