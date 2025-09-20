@@ -2,6 +2,7 @@ import { useFetchTaskCommentsQuery } from "@/features/workspace/hooks/queries/us
 import { toast } from "sonner";
 import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
+import noComments from "@/assets/noMessages.svg";
 
 type Props = {
   taskId: number;
@@ -12,23 +13,18 @@ export default function TaskComments({ taskId }: Props) {
 
   if (error) toast(error.message);
 
-  if (!comments)
-    return (
-      <div className="h-60 flex items-center justify-center">
-        <p className="text-error text-sm">Failed to get comments.</p>
-      </div>
-    );
-
   return (
     <div className="h-[700px]">
       <div className="max-h-[530px] h-[530px] overflow-y-scroll">
-        {comments.length === 0 && (
-          <div className="w-full flex justify-center mt-12">
-            <p>No comments yet.</p>
+        {comments && comments.length === 0 && (
+          <div className="flex flex-col items-center justify-between h-60">
+            <img src={noComments} alt="no attachments" />
+            <h3 className="font-semibold text-lg text-dark-text">No comments here</h3>
+            <p className="text-dark-subtle">Share updates, ideas, or feedback to keep everyone aligned</p>
           </div>
         )}
-
-        {comments.map((comment) => (
+        
+        {comments?.map((comment) => (
           <CommentItem key={comment.comment_id} comment={comment} />
         ))}
       </div>

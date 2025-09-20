@@ -1,3 +1,4 @@
+import noDocuments from "@/assets/noDocuments.svg";
 import PageLoader from "@/components/PageLoader";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -46,7 +47,7 @@ export default function TaskSheet({ children, task }: Props) {
     toast.success("Subtask added");
     setNewSubtask("");
   };
-  
+
   const handleDeleteTask = () => {
     deleteTask(task.task_id);
   };
@@ -150,7 +151,14 @@ export default function TaskSheet({ children, task }: Props) {
           <TabsContent value="comments" className="h-full min-h-[550px] max-h-[600px]">
             <TaskComments taskId={task.task_id} />
           </TabsContent>
-          <TabsContent value="attachments">attachments</TabsContent>
+          <TabsContent value="attachments">
+            {/* No attachment */}
+            <div className="flex flex-col items-center justify-between h-60">
+              <img src={noDocuments} alt="no attachments" />
+              <h3 className="font-semibold text-lg text-dark-text">No files shared</h3>
+              <p className="text-dark-subtle">Files attached to task comments will appear here</p>
+            </div>
+          </TabsContent>
         </Tabs>
       </SheetContent>
     </Sheet>
