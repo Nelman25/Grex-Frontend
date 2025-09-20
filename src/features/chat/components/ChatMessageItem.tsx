@@ -49,7 +49,13 @@ function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
       <div className={`max-w-[60%] flex space-x-3 ${isUsersMessage && "flex-row-reverse gap-3 pr-6"}`}>
         {!isUsersMessage && (
           <div className="pt-6 w-8">
-            {showMetadata && <UserAvatar className="size-8" name={message.nickname} photoUrl={photoUrl ?? undefined} />}
+            {showMetadata && (
+              <UserAvatar
+                className="size-8"
+                name={message.nickname}
+                photoUrl={(isMessageHistoryItem(message) && message.profile_picture) || undefined}
+              />
+            )}
           </div>
         )}
 

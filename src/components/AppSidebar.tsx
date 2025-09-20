@@ -1,4 +1,3 @@
-import profile from "@/assets/sample_profile.svg";
 import {
   Sidebar,
   SidebarContent,
@@ -21,6 +20,7 @@ import slugify from "slugify";
 import UserAvatar from "./UserAvatar";
 import { NewProjectModal } from "@/features/workspace/components/NewProjectModal";
 import { UserDropdown } from "./UserDropdown";
+import { useFetchUserProfileQuery } from "@/hooks/queries/useFetchUserProfileQuery";
 
 export function AppSidebar() {
   const location = useLocation();
@@ -28,6 +28,7 @@ export function AppSidebar() {
   const activeTab = location.pathname.split("/")[1];
   const { workspace_name: activeProject } = useParams();
   const { user } = useAuth();
+  const { data: userProfile } = useFetchUserProfileQuery(user?.user_id);
 
   const { data: projects } = useFetchAllWorkspacesQuery(user?.user_id);
 
@@ -54,7 +55,11 @@ export function AppSidebar() {
       <SidebarHeader className="border-b border-b-dark-muted">
         <UserDropdown>
           <div className="w-full flex space-x-3 rounded">
-            <img src={profile} className="size-10 rounded" alt="profile picture" />
+            <UserAvatar
+              name={userProfile?.first_name + " " + userProfile?.last_name}
+              photoUrl={userProfile?.profile_picture ?? undefined}
+              className="size-10"
+            />
             <div>
               <h3 className="font-medium text-sm text-dark-text">
                 {user?.first_name ?? "Jonel"} {user?.last_name ?? "Villaver"}

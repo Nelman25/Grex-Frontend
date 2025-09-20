@@ -258,3 +258,46 @@ export const formatFileSize = (bytes: number): string => {
 export const getFullName = (user: User): string => {
   return `${user.first_name} ${user.last_name}`.trim();
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getObjectDiff = <T extends Record<string, any>>(original: T, updated: T): Partial<T> => {
+  const changes: Partial<T> = {};
+
+  const allKeys = new Set([...Object.keys(original), ...Object.keys(updated)]) as Set<keyof T>;
+
+  allKeys.forEach((key) => {
+    const originalValue = original[key];
+    const updatedValue = updated[key];
+
+    if (!(key in original)) {
+      changes[key] = updatedValue;
+      return;
+    }
+
+    if (!(key in updated)) {
+      return;
+    }
+
+    if (Array.isArray(originalValue) && Array.isArray(updatedValue)) {
+      if (JSON.stringify(originalValue) !== JSON.stringify(updatedValue)) {
+        changes[key] = updatedValue;
+      }
+    } else if (
+      typeof originalValue === "object" &&
+      typeof updatedValue === "object" &&
+      originalValue !== null &&
+      updatedValue !== null &&
+      !Array.isArray(originalValue) &&
+      !Array.isArray(updatedValue)
+    ) {
+      const nestedChanges = getObjectDiff(originalValue, updatedValue);
+      if (Object.keys(nestedChanges).length > 0) {
+        changes[key] = nestedChanges as T[keyof T];
+      }
+    } else if (originalValue !== updatedValue) {
+      changes[key] = updatedValue;
+    }
+  });
+
+  return changes;
+};
