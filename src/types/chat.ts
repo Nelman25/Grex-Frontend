@@ -22,6 +22,7 @@ export interface PendingChatMessage extends Omit<IncomingChatMessage, "message_i
 // part of the response shape that's why these are here
 export interface MessageHistoryItem extends Omit<IncomingChatMessage, "avatar" | "type"> {
   // removing avatar and type here temporarily because of naming mismatch
+  is_pinned: boolean;
   profile_picture: string | null;
   message_type: string;
   file_url?: string | null;
@@ -30,10 +31,4 @@ export interface MessageHistoryItem extends Omit<IncomingChatMessage, "avatar" |
 }
 
 export type ChatMessage = IncomingChatMessage | MessageHistoryItem | PendingChatMessage;
-
-export interface PinnedMessage {
-  message_id: number;
-  pinned_by: number;
-  pinned_at: string;
-  workspace_id: number;
-}
+export type PinnedMessage = MessageHistoryItem;
