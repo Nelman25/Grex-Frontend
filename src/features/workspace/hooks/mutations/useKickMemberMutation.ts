@@ -6,9 +6,6 @@ export const useKickMemberMutation = (workspace_id: number) => {
 
   return useMutation({
     mutationFn: (user_id: number) => kickMember(workspace_id, user_id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workspace", workspace_id] }),
-
-    // NOTE: dis is not gud, request separate endpoint only for fetching members of the workspace.
-    // when the said endpoint is available, change the queryKey to ["workspaceMembers", workspace_id]
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["members", { workspace_id }] }),
   });
 };

@@ -2,6 +2,7 @@ import PageLoader from "@/components/PageLoader";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useState, type PropsWithChildren } from "react";
 import { useUserSearch } from "../hooks/queries/useUserSearch";
 import ShareWorkspaceLink from "./ShareWorkspaceLink";
@@ -11,7 +12,9 @@ type Props = PropsWithChildren & {};
 
 export default function InviteWorkspaceMemberModal({ children }: Props) {
   const [query, setQuery] = useState("");
-  const { data: users = [], error, isLoading } = useUserSearch(query);
+  const debouncedQuery = useDebounce(query, 500);
+
+  const { data: users = [], error, isLoading } = useUserSearch(debouncedQuery);
 
   return (
     <Dialog>

@@ -19,6 +19,11 @@ export default function WorkspaceMembersList({ members }: { members: WorkspaceMe
     toast.success(`${member.first_name} ${member.last_name} is now a leader`);
   };
 
+  const handleKickMember = (member: WorkspaceMember) => {
+    kickMember(member.user_id);
+    toast.success(`Removed ${member.first_name} ${member.last_name} from the workspace.`);
+  };
+
   return (
     <ul className="space-y-2">
       {members.map((member) => (
@@ -46,7 +51,7 @@ export default function WorkspaceMembersList({ members }: { members: WorkspaceMe
               {member.role !== "leader" && (
                 <>
                   <DropdownMenuItem onClick={() => handlePromoteToLeader(member)}>Make leader</DropdownMenuItem>
-                  <DropdownMenuItem className="text-red-600" onClick={() => kickMember(member.user_id)}>
+                  <DropdownMenuItem className="text-red-600" onClick={() => handleKickMember(member)}>
                     Kick Member
                   </DropdownMenuItem>
                 </>

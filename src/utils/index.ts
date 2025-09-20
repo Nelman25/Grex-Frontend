@@ -1,6 +1,7 @@
 import type { CalendarEvent } from "@/types";
 import type { ChatMessage, IncomingChatMessage, MessageHistoryItem, PendingChatMessage } from "@/types/chat";
 import type { Task, TaskPriority, Subtask, Category, TaskGroups } from "@/types/task";
+import type { User } from "@/types/user";
 
 // MOCK USER IMAGES FOR TESTING
 const USER_IMAGES = [
@@ -252,4 +253,8 @@ export const formatFileSize = (bytes: number): string => {
   const size = bytes / Math.pow(1024, i);
 
   return `${size.toFixed(1)}${units[i].toLowerCase()}`;
+};
+
+export const getFullName = (user: User): string => {
+  return `${user.first_name} ${user.last_name}`.trim();
 };
