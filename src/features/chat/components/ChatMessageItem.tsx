@@ -8,8 +8,27 @@ import { memo, useCallback, useState } from "react";
 import { BsFillPinAngleFill } from "react-icons/bs";
 import { LuDot, LuReply } from "react-icons/lu";
 import { useParams } from "react-router";
-import { usePinMessageMutation } from "../hooks/mutations/usePinMessageMutation";
 import { toast } from "sonner";
+import { usePinMessageMutation } from "../hooks/mutations/usePinMessageMutation";
+import { useFetchRepliedMessageQuery } from "../hooks/queries/useFetchRepliedMessageQuery";
+
+const getMessageId = (message: ChatMessage): number | undefined => {
+  if (isIncomingChatMessage(message)) return message.message_id;
+  if (isMessageHistoryItem(message)) return message.message_id;
+  return undefined;
+};
+
+const getRepliedTo = (message: ChatMessage): number | null => {
+  if (isIncomingChatMessage(message)) return message.reply_to;
+  if (isMessageHistoryItem(message)) return message.reply_to;
+  return null;
+};
+
+const getAvatarUrl = (message: ChatMessage): string | undefined | null => {
+  if (isMessageHistoryItem(message)) return message.profile_picture;
+  if (isIncomingChatMessage(message)) return message.avatar;
+  return undefined;
+};
 
 type Props = {
   message: ChatMessage;
@@ -20,20 +39,26 @@ type Props = {
 function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
   const [isHovered, setIsHovered] = useState(false);
   const setReplyingTo = useChatReplyStore((state) => state.setReplyingTo);
+  const reply_to = getRepliedTo(message);
   const { workspace_id } = useParams();
+  const workspaceId = Number(workspace_id);
   const { user } = useAuth();
-  const { mutate: pinMessage } = usePinMessageMutation(Number(workspace_id));
+  const { mutate: pinMessage } = usePinMessageMutation(workspaceId);
+  const { data: replied } = useFetchRepliedMessageQuery(workspaceId, reply_to);
+
+  console.log(replied?.content);
+
+  // Extract common properties
+  const messageId = getMessageId(message);
+  const avatarUrl = getAvatarUrl(message);
+  const isPinned = isMessageHistoryItem(message) && message.is_pinned;
 
   const handlePinMessage = useCallback(() => {
-    let message_id;
+    if (!messageId || !user) return;
 
-    if (isIncomingChatMessage(message)) message_id = message.message_id;
-    if (isMessageHistoryItem(message)) message_id = message.message_id;
-    if (!message_id || !user) return;
-
-    pinMessage({ message_id, pinned_by: user?.user_id });
+    pinMessage({ message_id: messageId, pinned_by: user.user_id });
     toast.success("Message pinned");
-  }, [message, pinMessage, user]);
+  }, [messageId, pinMessage, user]);
 
   return (
     <motion.div
@@ -48,22 +73,22 @@ function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
       <div className={`max-w-[60%] flex space-x-3 ${isUsersMessage && "flex-row-reverse gap-3 pr-6"}`}>
         {!isUsersMessage && (
           <div className="pt-6 w-8">
-            {showMetadata && (
-              <UserAvatar
-                className="size-8"
-                name={message.nickname}
-                photoUrl={
-                  (isMessageHistoryItem(message) && message.profile_picture) ||
-                  (isIncomingChatMessage(message) && message.avatar) ||
-                  undefined
-                }
-              />
-            )}
+            {showMetadata && <UserAvatar className="size-8" name={message.nickname} photoUrl={avatarUrl ?? undefined} />}
           </div>
         )}
 
         <div className={`flex flex-col max-w-[90%] min-w-[150px] ${isUsersMessage ? "items-end" : "items-start"}`}>
-          {showMetadata && (
+          {replied && (
+            <div className={`flex flex-col text-sm ${isUsersMessage ? "items-end" : "items-start"}`}>
+              <p>
+                <span className="font-semibold">{isUsersMessage ? "You" : message.nickname}</span> replied to{" "}
+                <span className="font-semibold">{replied.sender_name}</span>
+              </p>
+
+              <div className="p-1 rounded bg-dark-muted/70 text-dark-subtle max-w-fit">{replied.content}</div>
+            </div>
+          )}
+          {!reply_to && showMetadata && (
             <div className="text-dark-subtle flex space-x-1 items-center text-xs mb-1">
               {!isUsersMessage && (
                 <>
@@ -72,7 +97,7 @@ function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
                 </>
               )}
               <span>{formatChatDate(message.sent_at)}</span>
-              {isMessageHistoryItem(message) && message.is_pinned && (
+              {isPinned && (
                 <>
                   <LuDot /> <span>Pinned</span>
                 </>
@@ -132,13 +157,10 @@ const areEqual = (prevProps: Props, nextProps: Props) => {
   const prevMessage = prevProps.message;
   const nextMessage = nextProps.message;
 
-  if ("message_id" in prevMessage && "message_id" in nextMessage) {
-    if (prevMessage.message_id !== nextMessage.message_id) return false;
-  } else if ("temp_id" in prevMessage && "temp_id" in nextMessage) {
-    if (prevMessage.temp_id !== nextMessage.temp_id) return false;
-  } else {
-    return false;
-  }
+  const prevMessageId = getMessageId(prevMessage);
+  const nextMessageId = getMessageId(nextMessage);
+
+  if (prevMessageId !== nextMessageId) return false;
 
   return prevMessage.content === nextMessage.content && prevMessage.sent_at === nextMessage.sent_at;
 };

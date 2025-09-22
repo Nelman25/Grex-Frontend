@@ -17,6 +17,13 @@ export const fetchMessages = async (ctx: QueryFunctionContext<readonly unknown[]
   return data;
 };
 
+export const getRepliedMessage = async (workspace_id: number, message_id: number | null) => {
+  const { data } = await api.get<{ message_id: number; sender_name: string; content: string }>(
+    `/workspaces/${workspace_id}/messages/${message_id}/replies`
+  );
+  return data;
+};
+
 export const pinMessage = async (workspace_id: number, message_id: number, pinned_by: number) => {
   await api.post(`/workspace/${workspace_id}/pinned-messages/${message_id}?pinned_by=${pinned_by}`);
 };
