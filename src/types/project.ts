@@ -58,3 +58,11 @@ export interface WorkspaceResponse {
   created_by: number;
   created_at: Date;
 }
+
+export interface RecentActivity {
+  activity_id: number;
+  task_log_id: number;
+  workspace_id: number;
+  content: string;
+  created_at: Date;
+}

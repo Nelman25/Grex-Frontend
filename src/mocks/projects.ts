@@ -1,9 +1,50 @@
-import type {
-  Project,
-  UserWorkspacesResponse,
-  WorkspaceResponse,
-} from "@/types/project";
+import type { Project, RecentActivity, UserWorkspacesResponse, WorkspaceResponse } from "@/types/project";
 import { getRandomUserImage } from "@/utils";
+
+export const MOCK_RECENT_ACTIVITIES: RecentActivity[] = [
+  {
+    activity_id: 1,
+    task_log_id: 101,
+    workspace_id: 10,
+    content: "Danfred patched task_id 5. Changes made: Title, Description, Deadline",
+    created_at: new Date("2025-09-22T08:30:00"),
+  },
+  {
+    activity_id: 2,
+    task_log_id: 102,
+    workspace_id: 10,
+    content: "Alice created task_id 6. Title: Setup CI/CD pipeline",
+    created_at: new Date("2025-09-22T09:15:00"),
+  },
+  {
+    activity_id: 3,
+    task_log_id: 103,
+    workspace_id: 10,
+    content: "Bob marked task_id 3 as done",
+    created_at: new Date("2025-09-22T10:05:00"),
+  },
+  {
+    activity_id: 4,
+    task_log_id: 104,
+    workspace_id: 10,
+    content: "Charlie updated task_id 7. Changes made: Priority Level",
+    created_at: new Date("2025-09-22T11:20:00"),
+  },
+  {
+    activity_id: 5,
+    task_log_id: 105,
+    workspace_id: 10,
+    content: "Eve assigned task_id 4 to Danfred",
+    created_at: new Date("2025-09-22T13:45:00"),
+  },
+  {
+    activity_id: 6,
+    task_log_id: 106,
+    workspace_id: 10,
+    content: "Alice patched task_id 8. Changes made: Status set to In-Progress",
+    created_at: new Date("2025-09-22T15:10:00"),
+  },
+];
 
 export const MOCK_PROJECTS: Project[] = [
   {
@@ -52,8 +93,7 @@ export const MOCK_PROJECTS: Project[] = [
   },
   {
     name: "Campus Navigation App",
-    description:
-      "A mobile app that helps new students navigate the campus using GPS and building information.",
+    description: "A mobile app that helps new students navigate the campus using GPS and building information.",
     project_nature: "Mobile App Development / Maps",
     start_date: new Date("2025-09-01"),
     due_date: new Date("2025-10-20"),

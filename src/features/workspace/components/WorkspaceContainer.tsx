@@ -11,6 +11,7 @@ import { TbLayoutKanbanFilled } from "react-icons/tb";
 import { useParams } from "react-router";
 import { useFetchWorkspaceQuery } from "../hooks/queries/useFetchWorkspaceQuery";
 import CalendarContainer from "./CalendarContainer";
+import WorkspaceOverview from "./WorkspaceOverview";
 
 export default function WorkspaceContainer() {
   const { workspace_id } = useParams();
@@ -46,6 +47,9 @@ export default function WorkspaceContainer() {
               <span>Messages</span>
             </TabsTrigger>
           </TabsList>
+          <TabsContent className="h-full" value="Overview">
+            <WorkspaceOverview />
+          </TabsContent>
           <TabsContent className="h-full" value="Kanban">
             <KanbanContainer />
           </TabsContent>

@@ -20,7 +20,7 @@ export const editTask = async (
   workspace_id: number,
   task_id: number,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload: EditableTaskFields | Record<string, any>
+  payload: Partial<EditableTaskFields> | Record<string, any>
 ): Promise<Task> => {
   const updated = {
     ...payload,
@@ -31,6 +31,7 @@ export const editTask = async (
   const { data } = await api.patch<Task>(`/tasks/${workspace_id}/${task_id}`, updated);
   return data;
 };
+
 export const deleteTask = async (workspace_id: number, task_id: number) => {
   await api.delete(`/tasks/${workspace_id}/${task_id}`);
 };
