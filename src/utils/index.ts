@@ -1,6 +1,6 @@
 import type { CalendarEvent } from "@/types";
 import type { ChatMessage, IncomingChatMessage, MessageHistoryItem, PendingChatMessage } from "@/types/chat";
-import type { Task, TaskPriority, Subtask, Category, TaskGroups } from "@/types/task";
+import type { Task, TaskPriority, Subtask, Category, TaskGroups, TaskAssignee } from "@/types/task";
 import type { User } from "@/types/user";
 
 // MOCK USER IMAGES FOR TESTING
@@ -300,4 +300,54 @@ export const getObjectDiff = <T extends Record<string, any>>(original: T, update
   });
 
   return changes;
+};
+
+export const getTaskSummary = (tasks: Task[]): [number, number, number] => {
+  const now = new Date();
+
+  let pending = 0;
+  let done = 0;
+  let overdue = 0;
+
+  for (const task of tasks) {
+    const isDone = task.status === "done" || task.marked_done_at !== null;
+    const isOverdue = !isDone && task.deadline < now;
+
+    if (isDone) {
+      done++;
+    } else if (isOverdue) {
+      overdue++;
+    } else {
+      pending++;
+    }
+  }
+
+  return [done, pending, overdue];
+};
+
+export const getTaskPrioritySummary = (tasks: Task[]): [number, number, number] => {
+  let low = 0;
+  let medium = 0;
+  let high = 0;
+
+  for (const task of tasks) {
+    if (task.priority_level === "low") low++;
+    else if (task.priority_level === "medium") medium++;
+    else if (task.priority_level === "high") high++;
+  }
+
+  return [low, medium, high];
+};
+
+export const aggregateAssignees = (assignees: TaskAssignee[]) => {
+  const map: Record<number, { name: string; avatar: string; count: number }> = {};
+
+  for (const a of assignees) {
+    if (!map[a.user_id]) {
+      map[a.user_id] = { name: a.name, avatar: a.avatar, count: 0 };
+    }
+    map[a.user_id].count++;
+  }
+
+  return Object.values(map);
 };
