@@ -180,6 +180,34 @@ export function isMessageHistoryItem(msg: ChatMessage): msg is MessageHistoryIte
   return "message_type" in msg;
 }
 
+export const timeAgo = (input: Date | string): string => {
+  const date = input instanceof Date ? input : new Date(input);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+
+  if (diffMs < 0) {
+    const diffSec = Math.floor(Math.abs(diffMs) / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffSec < 60) return `in ${diffSec} sec${diffSec !== 1 ? "s" : ""}`;
+    if (diffMin < 60) return `in ${diffMin} min${diffMin !== 1 ? "s" : ""}`;
+    if (diffHour < 24) return `in ${diffHour} hour${diffHour !== 1 ? "s" : ""}`;
+    return `in ${diffDay} day${diffDay !== 1 ? "s" : ""}`;
+  }
+
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffSec < 60) return `${diffSec} sec${diffSec !== 1 ? "s" : ""} ago`;
+  if (diffMin < 60) return `${diffMin} min${diffMin !== 1 ? "s" : ""} ago`;
+  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? "s" : ""} ago`;
+  return `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`;
+};
+
 export function formatChatDate(dateString: string | Date): string {
   const date = new Date(dateString);
   const now = new Date();
@@ -303,23 +331,14 @@ export const getObjectDiff = <T extends Record<string, any>>(original: T, update
 };
 
 export const getTaskSummary = (tasks: Task[]): [number, number, number] => {
-  const now = new Date();
-
   let pending = 0;
   let done = 0;
   let overdue = 0;
 
   for (const task of tasks) {
-    const isDone = task.status === "done" || task.marked_done_at !== null;
-    const isOverdue = !isDone && task.deadline < now;
-
-    if (isDone) {
-      done++;
-    } else if (isOverdue) {
-      overdue++;
-    } else {
-      pending++;
-    }
+    if (task.status === "done") done++;
+    else if (task.status === "pending") pending++;
+    else if (task.status === "overdue") overdue++;
   }
 
   return [done, pending, overdue];

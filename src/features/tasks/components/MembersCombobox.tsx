@@ -6,6 +6,8 @@ import { type PropsWithChildren } from "react";
 import { useParams } from "react-router";
 import { useAssignTaskMemberMutation } from "../hooks/mutations/useAssignTaskMemberMutation";
 import { useFetchTaskAssigneesQuery } from "../hooks/queries/useFetchTaskAssigneesQuery";
+import type { WorkspaceMember } from "@/types/member";
+import { toast } from "sonner";
 
 type Props = PropsWithChildren & {
   id: number;
@@ -21,6 +23,11 @@ export default function MembersCombobox({ id, open, setOpen, children }: Props) 
 
   const availableMembers = members?.filter((member) => !assignees?.some((a) => a.user_id === member.user_id));
 
+  const handleAddAssignee = (member: WorkspaceMember) => {
+    addAssignee(member.user_id);
+    toast.success(`Assigned ${member.first_name} to this task.`);
+  };
+
   return (
     <div className="flex items-center space-x-4">
       <Popover open={open} onOpenChange={setOpen}>
@@ -35,7 +42,7 @@ export default function MembersCombobox({ id, open, setOpen, children }: Props) 
                   const fullname = member.first_name + " " + member.last_name;
 
                   return (
-                    <CommandItem key={member.user_id} value={fullname} onSelect={() => addAssignee(member.user_id)}>
+                    <CommandItem key={member.user_id} value={fullname} onSelect={() => handleAddAssignee(member)}>
                       <div className="flex space-x-3">
                         <UserAvatar name={fullname} photoUrl={member.profile_picture ?? undefined} />
                         <span>{fullname}</span>

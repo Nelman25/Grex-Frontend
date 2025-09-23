@@ -64,3 +64,16 @@ export interface Category {
   category_id: number;
   created_at: Date;
 }
+
+export interface UserTask {
+  title: string;
+  description: string;
+  deadline: Date;
+  start_date: Date;
+  task_id: number;
+  workspace_id: number;
+  workspace_name: string;
+  category: string;
+  status: TaskStatus;
+  priority_level: TaskPriority;
+}

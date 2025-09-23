@@ -1,6 +1,18 @@
 import api from "@/lib/axios";
-import type { TaskAssignee, EditableTaskFields, NewTask, Task, Category } from "@/types/task";
+import { mockTasks } from "@/mocks/tasks";
+import type { TaskAssignee, EditableTaskFields, NewTask, Task, Category, UserTask } from "@/types/task";
 import { formatDateForAPI } from "@/utils";
+
+export const seedTasks = async (workspace_id: number): Promise<void> => {
+  for (const task of mockTasks) {
+    try {
+      await createTask(task, workspace_id);
+      console.log(`✅ Task "${task.title}" seeded`);
+    } catch (error) {
+      console.error(`❌ Failed to seed task "${task.title}"`, error);
+    }
+  }
+};
 
 export const createTask = async (newTask: NewTask, workspace_id: number): Promise<void> => {
   const payload = {
@@ -13,6 +25,11 @@ export const createTask = async (newTask: NewTask, workspace_id: number): Promis
 
 export const getTasks = async (workspace_id: number): Promise<Task[]> => {
   const { data } = await api.get<Task[]>(`/tasks/${workspace_id}`);
+  return data;
+};
+
+export const getUserTasks = async (user_id: number): Promise<UserTask[]> => {
+  const { data } = await api.get<UserTask[]>(`/users/${user_id}/tasks`);
   return data;
 };
 

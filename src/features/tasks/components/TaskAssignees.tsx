@@ -20,15 +20,15 @@ export default function TaskAssignees({ id }: { id: number }) {
       </div>
 
       <div className="flex max-w-[400px] overflow-x-auto gap-2 no-scrollbar items-center">
-        {tasksAssignees.map((assignee) => (
-          <AssigneeItem key={assignee.user_id} assignee={assignee} id={id} />
-        ))}
-        {!tasksAssignees && <div className="text-sm">No assignees yet.</div>}
         <MembersCombobox id={id} open={open} setOpen={setOpen}>
           <div className="p-1 rounded-full hover:bg-dark-surface bg-dark-muted flex justify-center items-center">
             <BiPlus />
           </div>
         </MembersCombobox>
+        {tasksAssignees.map((assignee) => (
+          <AssigneeItem key={assignee.user_id} assignee={assignee} id={id} />
+        ))}
+        {!tasksAssignees && <div className="text-sm">No assignees yet.</div>}
       </div>
     </div>
   );

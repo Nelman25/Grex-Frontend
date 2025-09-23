@@ -1,31 +1,29 @@
-import type { User } from "@/types/user";
-
-export const mockUser: User = {
-  user_id: 1231,
-  username: "nelman",
-  email: "jonel@gmail.com",
-  phone_number: "09708075290",
-  first_name: "Jonel",
-  last_name: "Villaver",
-  profile_picture: "https://github.com/shadcn.png",
-  role: "Fullstack Developer",
-  bio: "Fullstack developer passionate about React and UX.",
-  skills: ["React", "TypeScript", "UI/UX"],
-  social_links: {
-    github: "https://github.com/nelman25",
-    linkedin: "https://linkedin.com/in/jonelvillaver",
-    portfolio: "https://nelman.dev",
-    twitter: "https://twitter.com/jonelvillaver",
-    email: "mailto:yourname@example.com",
+export const mockUsers = [
+  {
+    first_name: "Jonel",
+    last_name: "Villaver",
+    email: "jonelvillaver@gmail.com",
+    password_hash: "Jonelvillaver25*",
   },
-};
-
-export const tasks_summary = {
-  totalAssigned: 42,
-  completed: 35,
-  pending: 5,
-  overdue: 2,
-};
+  {
+    first_name: "Edrich Darren",
+    last_name: "Santuyo",
+    email: "edrichdarrensantuyo@gmail.com",
+    password_hash: "Jonelvillaver25*",
+  },
+  {
+    first_name: "Danfred Martin",
+    last_name: "Isip",
+    email: "danfredisip@gmail.com",
+    password_hash: "Jonelvillaver25*",
+  },
+  {
+    first_name: "Matthew",
+    last_name: "Pena",
+    email: "matthewpena@gmail.com",
+    password_hash: "Jonelvillaver25*",
+  },
+];
 
 export const recent_activity = [
   {
@@ -90,29 +88,9 @@ export const recent_activity = [
   },
 ];
 
-// tasks_summary: {
-//   totalAssigned: 42,
-//   completed: 35,
-//   pending: 5,
-//   overdue: 2,
-// },
-
-// recent_activity: [
-//   {
-//     type: "task_completed",
-//     taskId: "t567",
-//     description: "Completed Task: Fix login bug",
-//     timestamp: "2025-09-14T10:30:00Z",
-//   },
-//   {
-//     type: "comment_added",
-//     taskId: "t789",
-//     description: "Commented on Task: Update homepage UI",
-//     timestamp: "2025-09-15T16:45:00Z",
-//   },
-// ],
-
-// achievements: [
-//   { id: "a1", name: "Task Master", description: "Completed 100 tasks" },
-//   { id: "a2", name: "Early Adopter", description: "Joined in beta phase" },
-// ],
+export const tasks_summary = {
+  totalAssigned: 42,
+  completed: 35,
+  pending: 5,
+  overdue: 2,
+};
