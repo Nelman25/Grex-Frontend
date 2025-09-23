@@ -1,4 +1,4 @@
-import PageLoader from "@/components/PageLoader";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/context/auth-context";
 import { useFetchUserTasksQuery } from "@/features/tasks/hooks/queries/useFetchUserTasksQuery";
 import type { TaskStatus, UserTask } from "@/types/task";
@@ -39,13 +39,19 @@ export default function MyTasks() {
       <div className="w-full max-w-[1200px] mx-auto pt-24">
         <h1 className="text-2xl font-bold">My Tasks</h1>
 
-        {isPending && (
-          <div className="flex items-center justify-center h-[750px]">
-            <PageLoader />
-          </div>
-        )}
-
         <div className="mt-6 max-h-[750px] overflow-auto">
+          {isPending &&
+            Array.from({ length: 10 }).map((_, index) => (
+              <div key={index} className="px-8 py-4 hover:bg-dark-muted/20 rounded">
+                <Skeleton className="max-w-[200px] h-[30px] my-2 rounded-full " />
+                <Skeleton className="max-w-[450px] h-[30px] my-2 rounded-full " />
+                <div className="flex justify-between mt-3">
+                  <Skeleton className="w-[150px] h-[20px] rounded-full " />
+                  <Skeleton className="w-[150px] h-[20px] rounded-full " />
+                </div>
+              </div>
+            ))}
+
           {sortTasksByStatus(tasks).map((task) => (
             <div
               key={task.task_id}
