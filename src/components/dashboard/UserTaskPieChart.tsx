@@ -1,0 +1,33 @@
+import type { UserTask } from "@/types/task";
+import { getTaskSummary } from "@/utils";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+type Props = {
+  tasks: UserTask[];
+};
+
+export default function UserTaskPieChart({ tasks }: Props) {
+  const tasksData = getTaskSummary(tasks);
+
+  const data = {
+    labels: ["Completed", "In-Progress", "Overdue", "Not Started"],
+    datasets: [
+      {
+        label: "Tasks",
+        data: [...tasksData, 13],
+        backgroundColor: ["rgba(34, 197, 94, 0.7)", "rgba(59, 130, 246, 0.7)", "rgba(239, 68, 68, 0.7)", "rgba(48,48,48, 0.7)"],
+        borderColor: ["rgba(34, 197, 94, 1)", "rgba(59, 130, 246, 1)", "rgba(239, 68, 68, 1)", "rgba(48,48,48, 1.0)"],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  return (
+    <div className="flex-1 flex justify-center items-center">
+      <Doughnut data={data} className="max-h-[400px]" />
+    </div>
+  );
+}

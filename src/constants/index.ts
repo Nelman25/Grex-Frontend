@@ -3,7 +3,7 @@ import { LuBrainCircuit } from "react-icons/lu";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FaTasks, FaComments } from "react-icons/fa";
 import { GoTasklist } from "react-icons/go";
-import { CiCalendar, CiMail } from "react-icons/ci";
+import { CiCalendar } from "react-icons/ci";
 import { RxDashboard } from "react-icons/rx";
 
 export const FEATURE_CARDS = [
@@ -38,7 +38,6 @@ export const SIDEBAR_ITEMS = [
   { title: "Dashboard", icon: RxDashboard },
   { title: "Calendar", icon: CiCalendar },
   { title: "My Tasks", icon: GoTasklist },
-  { title: "Messages", icon: CiMail },
 ];
 
 export const AVATAR_COLORS = ["0e6655", "145a32", "154360", "512e5f", "6e2c00", "641e16", "1c2833"];

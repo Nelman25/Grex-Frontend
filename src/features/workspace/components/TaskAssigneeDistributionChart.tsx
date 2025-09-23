@@ -23,9 +23,23 @@ export default function WorkspaceAssigneeChart({ tasks }: Props) {
       {
         label: "Tasks Assigned",
         data: summary.map((u) => u.count),
-        backgroundColor: "#B7CA47",
-        borderColor: "#C5D279",
+        backgroundColor: [
+          "#B7CA47",
+          "#F3A712",
+          "#3A86FF",
+          "#C5D279",
+          "#118AB2",
+          "#C47317",
+          "#FF006E",
+          "#E4572E",
+          "#669BBC",
+          "#8338EC",
+          "#FB5607",
+          "#06D6A0",
+        ],
+        borderColor: "#",
         borderWidth: 2,
+        borderRadius: 5
       },
     ],
   };

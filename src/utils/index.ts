@@ -1,6 +1,6 @@
 import type { CalendarEvent } from "@/types";
 import type { ChatMessage, IncomingChatMessage, MessageHistoryItem, PendingChatMessage } from "@/types/chat";
-import type { Task, TaskPriority, Subtask, Category, TaskGroups, TaskAssignee } from "@/types/task";
+import type { Task, TaskPriority, Subtask, Category, TaskGroups, TaskAssignee, UserTask } from "@/types/task";
 import type { User } from "@/types/user";
 
 // MOCK USER IMAGES FOR TESTING
@@ -330,7 +330,7 @@ export const getObjectDiff = <T extends Record<string, any>>(original: T, update
   return changes;
 };
 
-export const getTaskSummary = (tasks: Task[]): [number, number, number] => {
+export const getTaskSummary = (tasks: Task[] | UserTask[]): [number, number, number] => {
   let pending = 0;
   let done = 0;
   let overdue = 0;
@@ -370,3 +370,22 @@ export const aggregateAssignees = (assignees: TaskAssignee[]) => {
 
   return Object.values(map);
 };
+
+export function getCompletedTasksByDay(tasks: UserTask[]) {
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const counts = Array(7).fill(0);
+
+  tasks.forEach((task) => {
+    if (task.status === "done") {
+      const dayIndex = new Date(task.deadline).getDay(); // 0 = Sun, 6 = Sat
+      counts[dayIndex] += 1;
+    }
+  });
+
+  // Return in Mon-Sun order
+  const orderedDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  return orderedDays.map((day) => ({
+    day,
+    completed: counts[days.indexOf(day)],
+  }));
+}

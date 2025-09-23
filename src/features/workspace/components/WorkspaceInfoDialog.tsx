@@ -1,11 +1,10 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useState } from "react";
+import { parseLocalDate } from "@/utils";
 import { useParams } from "react-router";
+import { useFetchWorkspaceMembersQuery } from "../hooks/queries/useFetchWorkspaceMembersQuery";
 import { useFetchWorkspaceQuery } from "../hooks/queries/useFetchWorkspaceQuery";
 import WorkspaceInfoLeft from "./WorkspaceInfoLeft";
 import WorkspaceInfoTabs from "./WorkspaceInfoTabs";
-import { parseLocalDate } from "@/utils";
-import { useFetchWorkspaceMembersQuery } from "../hooks/queries/useFetchWorkspaceMembersQuery";
 
 const mockActivities = [
   {
@@ -40,15 +39,6 @@ const mockActivities = [
   },
 ];
 
-const mockLinks = [
-  {
-    id: 1,
-    label: "Google Docs",
-    url: "https://docs.google.com/document/d/1WR_CVYh1Ph8IdwzjrmjVNYagfen_kqrbeftqhuw0cuw/edit?tab=t.0",
-  },
-  { id: 2, label: "GitHub Repo", url: "https://github.com/ConstDB" },
-];
-
 type Props = {
   open: boolean;
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
@@ -56,18 +46,10 @@ type Props = {
 
 export default function WorkspaceInfoDialog({ open, onOpenChange }: Props) {
   const { workspace_id } = useParams();
-  const { data: workspace } = useFetchWorkspaceQuery(Number(workspace_id));
-  const { data: members = [] } = useFetchWorkspaceMembersQuery(Number(workspace_id));
+  const workspaceId = Number(workspace_id);
 
-  const [links, setLinks] = useState(mockLinks);
-  const [newLink, setNewLink] = useState({ label: "", url: "" });
-
-  const handleAddLink = () => {
-    if (newLink.label && newLink.url) {
-      setLinks([...links, { ...newLink, id: Date.now() }]);
-      setNewLink({ label: "", url: "" });
-    }
-  };
+  const { data: workspace } = useFetchWorkspaceQuery(workspaceId);
+  const { data: members = [] } = useFetchWorkspaceMembersQuery(workspaceId);
 
   const progress = 60; // temp
 
@@ -86,16 +68,7 @@ export default function WorkspaceInfoDialog({ open, onOpenChange }: Props) {
       <DialogContent className="min-w-[1100px] w-full p-0 flex flex-col overflow-hidden max-h-[90vh]">
         {workspace ? (
           <div className="flex flex-col md:flex-row h-[80vh] overflow-hidden">
-            <WorkspaceInfoLeft
-              workspace={workspace}
-              progress={progress}
-              daysLeft={daysLeft}
-              activities={mockActivities}
-              links={links}
-              newLink={newLink}
-              setNewLink={setNewLink}
-              handleAddLink={handleAddLink}
-            />
+            <WorkspaceInfoLeft workspace={workspace} progress={progress} daysLeft={daysLeft} activities={mockActivities} />
             <WorkspaceInfoTabs members={members} />
           </div>
         ) : (

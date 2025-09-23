@@ -61,10 +61,10 @@ export function AppSidebar() {
               className="size-10"
             />
             <div>
-              <h3 className="font-medium text-sm text-dark-text">
+              <h3 className="font-medium text-sm text-dark-text truncate max-w-[20ch]">
                 {user?.first_name ?? "Jonel"} {user?.last_name ?? "Villaver"}
               </h3>
-              <h4 className="text-sm text-dark-subtle text-ellipsis">{user?.email ?? "jonelvillaver@gmail.com"}</h4>
+              <h4 className="text-sm text-dark-subtle truncate max-w-[20ch]">{user?.email}</h4>
             </div>
           </div>
         </UserDropdown>

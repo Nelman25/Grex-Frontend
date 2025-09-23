@@ -37,7 +37,6 @@ export default function App() {
         { path: "dashboard", element: withSuspense(<Dashboard />) },
         { path: "my-tasks", element: withSuspense(<MyTasks />) },
         { path: "calendar", element: withSuspense(<MyCalendar />) },
-        { path: "messages", element: withSuspense(<div>messages</div>) },
         {
           path: "my-projects",
           children: [

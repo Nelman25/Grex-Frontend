@@ -66,3 +66,14 @@ export interface RecentActivity {
   content: string;
   created_at: Date;
 }
+
+export interface NewQuickLink {
+  link_name: string;
+  link_url: string;
+}
+
+export interface QuickLink extends NewQuickLink {
+  link_id: number;
+  workspace_id: number;
+  created_at: Date;
+}

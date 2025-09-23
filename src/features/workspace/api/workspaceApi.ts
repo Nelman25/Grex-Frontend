@@ -7,6 +7,9 @@ import type {
   UserWorkspacesResponse,
   WorkspacePayload,
   EditProject,
+  RecentActivity,
+  QuickLink,
+  NewQuickLink,
 } from "@/types/project";
 
 export const createWorkspace = async (workspace: NewProject): Promise<Project> => {
@@ -48,4 +51,22 @@ export const kickMember = async (workspace_id: number, user_id: number): Promise
 
 export const makeMemberLeader = async (workspace_id: number, user_id: number): Promise<void> => {
   await api.patch(`/workspace/${workspace_id}/members/${user_id}`, { role: "leader" });
+};
+
+export const getWorkspaceRecentActivities = async (workspace_id: number): Promise<RecentActivity[]> => {
+  const { data } = await api.get<RecentActivity[]>(`/workspaces/${workspace_id}/recent-activities`);
+  return data;
+};
+
+export const createQuickLink = async (workspace_id: number, payload: NewQuickLink): Promise<void> => {
+  await api.post<QuickLink>(`/workspaces/${workspace_id}/quick-links`, payload);
+};
+
+export const getWorkspaceQuickLinks = async (workspace_id: number): Promise<QuickLink[]> => {
+  const { data } = await api.get<QuickLink[]>(`/workspaces/${workspace_id}/quick-links`);
+  return data;
+};
+
+export const deleteQuickLink = async (link_id: number): Promise<void> => {
+  await api.delete(`/quick-links/${link_id}`);
 };

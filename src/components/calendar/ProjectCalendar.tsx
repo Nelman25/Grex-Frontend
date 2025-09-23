@@ -6,15 +6,12 @@ import "@schedule-x/theme-default/dist/index.css";
 import type { CalendarEvent } from "@/types";
 import CustomMonthEvent from "./CustomMonthEvent";
 
-const customComponents = {
-  monthGridEvent: CustomMonthEvent,
+type Props = {
+  events: CalendarEvent[];
+  mode?: "workspace" | "user";
 };
 
-export default function ProjectCalendar({
-  events,
-}: {
-  events: CalendarEvent[];
-}) {
+export default function ProjectCalendar({ events, mode }: Props) {
   const eventsService = useState(() => createEventsServicePlugin())[0];
 
   const calendar = useCalendarApp({
@@ -27,12 +24,13 @@ export default function ProjectCalendar({
     eventsService.getAll();
   }, [eventsService]);
 
+  const customComponents = {
+    monthGridEvent: (props: { calendarEvent: CalendarEvent }) => <CustomMonthEvent {...props} mode={mode} />,
+  };
+
   return (
     <div>
-      <ScheduleXCalendar
-        calendarApp={calendar}
-        customComponents={customComponents}
-      />
+      <ScheduleXCalendar calendarApp={calendar} customComponents={customComponents} />
     </div>
   );
 }

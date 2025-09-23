@@ -4,14 +4,16 @@ import TaskPriorityChart from "./TaskPriorityChart";
 import { useFetchTasksQuery } from "@/features/tasks/hooks/queries/useFetchTasksQuery";
 import TaskAssigneeDistributionChart from "./TaskAssigneeDistributionChart";
 import ChartCard from "./ChartCard";
-import { MOCK_RECENT_ACTIVITIES } from "@/mocks/projects";
+import { useFetchWorkspaceRecentActivitiesQuery } from "../hooks/queries/useFetchWorkspaceRecentActivitiesQuery";
 
 export default function WorkspaceOverview() {
   const { workspace_id } = useParams();
-  const { data: tasks = [] } = useFetchTasksQuery(Number(workspace_id));
+  const workspaceId = Number(workspace_id);
+  const { data: tasks = [] } = useFetchTasksQuery(workspaceId);
+  const { data: recentActivities = [] } = useFetchWorkspaceRecentActivitiesQuery(workspaceId);
 
   const renderRecentActivities = () => {
-    return MOCK_RECENT_ACTIVITIES.map((recent_activity) => (
+    return recentActivities.map((recent_activity) => (
       <div className="flex space-x-3 items-center text-lg">
         <div className="size-8 bg-brand-primary rounded-full border flex items-center justify-center text-light-text">JV</div>
         <p className="text-dark-text">{recent_activity.content}</p>
