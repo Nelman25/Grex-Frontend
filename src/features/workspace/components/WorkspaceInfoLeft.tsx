@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import UserAvatar from "@/components/UserAvatar";
-import type { EditProject, WorkspaceResponse } from "@/types/project";
+import type { EditProject, QuickLink, WorkspaceResponse } from "@/types/project";
 import { Edit, Link2 } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useEditWorkspaceMutation } from "../hooks/mutations/useEditWorkspaceMutation";
 import WorkspaceInfoDisplay from "./WorkspaceInfoDisplay";
 import WorkspaceInfoEdit from "./WorkspaceInfoEdit";
-import { formatDateForAPI } from "@/utils";
+import { formatDateForAPI, timeAgo } from "@/utils";
 
 type Props = {
   workspace: WorkspaceResponse;
@@ -23,9 +23,9 @@ type Props = {
     };
     time: string;
   }[];
-  links: { id: number; label: string; url: string }[];
-  newLink: { label: string; url: string };
-  setNewLink: React.Dispatch<React.SetStateAction<{ label: string; url: string }>>;
+  links: QuickLink[];
+  newLink: QuickLink;
+  setNewLink: React.Dispatch<React.SetStateAction<QuickLink>>;
   handleAddLink: () => void;
 };
 
@@ -46,17 +46,6 @@ export default function WorkspaceInfoLeft({
   const handleSave = (data: EditProject) => {
     editWorkspace(data);
     setEditing(false);
-  };
-
-  const timeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-    if (diff < 60) return `${diff}s ago`;
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-    console.log(`${Math.floor(diff / 86400)}d ago`);
-    return `${Math.floor(diff / 86400)}d ago`;
   };
 
   return (
@@ -105,32 +94,33 @@ export default function WorkspaceInfoLeft({
       <div>
         <div className="font-semibold mb-2">Quick Links</div>
         <ul className="space-y-2 mb-2">
-          {links.map((link) => (
-            <li key={link.id}>
+          {links.map((link, index) => (
+            <li key={`${link.link_name}-${link.link_url}-${index}`}>
               <a
-                href={link.url}
+                href={link.link_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-3 py-2 rounded hover:bg-muted transition text-sm font-medium"
               >
                 <Link2 className="w-4 h-4 text-primary" />
-                <span className="truncate">{link.label}</span>
-                <span className="text-muted-foreground truncate">{link.url}</span>
+                <span className="truncate">{link.link_name}</span>
+                <span className="text-muted-foreground truncate">{link.link_url}</span>
               </a>
             </li>
           ))}
         </ul>
+
         <div className="flex gap-2">
           <Input
             placeholder="Label"
-            value={newLink.label}
-            onChange={(e) => setNewLink({ ...newLink, label: e.target.value })}
+            value={newLink.link_name}
+            onChange={(e) => setNewLink({ ...newLink, link_name: e.target.value })}
             className="w-1/3"
           />
           <Input
             placeholder="URL"
-            value={newLink.url}
-            onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
+            value={newLink.link_url}
+            onChange={(e) => setNewLink({ ...newLink, link_url: e.target.value })}
             className="w-1/2"
           />
           <Button size="sm" onClick={handleAddLink}>

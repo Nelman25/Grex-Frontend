@@ -1,11 +1,13 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import type { QuickLink } from "@/types/project";
+import { parseLocalDate } from "@/utils";
 import { useState } from "react";
 import { useParams } from "react-router";
+import { useCreateQuickLinkMutation } from "../hooks/mutations/useCreateQuickLinkMutation";
+import { useFetchWorkspaceMembersQuery } from "../hooks/queries/useFetchWorkspaceMembersQuery";
 import { useFetchWorkspaceQuery } from "../hooks/queries/useFetchWorkspaceQuery";
 import WorkspaceInfoLeft from "./WorkspaceInfoLeft";
 import WorkspaceInfoTabs from "./WorkspaceInfoTabs";
-import { parseLocalDate } from "@/utils";
-import { useFetchWorkspaceMembersQuery } from "../hooks/queries/useFetchWorkspaceMembersQuery";
 
 const mockActivities = [
   {
@@ -40,13 +42,12 @@ const mockActivities = [
   },
 ];
 
-const mockLinks = [
+const mockLinks: QuickLink[] = [
   {
-    id: 1,
-    label: "Google Docs",
-    url: "https://docs.google.com/document/d/1WR_CVYh1Ph8IdwzjrmjVNYagfen_kqrbeftqhuw0cuw/edit?tab=t.0",
+    link_name: "Google Docs",
+    link_url: "https://docs.google.com/document/d/1WR_CVYh1Ph8IdwzjrmjVNYagfen_kqrbeftqhuw0cuw/edit?tab=t.0",
   },
-  { id: 2, label: "GitHub Repo", url: "https://github.com/ConstDB" },
+  { link_name: "GitHub Repo", link_url: "https://github.com/ConstDB" },
 ];
 
 type Props = {
@@ -56,17 +57,26 @@ type Props = {
 
 export default function WorkspaceInfoDialog({ open, onOpenChange }: Props) {
   const { workspace_id } = useParams();
-  const { data: workspace } = useFetchWorkspaceQuery(Number(workspace_id));
-  const { data: members = [] } = useFetchWorkspaceMembersQuery(Number(workspace_id));
+  const workspaceId = Number(workspace_id);
+
+  const { data: workspace } = useFetchWorkspaceQuery(workspaceId);
+  const { data: members = [] } = useFetchWorkspaceMembersQuery(workspaceId);
+
+  const { mutate: createQuickLink } = useCreateQuickLinkMutation(workspaceId);
 
   const [links, setLinks] = useState(mockLinks);
-  const [newLink, setNewLink] = useState({ label: "", url: "" });
+  const [newLink, setNewLink] = useState({ link_name: "", link_url: "" });
 
   const handleAddLink = () => {
-    if (newLink.label && newLink.url) {
-      setLinks([...links, { ...newLink, id: Date.now() }]);
-      setNewLink({ label: "", url: "" });
+    if (newLink.link_name && newLink.link_url) {
+      setLinks([...links, { ...newLink }]);
+      setNewLink({ link_name: "", link_url: "" });
     }
+
+    createQuickLink({
+      link_name: newLink.link_name,
+      link_url: newLink.link_url,
+    });
   };
 
   const progress = 60; // temp
