@@ -66,3 +66,7 @@ export const getWorkspaceQuickLinks = async (workspace_id: number): Promise<Quic
   const { data } = await api.get<QuickLink[]>(`/workspaces/${workspace_id}/quick-links`);
   return data;
 };
+
+export const deleteQuickLink = async (link_id: number): Promise<void> => {
+  await api.delete(`/quick-links/${link_id}`);
+};
