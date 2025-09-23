@@ -47,19 +47,19 @@
 }
 
 .sx__month-grid-day {
-  height: 250px !important;
+  height: 400px !important;
   background-color: transparent !important;
   color: #f2f2f2;
   border-right: 1px solid #404040 !important;
 }
 
 .sx__month-grid-event {
-  height: 30px !important;
+  height: auto !important;
 }
 
 .sx__event {
   background-color: rgba(138, 166, 36, 0.2) !important;
-  border-inline-start: 4px solid rgba(138, 166, 36, 0.5) !important;
+  /* border-inline-start: 4px solid rgba(138, 166, 36, 0.5) !important; */
   color: rgba(138, 166, 36) !important;
 }
 
