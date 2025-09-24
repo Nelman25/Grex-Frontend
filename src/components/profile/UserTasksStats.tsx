@@ -1,7 +1,13 @@
-import { tasks_summary } from "@/mocks/users";
+import { useAuth } from "@/context/auth-context";
+import { useFetchUserTasksQuery } from "@/features/tasks/hooks/queries/useFetchUserTasksQuery";
+import { getTaskSummary } from "@/utils";
 import { Card, CardContent, CardHeader } from "../ui/card";
 
 export default function UserTasksStats() {
+  const { user } = useAuth();
+  const { data: tasks = [] } = useFetchUserTasksQuery(user?.user_id);
+  const [done, pending, overdue] = getTaskSummary(tasks);
+
   return (
     <Card className="bg-dark-surface border-dark-muted rounded">
       <CardHeader className="pb-3">
@@ -9,19 +15,19 @@ export default function UserTasksStats() {
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <p className="text-4xl font-bold text-green-500">{tasks_summary.completed}</p>
+          <p className="text-4xl font-bold text-green-500">{done}</p>
           <p className="text-sm text-muted-foreground">Completed</p>
         </div>
         <div className="space-y-1">
-          <p className="text-4xl font-bold text-yellow-500">{tasks_summary.pending}</p>
+          <p className="text-4xl font-bold text-yellow-500">{pending}</p>
           <p className="text-sm text-muted-foreground">Pending</p>
         </div>
         <div className="space-y-1">
-          <p className="text-4xl font-bold text-red-500">{tasks_summary.overdue}</p>
+          <p className="text-4xl font-bold text-red-500">{overdue}</p>
           <p className="text-sm text-muted-foreground">Overdue</p>
         </div>
         <div className="space-y-1">
-          <p className="text-4xl font-bold">{tasks_summary.totalAssigned}</p>
+          <p className="text-4xl font-bold">{tasks.length}</p>
           <p className="text-sm text-muted-foreground">Total</p>
         </div>
       </CardContent>
