@@ -3,6 +3,7 @@ import type { Comment } from "@/types/comment";
 import { formatChatDate } from "@/utils";
 import { Avatar } from "@radix-ui/react-avatar";
 import { BsDot } from "react-icons/bs";
+import FileAttachment from "./FileAttachment";
 
 type Props = {
   comment: Comment;
@@ -22,6 +23,8 @@ export default function CommentItem({ comment }: Props) {
           <h4 className="text-dark-subtle text-sm">{formatChatDate(comment.created_at)}</h4>
         </div>
         <p className="text-dark-text">{comment.content}</p>
+
+        <FileAttachment attachment={comment.attachments} />
       </div>
     </div>
   );
