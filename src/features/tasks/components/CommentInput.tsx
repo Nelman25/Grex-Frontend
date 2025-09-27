@@ -1,19 +1,22 @@
+import { uploadFileToCloudinary, uploadImageToCloudinary } from "@/api/cloudinary";
 import { Input } from "@/components/ui/input";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "@/constants/cloudinary";
 import { useAuth } from "@/context/auth-context";
-import type { NewComment } from "@/types/comment";
+import type { NewComment, NewCommentAttachment } from "@/types/comment";
 import { useRef, useState } from "react";
 import { CiImageOn } from "react-icons/ci";
 import { IoSendSharp } from "react-icons/io5";
 import { MdAttachFile } from "react-icons/md";
 import { useCreateCommentMutation } from "../hooks/mutations/useCreateCommentMutation";
-import { uploadFileToCloudinary, uploadImageToCloudinary } from "@/api/cloudinary";
-import { formatFileSize } from "@/utils";
+import FileAttachment from "./FileAttachment";
 
 export default function CommentInput({ taskId }: { taskId: number }) {
-  const [comment, setComment] = useState("");
-  const imageRef = useRef<HTMLInputElement | null>(null);
   const attachmentRef = useRef<HTMLInputElement | null>(null);
+  const imageRef = useRef<HTMLInputElement | null>(null);
+
+  const [comment, setComment] = useState("");
+  const [newAttachment, setNewAttachment] = useState<NewCommentAttachment | undefined>(undefined);
+
   const { user } = useAuth();
   const { mutate: addComment } = useCreateCommentMutation(taskId);
 
@@ -21,12 +24,22 @@ export default function CommentInput({ taskId }: { taskId: number }) {
     if (!user) return;
 
     const newComment: NewComment = {
-      content: comment,
       sender_id: user.user_id,
     };
 
+    if (comment) {
+      newComment.content = comment;
+    }
+
+    if (newAttachment) {
+      newComment.attachments = newAttachment;
+    }
+
+    if (!newComment.content && !newComment.attachments) return;
+
     addComment(newComment);
     setComment("");
+    setNewAttachment(undefined);
   };
 
   const handleUploadFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,16 +54,18 @@ export default function CommentInput({ taskId }: { taskId: number }) {
     data.append("cloud_name", CLOUDINARY_CLOUD_NAME);
 
     const file = await uploadFileToCloudinary(data);
-    console.log({
+
+    setNewAttachment({
       name: files[0].name,
-      type: files[0].type,
-      size: formatFileSize(file.bytes),
-      url: file.secure_url,
+      file_type: "file",
+      file_size: file.bytes,
+      file_url: file.secure_url,
     });
+
+    attachmentRef.current = null;
   };
 
   const handleUploadImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("Upload file triggered!");
     const { files } = event.target;
 
     if (!files || files.length === 0) return;
@@ -63,17 +78,36 @@ export default function CommentInput({ taskId }: { taskId: number }) {
 
     const image = await uploadImageToCloudinary(data);
 
-    console.log({
+    setNewAttachment({
       name: files[0].name,
-      type: files[0].type,
-      size: formatFileSize(image.bytes),
-      url: image.secure_url,
+      file_type: "image",
+      file_size: image.bytes,
+      file_url: image.secure_url,
     });
-    console.log(image);
+
+    imageRef.current = null;
+  };
+
+  const removeAttachment = () => {
+    setNewAttachment(undefined);
   };
 
   return (
     <div className="mx-4 my-2 relative">
+      {newAttachment && (
+        <div className="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 shadow-lg p-3">
+          <div className="flex items-start justify-between">
+            <FileAttachment attachment={newAttachment} />
+            <button
+              onClick={removeAttachment}
+              className="ml-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <Input
         className="w-full pr-20"
         value={comment}
@@ -84,6 +118,7 @@ export default function CommentInput({ taskId }: { taskId: number }) {
             handleSendComment();
           }
         }}
+        placeholder="Type a comment..."
       />
 
       <Input type="file" accept="image/*" className="hidden" ref={imageRef} onChange={handleUploadImage} />

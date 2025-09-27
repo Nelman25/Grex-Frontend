@@ -10,8 +10,6 @@ export default function TaskAssignees({ id }: { id: number }) {
   const [open, setOpen] = useState(false);
   const { data: tasksAssignees } = useFetchTaskAssigneesQuery(id);
 
-  if (!tasksAssignees) return <p>No assignees yet.</p>;
-
   return (
     <div className="flex space-x-2 items-center">
       <div className="flex min-w-28 items-center space-x-2 mb-2 text-sm">
@@ -25,10 +23,12 @@ export default function TaskAssignees({ id }: { id: number }) {
             <BiPlus />
           </div>
         </MembersCombobox>
-        {tasksAssignees.map((assignee) => (
+
+        {!tasksAssignees && <div className="text-sm">No assignees yet.</div>}
+
+        {tasksAssignees?.map((assignee) => (
           <AssigneeItem key={assignee.user_id} assignee={assignee} id={id} />
         ))}
-        {!tasksAssignees && <div className="text-sm">No assignees yet.</div>}
       </div>
     </div>
   );
