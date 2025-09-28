@@ -5,7 +5,7 @@ import { useFetchWorkspaceMembersQuery } from "@/features/workspace/hooks/querie
 import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceQuery";
 import { useChatReplyStore } from "@/stores/useChatReplyStore";
 import { formatDateToLong } from "@/utils";
-import { FileIcon, ImageIcon, UsersIcon } from "lucide-react";
+import { CircleX, FileIcon, ImageIcon, UsersIcon } from "lucide-react";
 import { BsPinAngle } from "react-icons/bs";
 import { useParams } from "react-router";
 import ChatHeader from "./ChatHeader";
@@ -13,6 +13,7 @@ import ChatInput from "./ChatInput";
 import ChatMessageList from "./ChatMessageList";
 import PinnedMessagesDialog from "./PinnedMessagesDialog";
 import ReplyPreview from "./ReplyPreview";
+import { useChatAttachmentStore } from "@/stores/useChatAttachmentStore";
 
 const mockFiles = [
   {
@@ -38,7 +39,10 @@ export default function ChatContainer() {
   const workspaceId = Number(workspace_id);
   const { data: project } = useFetchWorkspaceQuery(workspaceId);
   const { data: members = [] } = useFetchWorkspaceMembersQuery(workspaceId);
+
   const replyingTo = useChatReplyStore((state) => state.replyingTo);
+  const attachment = useChatAttachmentStore((state) => state.attachment);
+  const removeAttachment = useChatAttachmentStore((state) => state.removeAttachment);
 
   return (
     <div className="shadow flex h-full w-full gap-4 overflow-hidden">
@@ -49,6 +53,34 @@ export default function ChatContainer() {
         </div>
         <div className="border-t border-dark-muted px-4 py-2">
           {replyingTo && <ReplyPreview />}
+          {attachment && (
+            <>
+              {attachment.file_type === "file" && (
+                <div className="inline-flex items-center space-x-2 px-3 py-2 my-2 border rounded">
+                  <div className="flex items-center justify-center rounded-full p-2 bg-blue-400">
+                    <FileIcon strokeWidth={1} className="text-light-text size-4" />
+                  </div>
+                  <span className="text-sm">{attachment.file_name}</span>
+                  <button>
+                    <CircleX className="size-4" strokeWidth={1} onClick={removeAttachment} />
+                  </button>
+                </div>
+              )}
+
+              {attachment.file_type === "image" && (
+                <div className="inline-flex relative mt-2">
+                  <button onClick={removeAttachment} className="absolute -top-3 -right-3">
+                    <CircleX strokeWidth={1} className="size-4" />
+                  </button>
+                  <img
+                    src={attachment.file_url}
+                    alt={attachment.file_name}
+                    className="max-w-60 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm transition-transform"
+                  />
+                </div>
+              )}
+            </>
+          )}
           <ChatInput />
         </div>
       </div>
