@@ -1,7 +1,7 @@
 import { FileText, Download, Image as ImageIcon } from "lucide-react";
 import type { Comment, NewCommentAttachment } from "@/types/comment";
 import { LuDot } from "react-icons/lu";
-import { formatFileSize } from "@/utils";
+import { formatFileSize, getFileExtension } from "@/utils";
 
 type FileAttachmentProps = {
   attachment: Comment["attachments"] | NewCommentAttachment;
@@ -20,10 +20,6 @@ export default function FileAttachment({ attachment }: FileAttachmentProps) {
       default:
         return <FileText className="w-4 h-4" />;
     }
-  };
-
-  const getFileExtension = (filename: string) => {
-    return filename.split(".").pop()?.toUpperCase() || "FILE";
   };
 
   if (file_type === "image") {

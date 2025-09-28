@@ -2,7 +2,7 @@ import UserAvatar from "@/components/UserAvatar";
 import { useAuth } from "@/context/auth-context";
 import { useChatReplyStore } from "@/stores/useChatReplyStore";
 import type { ChatMessage } from "@/types/chat";
-import { formatChatDate, formatFileSize, isIncomingChatMessage, isMessageHistoryItem } from "@/utils";
+import { formatChatDate, formatFileSize, getFileExtension, isIncomingChatMessage, isMessageHistoryItem } from "@/utils";
 import { isAttachmentMessageContent, isTextMessageContent } from "@/utils/typeGuards";
 import { Download, FileText } from "lucide-react";
 import { motion } from "motion/react";
@@ -54,10 +54,6 @@ function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
     pinMessage({ message_id: messageId, pinned_by: user.user_id });
     toast.success("Message pinned");
   }, [messageId, pinMessage, user]);
-
-  const getFileExtension = (filename: string) => {
-    return filename.split(".").pop()?.toUpperCase() || "FILE";
-  };
 
   return (
     <motion.div

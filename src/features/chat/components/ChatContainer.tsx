@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChatImageViewer } from "@/features/workspace/components/ChatImageViewer";
 import { useFetchWorkspaceMembersQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceMembersQuery";
 import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceQuery";
+import { useChatAttachmentStore } from "@/stores/useChatAttachmentStore";
 import { useChatReplyStore } from "@/stores/useChatReplyStore";
 import { formatDateToLong } from "@/utils";
 import { CircleX, FileIcon, ImageIcon, UsersIcon } from "lucide-react";
@@ -13,7 +14,6 @@ import ChatInput from "./ChatInput";
 import ChatMessageList from "./ChatMessageList";
 import PinnedMessagesDialog from "./PinnedMessagesDialog";
 import ReplyPreview from "./ReplyPreview";
-import { useChatAttachmentStore } from "@/stores/useChatAttachmentStore";
 
 const mockFiles = [
   {
@@ -53,6 +53,7 @@ export default function ChatContainer() {
         </div>
         <div className="border-t border-dark-muted px-4 py-2">
           {replyingTo && <ReplyPreview />}
+
           {attachment && (
             <>
               {attachment.file_type === "file" && (

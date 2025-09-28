@@ -177,7 +177,7 @@ export function isPendingChatMessage(msg: ChatMessage): msg is PendingChatMessag
 }
 
 export function isMessageHistoryItem(msg: ChatMessage): msg is MessageHistoryItem {
-  return "message_type" in msg;
+  return "is_pinned" in msg;
 }
 
 export const timeAgo = (input: Date | string): string => {
@@ -389,3 +389,6 @@ export function getCompletedTasksByDay(tasks: UserTask[]) {
     completed: counts[days.indexOf(day)],
   }));
 }
+export const getFileExtension = (filename: string) => {
+  return filename.split(".").pop()?.toUpperCase() || "FILE";
+};
