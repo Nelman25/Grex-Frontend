@@ -6,17 +6,18 @@ import { useFetchMessagesQuery } from "../hooks/queries/useFetchMessagesQuery";
 import { useParams } from "react-router";
 
 export default function ChatMessageList() {
+  const { user } = useAuth();
+  const { workspace_id } = useParams<{ workspace_id: string }>();
+  const workspaceId = Number(workspace_id);
+
   const setMessages = useChatStore((s) => s.setMessages);
   const messages = useChatStore((s) => s.messages);
+
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const topRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const hasInitializedRef = useRef(false);
   const hasScrolledToBottomRef = useRef(false);
-
-  const { user } = useAuth();
-  const { workspace_id } = useParams<{ workspace_id: string }>();
-  const workspaceId = Number(workspace_id);
 
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useFetchMessagesQuery(workspaceId);
 

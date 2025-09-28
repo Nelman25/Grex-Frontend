@@ -2,7 +2,9 @@ import UserAvatar from "@/components/UserAvatar";
 import { useAuth } from "@/context/auth-context";
 import { useChatReplyStore } from "@/stores/useChatReplyStore";
 import type { ChatMessage } from "@/types/chat";
-import { formatChatDate, isIncomingChatMessage, isMessageHistoryItem } from "@/utils";
+import { formatChatDate, formatFileSize, isIncomingChatMessage, isMessageHistoryItem } from "@/utils";
+import { isAttachmentMessageContent, isTextMessageContent } from "@/utils/typeGuards";
+import { Download, FileText } from "lucide-react";
 import { motion } from "motion/react";
 import { memo, useCallback, useState } from "react";
 import { BsFillPinAngleFill } from "react-icons/bs";
@@ -24,12 +26,6 @@ const getRepliedTo = (message: ChatMessage): number | null => {
   return null;
 };
 
-const getAvatarUrl = (message: ChatMessage): string | undefined | null => {
-  if (isMessageHistoryItem(message)) return message.profile_picture;
-  if (isIncomingChatMessage(message)) return message.avatar;
-  return undefined;
-};
-
 type Props = {
   message: ChatMessage;
   showMetadata: boolean;
@@ -37,20 +33,19 @@ type Props = {
 };
 
 function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
-  const [isHovered, setIsHovered] = useState(false);
-  const setReplyingTo = useChatReplyStore((state) => state.setReplyingTo);
-  const reply_to = getRepliedTo(message);
+  const { user } = useAuth();
   const { workspace_id } = useParams();
   const workspaceId = Number(workspace_id);
-  const { user } = useAuth();
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const setReplyingTo = useChatReplyStore((state) => state.setReplyingTo);
+  const reply_to = getRepliedTo(message);
+
   const { mutate: pinMessage } = usePinMessageMutation(workspaceId);
   const { data: replied } = useFetchRepliedMessageQuery(workspaceId, reply_to);
 
-  console.log(replied?.content);
-
-  // Extract common properties
   const messageId = getMessageId(message);
-  const avatarUrl = getAvatarUrl(message);
   const isPinned = isMessageHistoryItem(message) && message.is_pinned;
 
   const handlePinMessage = useCallback(() => {
@@ -59,6 +54,10 @@ function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
     pinMessage({ message_id: messageId, pinned_by: user.user_id });
     toast.success("Message pinned");
   }, [messageId, pinMessage, user]);
+
+  const getFileExtension = (filename: string) => {
+    return filename.split(".").pop()?.toUpperCase() || "FILE";
+  };
 
   return (
     <motion.div
@@ -73,7 +72,7 @@ function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
       <div className={`max-w-[60%] flex space-x-3 ${isUsersMessage && "flex-row-reverse gap-3 pr-6"}`}>
         {!isUsersMessage && (
           <div className="pt-6 w-8">
-            {showMetadata && <UserAvatar className="size-8" name={message.nickname} photoUrl={avatarUrl ?? undefined} />}
+            {showMetadata && <UserAvatar className="size-8" name={message.nickname} photoUrl={message.avatar ?? undefined} />}
           </div>
         )}
 
@@ -116,11 +115,57 @@ function ChatMessageItem({ message, showMetadata, isUsersMessage }: Props) {
             </div>
 
             <div className={`${isUsersMessage ? "order-2" : "order-1"} relative`}>
-              <div
-                className={`${isUsersMessage ? "bg-brand-primary text-light-text" : "bg-muted text-dark-text"} p-2 rounded-sm`}
-              >
-                <p>{message.content}</p>
-              </div>
+              {isTextMessageContent(message) && (
+                <div
+                  className={`${isUsersMessage ? "bg-brand-primary text-light-text" : "bg-muted text-dark-text"} p-2 rounded-sm`}
+                >
+                  <p>{message.content.text}</p>
+                </div>
+              )}
+              {isAttachmentMessageContent(message) && (
+                <>
+                  {message.content.file_type === "file" && (
+                    <div className="mt-2">
+                      <a
+                        href={message.content.file_url}
+                        download={message.content.file_name}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-3 p-3 bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group max-w-md w-full"
+                      >
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <div className="p-2 border bg-gray-100 dark:bg-gray-800 rounded group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors shadow-lg">
+                            <FileText className="size-4" />
+                          </div>
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                              {message.content.file_name}
+                            </span>
+                            <div className="flex items-center">
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {getFileExtension(message.content.file_name)}
+                              </span>
+                              <LuDot />
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {formatFileSize(message.content.file_size)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <Download className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors flex-shrink-0" />
+                      </a>
+                    </div>
+                  )}
+
+                  {message.content.file_type === "image" && (
+                    <img
+                      src={message.content.file_url}
+                      alt={message.content.file_name}
+                      className="max-w-60 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm transition-transform"
+                    />
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>

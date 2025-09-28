@@ -154,19 +154,19 @@ export const mapTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
   });
 };
 
-export const normalizeHistoryItem = (item: MessageHistoryItem): IncomingChatMessage => {
-  return {
-    message_id: item.message_id,
-    workspace_id: item.workspace_id,
-    sender_id: item.sender_id,
-    avatar: item.profile_picture,
-    nickname: item.nickname,
-    type: item.message_type as "text" | "file" | "poll",
-    content: item.content,
-    reply_to: item.reply_to,
-    sent_at: item.sent_at,
-  };
-};
+// export const normalizeHistoryItem = (item: MessageHistoryItem): IncomingChatMessage => {
+//   return {
+//     message_id: item.message_id,
+//     workspace_id: item.workspace_id,
+//     sender_id: item.sender_id,
+//     avatar: item.profile_picture,
+//     nickname: item.nickname,
+//     type: item.message_type as "text" | "file" | "poll",
+//     content: item.content,
+//     reply_to: item.reply_to,
+//     sent_at: item.sent_at,
+//   };
+// };
 
 export function isIncomingChatMessage(msg: ChatMessage): msg is IncomingChatMessage {
   return "message_id" in msg;
