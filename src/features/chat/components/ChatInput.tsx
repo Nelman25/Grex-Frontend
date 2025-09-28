@@ -1,7 +1,11 @@
+import { uploadFileToCloudinary, uploadImageToCloudinary } from "@/api/cloudinary";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import UserAvatar from "@/components/UserAvatar";
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "@/constants/cloudinary";
 import { useAuth } from "@/context/auth-context";
 import { useFetchWorkspaceMembersQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceMembersQuery";
+import { useChatAttachmentStore } from "@/stores/useChatAttachmentStore";
 import { useChatReplyStore } from "@/stores/useChatReplyStore";
 import { getRandomUserImage, isIncomingChatMessage, isMessageHistoryItem } from "@/utils";
 import { ImageIcon, PlusCircle, SendHorizontal, SmileIcon } from "lucide-react";
@@ -10,24 +14,61 @@ import { useParams } from "react-router";
 import { useWebsocket } from "../hooks/useWebsocket";
 
 export default function ChatInput() {
+  const { user } = useAuth();
+  const { workspace_id } = useParams();
+  const workspaceId = Number(workspace_id);
+
   const [mentionQuery, setMentionQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const replyingTo = useChatReplyStore((state) => state.replyingTo);
   const clearReply = useChatReplyStore((state) => state.clearReply);
+  const setAttachment = useChatAttachmentStore((state) => state.setAttachment);
+  const attachment = useChatAttachmentStore((state) => state.attachment);
+  const removeAttachment = useChatAttachmentStore((state) => state.removeAttachment);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { user } = useAuth();
-  const { workspace_id } = useParams();
-  const workspaceId = Number(workspace_id);
+  const attachmentRef = useRef<HTMLInputElement | null>(null);
+  const imageRef = useRef<HTMLInputElement | null>(null);
+
   const { data: members = [] } = useFetchWorkspaceMembersQuery(workspaceId);
   const { sendMessage } = useWebsocket({
     workspaceId: Number(workspace_id),
     userId: user?.user_id ?? 0,
   });
 
+  const handleUploadAttachment = async (event: React.ChangeEvent<HTMLInputElement>, fileType: "file" | "image") => {
+    const { files } = event.target;
+
+    if (!files || files.length === 0) return;
+
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    data.append("cloud_name", CLOUDINARY_CLOUD_NAME);
+
+    if (fileType === "file") {
+      const file = await uploadFileToCloudinary(data);
+      setAttachment({
+        file_name: files[0].name,
+        file_type: "file",
+        file_size: file.bytes,
+        file_url: file.secure_url,
+      });
+      return;
+    } else if (fileType === "image") {
+      const image = await uploadImageToCloudinary(data);
+      setAttachment({
+        file_name: files[0].name,
+        file_type: "image",
+        file_size: image.bytes,
+        file_url: image.secure_url,
+      });
+    }
+  };
+
   const handleSendChat = () => {
-    if (!textareaRef.current?.value.trim()) return;
+    if (textareaRef.current?.value.trim() === "" && !attachment) return;
 
     let message_id;
 
@@ -36,15 +77,29 @@ export default function ChatInput() {
       if (isMessageHistoryItem(replyingTo)) message_id = replyingTo.message_id;
     }
 
-    sendMessage({
-      type: "text",
-      content: textareaRef.current.value,
-      reply_to: message_id ?? null,
-    });
+    if (textareaRef.current?.value.trim()) {
+      sendMessage({
+        type: "text",
+        content: {
+          text: textareaRef.current.value,
+        },
+        reply_to: message_id ?? null,
+      });
+    }
 
-    textareaRef.current.value = "";
-    setMentionQuery("");
+    if (attachment) {
+      sendMessage({
+        type: "attachment",
+        content: attachment,
+        reply_to: message_id ?? null,
+      });
+    }
+
+    if (textareaRef.current) textareaRef.current.value = "";
+
     setShowSuggestions(false);
+    setMentionQuery("");
+    removeAttachment();
     clearReply();
   };
 
@@ -80,6 +135,7 @@ export default function ChatInput() {
     setShowSuggestions(false);
   };
 
+  console.log(attachment);
   const filteredMembers = members?.filter((m) => m.nickname.toLowerCase().includes(mentionQuery.toLowerCase()));
 
   return (
@@ -87,10 +143,13 @@ export default function ChatInput() {
       <div className="bg-muted rounded-xl flex items-end gap-2 p-2">
         {/* Quick Actions */}
         <div className="flex items-center gap-2 px-2">
-          <button className="p-2 hover:bg-dark-muted rounded-full transition-colors">
+          <button
+            onClick={() => attachmentRef.current?.click()}
+            className="p-2 hover:bg-dark-muted rounded-full transition-colors"
+          >
             <PlusCircle className="size-5 text-muted-foreground" />
           </button>
-          <button className="p-2 hover:bg-dark-muted rounded-full transition-colors">
+          <button onClick={() => imageRef.current?.click()} className="p-2 hover:bg-dark-muted rounded-full transition-colors">
             <ImageIcon className="size-5 text-muted-foreground" />
           </button>
         </div>
@@ -139,6 +198,7 @@ export default function ChatInput() {
           <button className="p-2 hover:bg-dark-muted rounded-full transition-colors">
             <SmileIcon className="size-5 text-muted-foreground" />
           </button>
+
           <button
             onClick={handleSendChat}
             className="p-2 hover:bg-brand-primary/80 bg-brand-primary rounded-full transition-colors"
@@ -147,6 +207,21 @@ export default function ChatInput() {
           </button>
         </div>
       </div>
+
+      <Input
+        type="file"
+        accept="image/*"
+        className="hidden"
+        ref={imageRef}
+        onChange={(e) => handleUploadAttachment(e, "image")}
+      />
+      <Input
+        type="file"
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+        className="hidden"
+        ref={attachmentRef}
+        onChange={(e) => handleUploadAttachment(e, "file")}
+      />
     </div>
   );
 }
