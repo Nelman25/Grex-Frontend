@@ -39,3 +39,11 @@ export interface PinnedMessage extends MessageHistoryItem {
   pinned_at: Date;
   pinned_by: string;
 }
+
+export interface GrexPayload {
+  role: string;
+  nickname: string;
+  query: string;
+  workspace_id: number;
+  message_id: number;
+}

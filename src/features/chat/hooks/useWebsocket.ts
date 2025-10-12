@@ -1,6 +1,7 @@
-import { useEffect, useRef, useCallback } from "react";
 import { useChatStore } from "@/stores/useChatStore";
-import type { OutgoingChatMessage, IncomingChatMessage } from "@/types/chat";
+import type { IncomingChatMessage, OutgoingChatMessage } from "@/types/chat";
+import { handleIncomingMessage } from "@/utils";
+import { useCallback, useEffect, useRef } from "react";
 
 // THIS IS FOR HANDLING THE SINGLETON PATTERN PROPERLY
 class WebSocketManager {
@@ -13,11 +14,7 @@ class WebSocketManager {
   private currentUserId: number | null = null;
   private setConnectionStatus: ((status: boolean) => void) | null = null;
 
-  connect(
-    workspaceId: number,
-    userId: number,
-    setConnectionStatusFn: (status: boolean) => void
-  ) {
+  connect(workspaceId: number, userId: number, setConnectionStatusFn: (status: boolean) => void) {
     // STORE THE CONNECTION STATUS SETTER
     this.setConnectionStatus = setConnectionStatusFn;
 
@@ -34,10 +31,7 @@ class WebSocketManager {
     }
 
     // CLOSE EXISTING CONNECTION IF WORKSPACE/USER CHANGED
-    if (
-      this.ws &&
-      (this.currentWorkspaceId !== workspaceId || this.currentUserId !== userId)
-    ) {
+    if (this.ws && (this.currentWorkspaceId !== workspaceId || this.currentUserId !== userId)) {
       this.ws.close();
       this.ws = null;
     }
@@ -49,7 +43,7 @@ class WebSocketManager {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       const token = localStorage.getItem("access_token");
       const wsUrl = `${protocol}//localhost:8000/workspace/${workspaceId}/${userId}?token=${token}`;
-      
+
       this.ws = new WebSocket(wsUrl);
       this.connectionCount = 1;
 
@@ -64,6 +58,14 @@ class WebSocketManager {
           const message: IncomingChatMessage = JSON.parse(event.data);
           useChatStore.getState().addMessage(message);
           this.listeners.forEach((listener) => listener(message));
+
+          const user = localStorage.getItem("user");
+          // get user role, imma use string for now since I don't know where to get this from, will fix later
+
+          // this should also check if the role is not falsy, add nalang later
+          if (user) {
+            handleIncomingMessage(message, userId, "member");
+          }
         } catch (error) {
           console.error("Error parsing WebSocket message:", error);
         }
@@ -73,10 +75,7 @@ class WebSocketManager {
         console.log("WebSocket disconnected.");
         setConnectionStatusFn(false);
 
-        if (
-          this.listeners.size > 0 &&
-          this.reconnectAttempts < this.maxReconnectAttempts
-        ) {
+        if (this.listeners.size > 0 && this.reconnectAttempts < this.maxReconnectAttempts) {
           const delay = Math.pow(2, this.reconnectAttempts) * 1000;
           this.reconnectAttempts++;
           setTimeout(() => {
@@ -147,9 +146,7 @@ interface UseWebsocketProps {
 
 export const useWebsocket = ({ workspaceId, userId }: UseWebsocketProps) => {
   const addMessage = useChatStore((state) => state.addMessage);
-  const setConnectionStatus = useChatStore(
-    (state) => state.setConnectionStatus
-  );
+  const setConnectionStatus = useChatStore((state) => state.setConnectionStatus);
 
   const isMountedRef = useRef(true);
 

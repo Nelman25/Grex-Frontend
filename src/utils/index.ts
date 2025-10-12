@@ -1,5 +1,13 @@
+import { sendQueryToGrex } from "@/features/chat/api/chatApi";
 import type { CalendarEvent } from "@/types";
-import type { ChatMessage, IncomingChatMessage, MessageHistoryItem, PendingChatMessage } from "@/types/chat";
+import type {
+  ChatMessage,
+  GrexPayload,
+  IncomingChatMessage,
+  MessageHistoryItem,
+  PendingChatMessage,
+  TextMessage,
+} from "@/types/chat";
 import type { Task, TaskPriority, Subtask, Category, TaskGroups, TaskAssignee, UserTask } from "@/types/task";
 import type { User } from "@/types/user";
 
@@ -105,7 +113,7 @@ export const getProgressPercentage = (subtasks: Subtask[]): number => {
   const length = subtasks.length;
   const noOfDone = subtasks.filter((s) => s.is_done).length;
 
-  return (noOfDone / length) * 100;
+  return Number(((noOfDone / length) * 100).toFixed(2));
 };
 
 export const getStatusStyle = (status: string): string => {
@@ -153,20 +161,6 @@ export const mapTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
     };
   });
 };
-
-// export const normalizeHistoryItem = (item: MessageHistoryItem): IncomingChatMessage => {
-//   return {
-//     message_id: item.message_id,
-//     workspace_id: item.workspace_id,
-//     sender_id: item.sender_id,
-//     avatar: item.profile_picture,
-//     nickname: item.nickname,
-//     type: item.message_type as "text" | "file" | "poll",
-//     content: item.content,
-//     reply_to: item.reply_to,
-//     sent_at: item.sent_at,
-//   };
-// };
 
 export function isIncomingChatMessage(msg: ChatMessage): msg is IncomingChatMessage {
   return "message_id" in msg;
@@ -391,4 +385,35 @@ export function getCompletedTasksByDay(tasks: UserTask[]) {
 }
 export const getFileExtension = (filename: string) => {
   return filename.split(".").pop()?.toUpperCase() || "FILE";
+};
+
+export const mentionsGrexAI = (message: string) => {
+  return message.toLowerCase().includes("@grex ai");
+};
+
+export const handleIncomingMessage = async (
+  message: IncomingChatMessage,
+  currentUserId: number,
+  userRole: "leader" | "member"
+) => {
+  try {
+    if (currentUserId !== message.sender_id) return;
+    if (message.type !== "text") return;
+
+    const textContent = message.content as TextMessage;
+
+    if (!mentionsGrexAI(textContent.text)) return;
+
+    const grexPayload: GrexPayload = {
+      role: userRole,
+      nickname: message.nickname,
+      query: textContent.text,
+      workspace_id: message.workspace_id,
+      message_id: message.message_id,
+    };
+
+    await sendQueryToGrex(grexPayload);
+  } catch (error) {
+    console.error("Error handling incoming message for Grex AI:", error);
+  }
 };
