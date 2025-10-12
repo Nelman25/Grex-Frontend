@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { PinnedMessage, MessageHistoryItem } from "@/types/chat";
+import type { PinnedMessage, MessageHistoryItem, GrexPayload } from "@/types/chat";
 import type { QueryFunctionContext } from "@tanstack/react-query";
 
 export const fetchMessages = async (ctx: QueryFunctionContext<readonly unknown[], unknown>): Promise<MessageHistoryItem[]> => {
@@ -36,4 +36,9 @@ export const getPinnedMessages = async (workspace_id: number): Promise<PinnedMes
 
 export const unpinMessage = async (workspace_id: number, message_id: number): Promise<void> => {
   await api.delete(`/workspace/${workspace_id}/pinned-messages/${message_id}`);
+};
+
+export const sendQueryToGrex = async (query: GrexPayload) => {
+  const { data } = await api.post(`/assistant/query`, query);
+  return data;
 };
