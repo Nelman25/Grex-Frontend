@@ -7,7 +7,7 @@ import { useAuth } from "@/context/auth-context";
 import { useFetchWorkspaceMembersQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceMembersQuery";
 import { useChatAttachmentStore } from "@/stores/useChatAttachmentStore";
 import { useChatReplyStore } from "@/stores/useChatReplyStore";
-import { getRandomUserImage, isIncomingChatMessage, isMessageHistoryItem } from "@/utils";
+import { isIncomingChatMessage, isMessageHistoryItem } from "@/utils";
 import { ImageIcon, PlusCircle, SendHorizontal, SmileIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -135,11 +135,10 @@ export default function ChatInput() {
     setShowSuggestions(false);
   };
 
-  console.log(attachment);
   const filteredMembers = members?.filter((m) => m.nickname.toLowerCase().includes(mentionQuery.toLowerCase()));
 
   return (
-    <div className="">
+    <div>
       <div className="bg-muted rounded-xl flex items-end gap-2 p-2">
         {/* Quick Actions */}
         <div className="flex items-center gap-2 px-2">
@@ -183,10 +182,10 @@ export default function ChatInput() {
                   key={member.user_id}
                   className="px-3 py-2 cursor-pointer hover:bg-muted/50 transition-colors 
                     flex items-center gap-2"
-                  onClick={() => handleSelectMention(member.nickname)}
+                  onClick={() => handleSelectMention(`${member.first_name + " " + member.last_name}`)}
                 >
-                  <UserAvatar name={member.nickname} photoUrl={getRandomUserImage()} className="size-6" />
-                  <span className="text-sm">{member.nickname}</span>
+                  <UserAvatar name={member.nickname} photoUrl={member.profile_picture || undefined} className="size-6" />
+                  <span className="text-sm">{member.first_name + " " + member.last_name}</span>
                 </div>
               ))}
             </div>

@@ -73,14 +73,12 @@ export default function KanbanTask({ task, isDragging, dragHandleProps }: Props)
         </div>
 
         <div className="p-2">
-          <p className="text-sm text-white/70 line-clamp-3 text-wrap">
-            {task.description}
-          </p>
+          <p className="text-sm text-white/70 line-clamp-3 text-wrap">{task.description}</p>
         </div>
       </div>
 
       <div className="my-2">
-        {subtasks && <SubtaskList task_id={task.task_id} subtasks={subtasks} />}
+        {subtasks && <SubtaskList task={task} task_id={task.task_id} subtasks={subtasks} />}
         {isPending && <PageLoader />}
       </div>
 

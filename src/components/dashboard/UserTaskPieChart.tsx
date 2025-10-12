@@ -13,13 +13,13 @@ export default function UserTaskPieChart({ tasks }: Props) {
   const tasksData = getTaskSummary(tasks);
 
   const data = {
-    labels: ["Completed", "In-Progress", "Overdue", "Not Started"],
+    labels: ["Completed", "In-Progress", "Overdue"],
     datasets: [
       {
         label: "Tasks",
-        data: [...tasksData, 13],
-        backgroundColor: ["rgba(34, 197, 94, 0.7)", "rgba(59, 130, 246, 0.7)", "rgba(239, 68, 68, 0.7)", "rgba(48,48,48, 0.7)"],
-        borderColor: ["rgba(34, 197, 94, 1)", "rgba(59, 130, 246, 1)", "rgba(239, 68, 68, 1)", "rgba(48,48,48, 1.0)"],
+        data: [...tasksData],
+        backgroundColor: ["rgba(34, 197, 94, 0.7)", "rgba(59, 130, 246, 0.7)", "rgba(239, 68, 68, 0.7)"],
+        borderColor: ["rgba(34, 197, 94, 1)", "rgba(59, 130, 246, 1)", "rgba(239, 68, 68, 1)"],
         borderWidth: 2,
       },
     ],
