@@ -1,12 +1,10 @@
-import { useAuth } from "@/context/auth-context";
 import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceQuery";
 import { getInitials } from "@/utils";
 import { useParams } from "react-router";
 
 export default function ChatHeader() {
-  const { user } = useAuth();
   const { workspace_id } = useParams();
-  const { data: project } = useFetchWorkspaceQuery(Number(workspace_id), user?.user_id);
+  const { data: project } = useFetchWorkspaceQuery(Number(workspace_id));
 
   return (
     <div className="h-12 bg-muted/80 backdrop-blur-md border-b border-white/20 shadow-sm flex items-center justify-between px-4">

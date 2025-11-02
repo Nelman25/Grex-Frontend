@@ -1,5 +1,5 @@
 import type { UserTask } from "@/types/task";
-import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
+import { type ChartOptions, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -56,7 +56,7 @@ export default function WorkspaceTasksDistribution({ tasks }: Props) {
     ],
   };
 
-  const options = {
+  const options: ChartOptions<"bar"> = {
     indexAxis: "y" as const,
     responsive: true,
     maintainAspectRatio: false,
@@ -87,7 +87,6 @@ export default function WorkspaceTasksDistribution({ tasks }: Props) {
         grid: {
           color: "#303030",
           lineWidth: 1,
-          drawBorder: false,
         },
         title: {
           display: true,
@@ -95,7 +94,7 @@ export default function WorkspaceTasksDistribution({ tasks }: Props) {
           color: "#666666",
           font: {
             size: 12,
-            weight: "500",
+            weight: "bold",
           },
         },
       },
@@ -104,13 +103,12 @@ export default function WorkspaceTasksDistribution({ tasks }: Props) {
           color: "#666666",
           font: {
             size: 12,
-            weight: "500",
+            weight: "bold",
           },
         },
         grid: {
           color: "#303030",
           lineWidth: 1,
-          drawBorder: false,
         },
       },
     },

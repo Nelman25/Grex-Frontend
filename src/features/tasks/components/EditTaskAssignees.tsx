@@ -1,24 +1,20 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import UserAvatar from "@/components/UserAvatar";
-import { useAuth } from "@/context/auth-context";
-import { useFetchWorkspaceQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceQuery";
 import { memo, useState } from "react";
 import { useParams } from "react-router";
 import { useAssignTaskMemberMutation } from "../hooks/mutations/useAssignTaskMemberMutation";
 import { useFetchTaskAssigneesQuery } from "../hooks/queries/useFetchTaskAssigneesQuery";
 import AssigneeItem from "./AssigneeItem";
 import { toast } from "sonner";
+import { useFetchWorkspaceMembersQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceMembersQuery";
 
 function EditTaskAssignees({ id }: { id: number }) {
   const [newAssignee, setNewAssignee] = useState("");
-  const { user } = useAuth();
   const { workspace_id } = useParams();
   const { data: assignees } = useFetchTaskAssigneesQuery(id);
   const { mutate: addAssignee } = useAssignTaskMemberMutation(id);
-  const { data: project } = useFetchWorkspaceQuery(Number(workspace_id), user?.user_id);
-
-  const members = project?.members;
+  const { data: members } = useFetchWorkspaceMembersQuery(Number(workspace_id));
 
   const availableMembers = members?.filter((member) => {
     const fullname = member.first_name + " " + member.last_name;
@@ -43,7 +39,7 @@ function EditTaskAssignees({ id }: { id: number }) {
       <Label>Assignee/s</Label>
       <div className="flex gap-2 flex-wrap">
         {assignees?.map((assignee) => (
-          <AssigneeItem key={assignee.user_id} id={id} assignee={assignee} />
+          <AssigneeItem key={assignee.user_id} id={id} assignee={assignee} canManageAssignees={true} />
         ))}
       </div>
 

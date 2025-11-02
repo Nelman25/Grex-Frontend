@@ -7,10 +7,10 @@ import { useUnassignTaskMemberMutation } from "../hooks/mutations/useUnassignTas
 type Props = {
   assignee: TaskAssignee;
   id: number;
-  canManageAssignees: boolean;
+  canManageAssignees?: boolean;
 };
 
-export default function AssigneeItem({ assignee, id, canManageAssignees }: Props) {
+export default function AssigneeItem({ assignee, id, canManageAssignees = false }: Props) {
   const { mutate: removeAssignee } = useUnassignTaskMemberMutation(id);
 
   const handleRemoveAssignee = () => {
