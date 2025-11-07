@@ -16,16 +16,18 @@ export default function Features({ ref }: { ref: React.RefObject<HTMLDivElement 
           variants={pulseGlow}
           initial="initial"
           animate="pulse"
-          className="absolute -top-30 size-[400px] rounded-full bg-brand-primary opacity-20 blur-[70px] z-0"
+          className="absolute -top-30 size-96 rounded-full bg-brand-primary opacity-20 blur-[70px] z-0"
         />
-        <h1 className="text-dark-text text-5xl text-center font-semibold">Discover What Grex Can Do</h1>
-        <p className="text-dark-subtle text-center text-xl">
+        <h1 className="text-dark-text text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-semibold">
+          Discover What Grex Can Do
+        </h1>
+        <p className="text-dark-subtle text-center text-base sm:text-lg md:w-lg">
           All the tools you need to plan, collaborate, and keep your team moving forward.
         </p>
       </motion.div>
 
       {/* Features Grid */}
-      <div ref={ref} className="max-w-[800px] mx-auto flex flex-col justify-center gap-4 mt-32 font-inter">
+      <div ref={ref} className="max-w-3xl mx-auto flex flex-col justify-center gap-4 mt-32 font-inter">
         {FEATURE_CARDS.map((feature, index) => (
           <motion.section
             id="features"
@@ -41,7 +43,10 @@ export default function Features({ ref }: { ref: React.RefObject<HTMLDivElement 
             }}
             className="bg-dark-surface/60 rounded border border-dark-muted p-8 cursor-pointer"
           >
-            <motion.div className="size-14 rounded bg-brand-dark p-4 mb-4" transition={{ duration: 0.5 }}>
+            <motion.div
+              className="size-14 rounded bg-brand-dark/30 border border-brand-dark/40 p-4 mb-4"
+              transition={{ duration: 0.5 }}
+            >
               <feature.icon className="size-6 text-brand-light" />
             </motion.div>
             <h2 className="text-dark-text text-xl font-medium">{feature.title}</h2>

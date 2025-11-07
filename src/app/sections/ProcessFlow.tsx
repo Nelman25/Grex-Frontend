@@ -9,27 +9,32 @@ import { motion } from "motion/react";
 
 export default function ProcessFlow() {
   return (
-    <div>
+    <div className="px-4 sm:px-0 max-w-screen-xl mx-auto">
       <motion.div
         variants={fadeInUp}
-      className="relative flex flex-col space-y-4 items-center justify-center max-w-[690px] mx-auto mt-72"
+        className="relative flex flex-col space-y-4 items-center justify-center sm:w-xl lg:w-2xl mx-auto mt-54 md:mt-72 "
       >
         <motion.div
           variants={pulseGlow}
           initial="initial"
           animate="pulse"
-          className="absolute -top-30 size-[400px] rounded-full bg-brand-primary opacity-20 blur-[70px] z-0"
+          className="absolute -top-20 size-64 rounded-full bg-brand-primary opacity-20 blur-3xl z-0"
         />
-        <h1 className="text-dark-text text-5xl text-center font-semibold">Everything Your Team Needs, All in One Place</h1>
-        <p className="text-dark-subtle text-center text-xl">
+        <h1 className="text-dark-text text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-semibold">
+          Everything Your Team Needs, All in One Place
+        </h1>
+        <p className="text-dark-subtle text-center text-base sm:text-lg">
           From organizing tasks to tracking progress, Grex keeps your team aligned and productive.
         </p>
       </motion.div>
 
       {/* Process Flow Section */}
-      <motion.div variants={staggerContainer} className="flex justify-center space-x-4 mt-40 max-w-[1400px] mx-auto">
+      <motion.div
+        variants={staggerContainer}
+        className="lg:flex justify-center space-x-4 mt-40 max-w-xl sm:px-6 md:max-w-2xl lg:max-w-full mx-auto"
+      >
         <div className="flex-1 flex flex-col justify-between">
-          <div className="flex flex-col items-end pt-52">
+          <div className="flex flex-col lg:items-end mt-24 lg:mt-52 self-center max-w-2xl lg:w-full lg:self-end">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -37,14 +42,16 @@ export default function ProcessFlow() {
               transition={{ duration: 0.7 }}
               className="mb-4"
             >
-              <h2 className="text-end font-semibold text-2xl text-dark-text">Kickstart Your Next Project with Grex</h2>
-              <p className="text-end text-lg text-dark-subtle">
+              <h2 className="font-semibold text-lg lg:text-2xl text-dark-text lg:text-end">
+                Kickstart Your Next Project with Grex
+              </h2>
+              <p className=" text-dark-subtle text-sm lg:text-base lg:text-end">
                 Create a new workspace or import an existing project into Grex — and start collaborating instantly.
               </p>
             </motion.div>
             <motion.img
               src={getStartedHero}
-              className="w-[600px]"
+              className="w-full sm:max-w-xl "
               alt="Get started hero"
               initial={{ opacity: 0, x: -100 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -53,7 +60,7 @@ export default function ProcessFlow() {
             />
           </div>
 
-          <div className="flex flex-col items-end">
+          <div className="flex flex-col lg:items-end mt-8 lg:mt-0 max-w-2xl self-center lg:self-end">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -61,14 +68,14 @@ export default function ProcessFlow() {
               transition={{ duration: 0.7 }}
               className="mb-4"
             >
-              <h2 className="text-end font-semibold text-2xl text-dark-text">Stay Connected, Work as One</h2>
-              <p className="text-end text-lg text-dark-subtle">
+              <h2 className="font-semibold text-lg lg:text-2xl text-dark-text lg:text-end">Stay Connected, Work as One</h2>
+              <p className="text-dark-subtle text-sm lg:text-base lg:text-end">
                 Chat, share files, and track progress in real time—stay connected and productive with your team, wherever you are.
               </p>
             </motion.div>
             <motion.img
               src={collaborateHero}
-              className="w-[600px]"
+              className="w-full sm:max-w-xl"
               alt="Collaborate hero"
               initial={{ opacity: 0, x: -100 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -79,7 +86,7 @@ export default function ProcessFlow() {
         </div>
 
         {/* Center Timeline */}
-        <motion.div className="flex flex-col justify-center items-center mx-auto">
+        <motion.div className="hidden lg:flex flex-col justify-center items-center mx-auto">
           {/* Get Started Circle */}
           <motion.div
             className="size-60 bg-blue-800/20 rounded-full flex items-center justify-center mt-1"
@@ -101,7 +108,7 @@ export default function ProcessFlow() {
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
           />
           <motion.div
-            className="size-10 rounded-full bg-gray-800 border border-blue-800"
+            className="size-10 rounded-full bg-gray-800 border-blue-800"
             initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={viewport}
@@ -189,30 +196,28 @@ export default function ProcessFlow() {
           />
         </motion.div>
 
-        <div className="flex-1 flex flex-col justify-center pt-32">
-          <div className="flex flex-col items-end">
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={viewport}
-              transition={{ duration: 0.7 }}
-              className="mb-4"
-            >
-              <h2 className="font-semibold text-2xl text-dark-text">Plan & Organize Effortlessly</h2>
-              <p className="text-lg text-dark-subtle">
-                Create a new workspace or import an existing project into Grex — and start collaborating instantly.
-              </p>
-            </motion.div>
-            <motion.img
-              src={planAndOrganizeHero}
-              className="w-[600px]"
-              alt="Plan and organize hero"
-              initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={viewport}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            />
-          </div>
+        <div className="flex-1 flex flex-col justify-center mx-auto max-w-2xl mt-8 lg:mt-0 lg:pt-20">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={viewport}
+            transition={{ duration: 0.7 }}
+            className="mb-4"
+          >
+            <h2 className="font-semibold text-lg text-dark-text lg:text-2xl">Plan & Organize Effortlessly</h2>
+            <p className="text-sm lg:text-base text-dark-subtle">
+              Create a new workspace or import an existing project into Grex — and start collaborating instantly.
+            </p>
+          </motion.div>
+          <motion.img
+            src={planAndOrganizeHero}
+            className="w-full sm:max-w-xl"
+            alt="Plan and organize hero"
+            initial={{ opacity: 0, x: 100 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={viewport}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          />
         </div>
       </motion.div>
     </div>

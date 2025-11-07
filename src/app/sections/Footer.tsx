@@ -12,7 +12,7 @@ export default function Footer() {
       transition={{ duration: 0.7 }}
       className="mt-40 border-t border-dark-muted"
     >
-      <div className="max-w-[1400px] mx-auto px-8 py-16">
+      <div className="max-w-6xl mx-auto px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Company Info (MOCK)*/}
           <div className="space-y-4">

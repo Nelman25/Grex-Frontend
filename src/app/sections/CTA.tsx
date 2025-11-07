@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { pulseGlow, viewport } from "@/lib/motion";
 import { motion } from "motion/react";
+import { Link } from "react-router";
 
 export default function CTA() {
   return (
@@ -15,10 +16,10 @@ export default function CTA() {
         variants={pulseGlow}
         initial="initial"
         animate="pulse"
-        className="absolute -top-30 size-[400px] rounded-full bg-brand-primary opacity-20 blur-[70px] z-0"
+        className="absolute -top-30 size-96 rounded-full bg-brand-primary opacity-20 blur-[70px] z-0"
       />
 
-      <h1 className="text-dark-text text-5xl text-center font-semibold">
+      <h1 className="text-dark-text text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-semibold">
         Ready to supercharge your{" "}
         <motion.span
           className="text-brand-primary"
@@ -41,7 +42,7 @@ export default function CTA() {
         </motion.span>
       </h1>
 
-      <p className="text-dark-subtle text-center text-xl">
+      <p className="text-dark-subtle text-center text-base sm:text-lg lg:w-lg">
         Join thousands of teams already using Grex to streamline their projects and boost productivity.
       </p>
 
@@ -53,9 +54,11 @@ export default function CTA() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Button className="relative z-10 bg-brand-primary border border-brand-light border-t border-t-brand-soft px-12 py-6 text-light-text text-lg hover:bg-brand-primary/80 mt-4">
-          Start Collaborating Now
-        </Button>
+        <Link to="/auth/signup">
+          <Button className="relative z-10 bg-brand-primary border border-brand-light border-t border-t-brand-soft  text-light-text text-base lg:px-8 lg:py-6 hover:bg-brand-primary/80 mt-4">
+            Start Collaborating Now
+          </Button>
+        </Link>
       </motion.div>
     </motion.div>
   );
