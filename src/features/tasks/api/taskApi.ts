@@ -1,10 +1,16 @@
 import api from "@/lib/axios";
 import { mockTasks } from "@/mocks/tasks";
-import type { TaskAssignee, EditableTaskFields, NewTask, Category } from "@/types/task";
-import type { Task, UserTask } from "../schemas/task.schema";
+import type { Category, EditableTaskFields, NewTask } from "@/types/task";
 import { formatDateForAPI } from "@/utils";
 import { fetchAndValidate } from "@/utils/api";
-import { tasksSchema, userTasksSchema } from "../schemas/task.schema";
+import {
+  type Task,
+  type TaskAssignee,
+  type UserTask,
+  assigneesSchema,
+  tasksSchema,
+  userTasksSchema,
+} from "../schemas/task.schema";
 
 export const seedTasks = async (workspace_id: number): Promise<void> => {
   for (const task of mockTasks) {
@@ -34,6 +40,10 @@ export const getUserTasks = async (user_id: number): Promise<UserTask[]> => {
   return fetchAndValidate(`/users/${user_id}/tasks`, userTasksSchema);
 };
 
+export const getAssignees = async (task_id: number): Promise<TaskAssignee[]> => {
+  return fetchAndValidate(`/task/${task_id}/assignment`, assigneesSchema);
+};
+
 export const editTask = async (
   workspace_id: number,
   task_id: number,
@@ -60,11 +70,6 @@ export const deleteTask = async (workspace_id: number, task_id: number) => {
 
 export const addAssignee = async (task_id: number, user_id: number) => {
   await api.post(`/task/${task_id}/assignment/${user_id}`);
-};
-
-export const getAssignees = async (task_id: number): Promise<TaskAssignee[]> => {
-  const { data } = await api.get<TaskAssignee[]>(`/task/${task_id}/assignment`);
-  return data;
 };
 
 export const deleteAssignee = async (task_id: number, user_id: number) => {

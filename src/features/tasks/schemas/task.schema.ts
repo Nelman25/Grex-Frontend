@@ -34,3 +34,13 @@ export const userTaskSchema = z.object({
 
 export const userTasksSchema = z.array(userTaskSchema);
 export type UserTask = z.infer<typeof userTaskSchema>;
+
+export const assigneeSchema = z.object({
+  task_id: z.number(),
+  user_id: z.number(),
+  avatar: z.string().nullable(),
+  name: z.string(),
+});
+
+export const assigneesSchema = z.array(assigneeSchema);
+export type TaskAssignee = z.infer<typeof assigneeSchema>;
