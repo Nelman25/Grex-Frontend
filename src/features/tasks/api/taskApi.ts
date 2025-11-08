@@ -1,10 +1,10 @@
 import api from "@/lib/axios";
 import { mockTasks } from "@/mocks/tasks";
-import type { TaskAssignee, EditableTaskFields, NewTask, Task, Category, UserTask } from "@/types/task";
-import type { Task as TaskType } from "../schemas/task.schema";
+import type { TaskAssignee, EditableTaskFields, NewTask, Category } from "@/types/task";
+import type { Task, UserTask } from "../schemas/task.schema";
 import { formatDateForAPI } from "@/utils";
 import { fetchAndValidate } from "@/utils/api";
-import { tasksSchema } from "../schemas/task.schema";
+import { tasksSchema, userTasksSchema } from "../schemas/task.schema";
 
 export const seedTasks = async (workspace_id: number): Promise<void> => {
   for (const task of mockTasks) {
@@ -26,18 +26,12 @@ export const createTask = async (newTask: NewTask, workspace_id: number): Promis
   await api.post(`/tasks/${workspace_id}`, payload);
 };
 
-// export const getTasks = async (workspace_id: number): Promise<Task[]> => {
-//   const { data } = await api.get<Task[]>(`/tasks/${workspace_id}`);
-//   return data;
-// };
-
-export const getTasks = async (workspace_id: number): Promise<TaskType[]> => {
+export const getTasks = async (workspace_id: number): Promise<Task[]> => {
   return fetchAndValidate(`/tasks/${workspace_id}`, tasksSchema);
 };
 
 export const getUserTasks = async (user_id: number): Promise<UserTask[]> => {
-  const { data } = await api.get<UserTask[]>(`/users/${user_id}/tasks`);
-  return data;
+  return fetchAndValidate(`/users/${user_id}/tasks`, userTasksSchema);
 };
 
 export const editTask = async (

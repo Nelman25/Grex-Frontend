@@ -18,3 +18,19 @@ export const taskSchema = z.object({
 
 export const tasksSchema = z.array(taskSchema);
 export type Task = z.infer<typeof taskSchema>;
+
+export const userTaskSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  deadline: z.string(),
+  start_date: z.string(),
+  task_id: z.number(),
+  workspace_id: z.number(),
+  workspace_name: z.string(),
+  category: z.string(),
+  status: z.enum(["pending", "done", "overdue"]),
+  priority_level: z.enum(["low", "medium", "high"]),
+});
+
+export const userTasksSchema = z.array(userTaskSchema);
+export type UserTask = z.infer<typeof userTaskSchema>;
