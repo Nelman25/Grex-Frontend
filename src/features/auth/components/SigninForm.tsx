@@ -1,12 +1,13 @@
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { CiLock, CiMail } from "react-icons/ci";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
-import axios from "axios";
-import type { IUserCredentials } from "@/types";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/auth-context";
+import type { IUserCredentials } from "@/types";
+import axios from "axios";
+import { AlertCircleIcon, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { CiLock, CiMail } from "react-icons/ci";
 import { useNavigate } from "react-router";
 
 export default function SigninForm() {
@@ -37,13 +38,13 @@ export default function SigninForm() {
       }
 
       await login(userCredentials);
-      navigate("/dashboard"); // TODO: Implement protected routes
+      navigate("/dashboard", { replace: true }); // TODO: Implement protected routes
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.message);
         console.error(error.message); // TODO: better error handling
       } else {
-        console.error(error); // TODO: better error handling
+        setError("The password you've entered is incorrect.");
       }
     } finally {
       setIsLoading(false);
@@ -55,29 +56,40 @@ export default function SigninForm() {
       <div className="w-full">
         <Label className="text-dark-text">Email Address</Label>
         <div className="relative flex items-center mt-2">
-          <CiMail className="absolute text-gray-300 size-5 left-5" />
+          <CiMail className="absolute text-white size-5 left-5" />
           <Input
-            className="w-full pl-12 h-11 text-lg focus:ring-2 focus:ring-brand-primary outline-none text-white placeholder-red-600 bg-white/20 border border-white/30 rounded"
+            className="w-full pl-12 pr-6 h-11 text-sm sm:text-base focus:ring-1! focus:ring-brand-primary! outline-none text-white placeholder-red-600 bg-white/20 border border-white/30 rounded"
             name="email"
             placeholder="Email Address"
             onChange={handleInputChange}
+            required
           />
         </div>
-        <p className="text-error text-sm">{error}</p>
       </div>
 
       <div className="w-full mt-4">
         <Label className="text-dark-text">Password</Label>
         <div className="relative flex items-center mt-2">
-          <CiLock className="absolute text-gray-300 size-5 left-5" />
+          <CiLock className="absolute text-white size-5 left-5" />
           <Input
-            className="w-full pl-12 h-11 focus:ring-2 focus:ring-brand-primary outline-none text-white bg-white/20 border border-white/30 rounded"
+            className="w-full pl-12 pr-6 h-11 text-sm sm:text-base focus:ring-1! focus:ring-brand-primary! outline-none text-white bg-white/20 border border-white/30 rounded"
             name="password_hash"
             type="password"
             placeholder="Password"
             onChange={handleInputChange}
+            required
           />
         </div>
+
+        {error && (
+          <Alert variant="destructive" className="mt-2 bg-black/40">
+            <AlertCircleIcon />
+            <AlertTitle>Login failed.</AlertTitle>
+            <AlertDescription>
+              <p>{error ?? "The password you’ve entered is incorrect."}</p>
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
 
       <Button

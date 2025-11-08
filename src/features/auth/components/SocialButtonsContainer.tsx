@@ -1,7 +1,7 @@
 import { AUTH_SOCIALS } from "../constants";
 import AuthSocialButton from "./AuthSocialButton";
 
-const SIGNIN_STYLE = "flex flex-col space-y-2";
+const SIGNIN_STYLE = "space-y-2";
 const SIGNUP_STYLE = "flex space-x-2 mt-4";
 
 export default function SocialButtonsContainer({ signin }: { signin?: true }) {
@@ -10,11 +10,7 @@ export default function SocialButtonsContainer({ signin }: { signin?: true }) {
   return (
     <div className={signin ? SIGNIN_STYLE : SIGNUP_STYLE}>
       {AUTH_SOCIALS.map((social) => (
-        <AuthSocialButton
-          key={social.provider}
-          social={social}
-          signin={signin}
-        />
+        <AuthSocialButton key={social.provider} social={social} signin={signin} />
       ))}
     </div>
   );
