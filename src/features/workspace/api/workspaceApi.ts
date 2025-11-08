@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
 import type { EditProject, NewProject, NewQuickLink, Project, WorkspacePayload } from "@/types/project";
-import { fetchAndValidate } from "@/utils/api";
+import { fetchAndValidate } from "@/utils/api/fetchAndValidate";
 import {
   type UserWorkspaces,
   type QuickLink,

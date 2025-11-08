@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { fetchAndValidate } from "@/utils/api";
+import { fetchAndValidate } from "@/utils/api/fetchAndValidate";
 import { subtaskEnvelopeSchema, type Subtask } from "../schemas/subtask.schema";
 
 export const getSubtasks = async (task_id: number): Promise<Subtask[]> => {
