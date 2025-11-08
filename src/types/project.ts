@@ -30,34 +30,6 @@ export interface EditProject {
   due_date?: string;
   workspace_profile_url?: string | null;
 }
-// SHAPE OF GET ALL WORKSPACES OF USER RESPONSE
-export interface UserWorkspacesResponse {
-  workspace_id: number;
-  name: string;
-  project_nature: string;
-  start_date: string;
-  due_date: string;
-  created_by: number;
-  workspace_profile_url: string | null;
-  members: {
-    user_id: number;
-    profile_picture: string | null;
-    status: string | null;
-  }[];
-}
-
-// get pecific, complete workspace
-export interface WorkspaceResponse {
-  workspace_id: number;
-  name: string;
-  project_nature: string;
-  description: string;
-  start_date: string;
-  due_date: string;
-  workspace_profile_url: string | null;
-  created_by: number;
-  created_at: Date;
-}
 
 export interface RecentActivity {
   activity_id: number;
