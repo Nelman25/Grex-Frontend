@@ -8,7 +8,7 @@ export default function SocialButtonsContainer({ signin }: { signin?: true }) {
   // TODO: Function for social auth operations
 
   return (
-    <div className={signin ? SIGNIN_STYLE : SIGNUP_STYLE}>
+    <div className={`overflow-x-auto ${signin ? SIGNIN_STYLE : SIGNUP_STYLE}`}>
       {AUTH_SOCIALS.map((social) => (
         <AuthSocialButton key={social.provider} social={social} signin={signin} />
       ))}

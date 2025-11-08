@@ -94,7 +94,7 @@ export default function SigninForm() {
 
       <Button
         disabled={isLoading}
-        className="w-full rounded my-6 bg-brand-primary/80 border border-brand-light border-t border-t-brand-soft text-light-text text-sm h-9 hover:bg-brand-primary/60 transition-colors"
+        className="w-full rounded my-6 bg-brand-primary/80 border border-brand-light border-t border-t-brand-soft text-light-text text-sm h-9 hover:bg-brand-primary/60 transition-colors outline-none! ring-0!"
         type="submit"
       >
         {isLoading && (
