@@ -1,21 +1,15 @@
 import api from "@/lib/axios";
-import type {
-  EditProject,
-  NewProject,
-  NewQuickLink,
-  Project,
-  QuickLink,
-  RecentActivity,
-  WorkspacePayload,
-} from "@/types/project";
+import type { EditProject, NewProject, NewQuickLink, Project, QuickLink, WorkspacePayload } from "@/types/project";
 import { fetchAndValidate } from "@/utils/api";
 import {
-  userWorkspacesSchema,
-  workspaceSchema,
   type UserWorkspaces,
   type Workspace,
   type WorkspaceMemberArray,
+  type WorkspaceRecentActivity,
+  userWorkspacesSchema,
   workspaceMembersSchema,
+  workspaceRecentActivitiesSchema,
+  workspaceSchema,
 } from "../schemas/workspace.schema";
 
 export const createWorkspace = async (workspace: NewProject): Promise<Project> => {
@@ -54,9 +48,8 @@ export const makeMemberLeader = async (workspace_id: number, user_id: number): P
   await api.patch(`/workspace/${workspace_id}/members/${user_id}`, { role: "leader" });
 };
 
-export const getWorkspaceRecentActivities = async (workspace_id: number): Promise<RecentActivity[]> => {
-  const { data } = await api.get<RecentActivity[]>(`/workspaces/${workspace_id}/recent-activities`);
-  return data;
+export const getWorkspaceRecentActivities = async (workspace_id: number): Promise<WorkspaceRecentActivity[]> => {
+  return fetchAndValidate(`/workspaces/${workspace_id}/recent-activities`, workspaceRecentActivitiesSchema);
 };
 
 export const createQuickLink = async (workspace_id: number, payload: NewQuickLink): Promise<void> => {

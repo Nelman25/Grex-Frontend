@@ -14,7 +14,7 @@ export default function WorkspaceOverview() {
 
   const renderRecentActivities = () => {
     return recentActivities.map((recent_activity) => (
-      <div className="flex space-x-3 items-center text-lg">
+      <div key={recent_activity.activity_id} className="flex space-x-3 items-center text-lg">
         <div className="size-8 bg-brand-primary rounded-full border flex items-center justify-center text-light-text">JV</div>
         <p className="text-dark-text">{recent_activity.content}</p>
       </div>

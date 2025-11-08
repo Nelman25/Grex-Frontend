@@ -51,5 +51,16 @@ export const workspaceMemberSchema = z.object({
 
 export const workspaceMembersSchema = z.array(workspaceMemberSchema); // members array schema
 
-export type WorkspaceMember = z.infer<typeof workspaceMemberSchema>; // for single member 
+export type WorkspaceMember = z.infer<typeof workspaceMemberSchema>; // for single member
 export type WorkspaceMemberArray = z.infer<typeof workspaceMembersSchema>; // for array of members
+
+// for getting workspace recent activities
+export const workspaceRecentActivitySchema = z.object({
+  activity_id: z.number(),
+  task_log_id: z.number().nullable(),
+  workspace_id: z.number(),
+  content: z.string(),
+  created_at: z.string(),
+});
+export const workspaceRecentActivitiesSchema = z.array(workspaceRecentActivitySchema);
+export type WorkspaceRecentActivity = z.infer<typeof workspaceRecentActivitySchema>;
