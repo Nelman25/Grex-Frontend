@@ -64,3 +64,15 @@ export const workspaceRecentActivitySchema = z.object({
 });
 export const workspaceRecentActivitiesSchema = z.array(workspaceRecentActivitySchema);
 export type WorkspaceRecentActivity = z.infer<typeof workspaceRecentActivitySchema>;
+
+// for getting workspace quick links
+export const quickLinkSchema = z.object({
+  link_id: z.number(),
+  workspace_id: z.number(),
+  created_at: z.string(),
+  link_name: z.string(),
+  link_url: z.string(),
+});
+
+export const quickLinkArraySchema = z.array(quickLinkSchema);
+export type QuickLink = z.infer<typeof quickLinkSchema>;
