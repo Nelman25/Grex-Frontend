@@ -8,10 +8,9 @@ import type {
   QuickLink,
   RecentActivity,
   WorkspacePayload,
-  WorkspaceResponse,
 } from "@/types/project";
 import { fetchAndValidate } from "@/utils/api";
-import { userWorkspacesSchema, type UserWorkspaces } from "../schemas/workspace.schema";
+import { userWorkspacesSchema, workspaceSchema, type UserWorkspaces, type Workspace } from "../schemas/workspace.schema";
 
 export const createWorkspace = async (workspace: NewProject): Promise<Project> => {
   const payload: WorkspacePayload = {
@@ -29,10 +28,8 @@ export const getWorkspaces = async (user_id: number): Promise<UserWorkspaces> =>
   return fetchAndValidate(`/users/${user_id}/workspace`, userWorkspacesSchema);
 };
 
-export const getSelectedWorkspace = async (workspace_id: number): Promise<WorkspaceResponse> => {
-  const { data } = await api.get<WorkspaceResponse>(`/workspace/${workspace_id}`);
-
-  return data;
+export const getSelectedWorkspace = async (workspace_id: number): Promise<Workspace> => {
+  return fetchAndValidate(`/workspace/${workspace_id}`, workspaceSchema);
 };
 
 export const editWorkspace = async (workspace_id: number, payload: EditProject): Promise<void> => {
