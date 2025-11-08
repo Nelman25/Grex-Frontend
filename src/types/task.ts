@@ -76,5 +76,4 @@ export interface UserTask {
   category: string;
   status: TaskStatus;
   priority_level: TaskPriority;
-  // mark_done_at: Date;
 }
