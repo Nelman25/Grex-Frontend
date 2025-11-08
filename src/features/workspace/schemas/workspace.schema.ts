@@ -34,3 +34,22 @@ export const workspaceSchema = z.object({
 });
 
 export type Workspace = z.infer<typeof workspaceSchema>;
+
+// for getting workspace members
+// workspace member shape
+export const workspaceMemberSchema = z.object({
+  user_id: z.number(),
+  role: z.enum(["leader", "member"]),
+  nickname: z.string(),
+  joined_at: z.string(),
+  added_by: z.number(),
+  first_name: z.string(),
+  last_name: z.string(),
+  email: z.email(),
+  profile_picture: z.string().nullable(),
+});
+
+export const workspaceMembersSchema = z.array(workspaceMemberSchema); // members array schema
+
+export type WorkspaceMember = z.infer<typeof workspaceMemberSchema>; // for single member 
+export type WorkspaceMemberArray = z.infer<typeof workspaceMembersSchema>; // for array of members

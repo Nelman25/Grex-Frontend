@@ -1,5 +1,4 @@
 import api from "@/lib/axios";
-import type { WorkspaceMember } from "@/types/member";
 import type {
   EditProject,
   NewProject,
@@ -10,7 +9,14 @@ import type {
   WorkspacePayload,
 } from "@/types/project";
 import { fetchAndValidate } from "@/utils/api";
-import { userWorkspacesSchema, workspaceSchema, type UserWorkspaces, type Workspace } from "../schemas/workspace.schema";
+import {
+  userWorkspacesSchema,
+  workspaceSchema,
+  type UserWorkspaces,
+  type Workspace,
+  type WorkspaceMemberArray,
+  workspaceMembersSchema,
+} from "../schemas/workspace.schema";
 
 export const createWorkspace = async (workspace: NewProject): Promise<Project> => {
   const payload: WorkspacePayload = {
@@ -36,9 +42,8 @@ export const editWorkspace = async (workspace_id: number, payload: EditProject):
   await api.patch(`/workspace/${workspace_id}`, payload);
 };
 
-export const getWorkspaceMembers = async (workspace_id: number): Promise<WorkspaceMember[]> => {
-  const { data } = await api.get<WorkspaceMember[]>(`/workspace/${workspace_id}/members`);
-  return data;
+export const getWorkspaceMembers = async (workspace_id: number): Promise<WorkspaceMemberArray> => {
+  return fetchAndValidate(`/workspace/${workspace_id}/members`, workspaceMembersSchema);
 };
 
 export const kickMember = async (workspace_id: number, user_id: number): Promise<void> => {
