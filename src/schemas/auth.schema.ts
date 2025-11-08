@@ -1,7 +1,6 @@
 import * as yup from "yup";
 
-const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 export const UserSchema = yup.object().shape({
   first_name: yup.string().required("Required"),
@@ -20,3 +19,5 @@ export const UserSchema = yup.object().shape({
     .oneOf([yup.ref("password_hash")], "Password must match")
     .required("Required"),
 });
+
+export type SignupUser = yup.InferType<typeof UserSchema>;
