@@ -1,16 +1,17 @@
 import api from "@/lib/axios";
 import type { WorkspaceMember } from "@/types/member";
 import type {
-  WorkspaceResponse,
-  NewProject,
-  Project,
-  UserWorkspacesResponse,
-  WorkspacePayload,
   EditProject,
-  RecentActivity,
-  QuickLink,
+  NewProject,
   NewQuickLink,
+  Project,
+  QuickLink,
+  RecentActivity,
+  WorkspacePayload,
+  WorkspaceResponse,
 } from "@/types/project";
+import { fetchAndValidate } from "@/utils/api";
+import { userWorkspacesSchema, type UserWorkspaces } from "../schemas/workspace.schema";
 
 export const createWorkspace = async (workspace: NewProject): Promise<Project> => {
   const payload: WorkspacePayload = {
@@ -24,10 +25,8 @@ export const createWorkspace = async (workspace: NewProject): Promise<Project> =
   return data;
 };
 
-export const getWorkspaces = async (user_id: number): Promise<UserWorkspacesResponse[]> => {
-  const { data } = await api.get<UserWorkspacesResponse[]>(`/users/${user_id}/workspace`);
-
-  return data;
+export const getWorkspaces = async (user_id: number): Promise<UserWorkspaces> => {
+  return fetchAndValidate(`/users/${user_id}/workspace`, userWorkspacesSchema);
 };
 
 export const getSelectedWorkspace = async (workspace_id: number): Promise<WorkspaceResponse> => {
