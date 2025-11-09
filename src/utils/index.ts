@@ -391,21 +391,13 @@ export const mentionsGrexAI = (message: string) => {
   return message.toLowerCase().includes("@grex ai");
 };
 
-export const handleIncomingMessage = async (
-  message: IncomingChatMessage,
-  currentUserId: number,
-  userRole: "leader" | "member"
-) => {
+export const handleIncomingMessage = async (message: IncomingChatMessage) => {
   try {
-    if (currentUserId !== message.sender_id) return;
-    if (message.type !== "text") return;
-
     const textContent = message.content as TextMessage;
-
     if (!mentionsGrexAI(textContent.text)) return;
 
     const grexPayload: GrexPayload = {
-      role: userRole,
+      role: "member",
       nickname: message.nickname,
       query: textContent.text,
       workspace_id: message.workspace_id,

@@ -57,12 +57,15 @@ class WebSocketManager {
           const message: IncomingChatMessage = JSON.parse(event.data);
           useChatStore.getState().addMessage(message);
 
-          const user = localStorage.getItem("user");
           // get user role, imma use string for now since I don't know where to get this from, will fix later
-
           // this should also check if the role is not falsy, add nalang later
-          if (user) {
-            handleIncomingMessage(message, userId, "member");
+
+          if (
+            message.sender_id === this.currentUserId &&
+            message.workspace_id === this.currentWorkspaceId &&
+            message.type === "text"
+          ) {
+            handleIncomingMessage(message);
           }
         } catch (error) {
           console.error("Error parsing WebSocket message:", error);
