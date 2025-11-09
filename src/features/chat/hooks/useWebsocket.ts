@@ -1,12 +1,11 @@
 import { useChatStore } from "@/stores/useChatStore";
 import type { IncomingChatMessage, OutgoingChatMessage } from "@/types/chat";
 import { handleIncomingMessage } from "@/utils";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 
 // THIS IS FOR HANDLING THE SINGLETON PATTERN PROPERLY
 class WebSocketManager {
   private ws: WebSocket | null = null;
-  private listeners = new Set<(message: IncomingChatMessage) => void>();
   private connectionCount = 0;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
@@ -57,7 +56,6 @@ class WebSocketManager {
         try {
           const message: IncomingChatMessage = JSON.parse(event.data);
           useChatStore.getState().addMessage(message);
-          this.listeners.forEach((listener) => listener(message));
 
           const user = localStorage.getItem("user");
           // get user role, imma use string for now since I don't know where to get this from, will fix later
@@ -75,13 +73,11 @@ class WebSocketManager {
         console.log("WebSocket disconnected.");
         setConnectionStatusFn(false);
 
-        if (this.listeners.size > 0 && this.reconnectAttempts < this.maxReconnectAttempts) {
+        if (this.reconnectAttempts < this.maxReconnectAttempts) {
           const delay = Math.pow(2, this.reconnectAttempts) * 1000;
           this.reconnectAttempts++;
           setTimeout(() => {
-            if (this.listeners.size > 0) {
-              this.connect(workspaceId, userId, setConnectionStatusFn);
-            }
+            this.connect(workspaceId, userId, setConnectionStatusFn);
           }, delay);
         } else {
           this.cleanup();
@@ -94,13 +90,6 @@ class WebSocketManager {
     } catch (error) {
       console.error("Failed to establish WebSocket connection:", error);
     }
-  }
-
-  addListener(listener: (message: IncomingChatMessage) => void) {
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
   }
 
   disconnect() {
@@ -117,7 +106,7 @@ class WebSocketManager {
       this.ws = null;
     }
     this.connectionCount = 0;
-    this.listeners.clear();
+    // this.listeners.clear();
     this.currentWorkspaceId = null;
     this.currentUserId = null;
     if (this.setConnectionStatus) {
@@ -148,24 +137,10 @@ export const useWebsocket = ({ workspaceId, userId }: UseWebsocketProps) => {
   const addMessage = useChatStore((state) => state.addMessage);
   const setConnectionStatus = useChatStore((state) => state.setConnectionStatus);
 
-  const isMountedRef = useRef(true);
-
   useEffect(() => {
-    isMountedRef.current = true;
-
-    const messageHandler = (message: IncomingChatMessage) => {
-      if (isMountedRef.current) {
-        addMessage(message);
-      }
-    };
-
-    const removeListener = wsManager.addListener(messageHandler);
-
     wsManager.connect(workspaceId, userId, setConnectionStatus);
 
     return () => {
-      isMountedRef.current = false;
-      removeListener();
       wsManager.disconnect();
     };
   }, [workspaceId, userId, addMessage, setConnectionStatus]);
