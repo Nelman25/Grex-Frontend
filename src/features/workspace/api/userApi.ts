@@ -1,11 +1,10 @@
 import api from "@/lib/axios";
 import { mockUsers } from "@/mocks/users";
-import type { User } from "@/types/user";
+import { fetchAndValidate } from "@/utils/api/fetchAndValidate";
+import { type SearchUser, searchUsersSchema } from "../schemas/user.schema";
 
-export const getUsers = async (name: string) => {
-  const { data } = await api.get<User[]>("/users/search", { params: { name } });
-
-  return data;
+export const getUsers = async (name: string): Promise<SearchUser[]> => {
+  return fetchAndValidate(`/users/search?name=${name}`, searchUsersSchema);
 };
 
 export const inviteUserToWorkspace = async (workspace_id: number, email: string, added_by: number) => {

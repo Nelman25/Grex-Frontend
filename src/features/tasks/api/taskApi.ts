@@ -2,7 +2,7 @@ import api from "@/lib/axios";
 import { mockTasks } from "@/mocks/tasks";
 import type { Category, EditableTaskFields, NewTask } from "@/types/task";
 import { formatDateForAPI } from "@/utils";
-import { fetchAndValidate } from "@/utils/api";
+import { fetchAndValidate } from "@/utils/api/fetchAndValidate";
 import {
   type Task,
   type TaskAssignee,

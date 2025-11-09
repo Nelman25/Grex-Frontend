@@ -2,7 +2,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
 import api from "@/lib/axios";
-import { UserSchema } from "@/schemas/authSchema";
+import { type SignupUser, UserSchema } from "@/schemas/auth.schema";
 import axios from "axios";
 import { Form, Formik } from "formik";
 import { AlertCircleIcon, Loader2 } from "lucide-react";
@@ -10,15 +10,14 @@ import { useState } from "react";
 import { BsPersonCircle } from "react-icons/bs";
 import { CiLock, CiMail } from "react-icons/ci";
 import { Link, useNavigate } from "react-router";
-import type { IUserCredentials } from "../types/auth";
 import FormField from "./FormField";
 import SocialButtonsContainer from "./SocialButtonsContainer";
 
 export interface CreateAccountHandler {
-  values: IUserCredentials;
+  values: SignupUser;
 }
 
-const initialValues: IUserCredentials = {
+const initialValues: SignupUser = {
   first_name: "",
   last_name: "",
   email: "",
@@ -33,7 +32,7 @@ export default function SignupForm() {
 
   const navigate = useNavigate();
 
-  const handleAccountCreation = async (values: IUserCredentials) => {
+  const handleAccountCreation = async (values: SignupUser) => {
     setIsLoading(true);
 
     const userCredentials = {
