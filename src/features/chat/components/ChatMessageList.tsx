@@ -1,9 +1,9 @@
-import { useEffect, useRef, useCallback, useMemo } from "react";
-import ChatMessageItem from "./ChatMessageItem";
-import { useChatStore } from "@/stores/useChatStore";
 import { useAuth } from "@/context/auth-context";
-import { useFetchMessagesQuery } from "../hooks/queries/useFetchMessagesQuery";
+import { useChatStore } from "@/stores/useChatStore";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useParams } from "react-router";
+import { useFetchMessagesQuery } from "../hooks/queries/useFetchMessagesQuery";
+import ChatMessageItem from "./ChatMessageItem";
 
 export default function ChatMessageList() {
   const { user } = useAuth();
@@ -11,7 +11,6 @@ export default function ChatMessageList() {
   const workspaceId = Number(workspace_id);
 
   const setMessages = useChatStore((s) => s.setMessages);
-  const messages = useChatStore((s) => s.messages);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const topRef = useRef<HTMLDivElement | null>(null);
@@ -22,58 +21,31 @@ export default function ChatMessageList() {
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useFetchMessagesQuery(workspaceId);
 
   const fetchedMessages = useMemo(() => {
-    return data?.pages?.flat() ?? [];
+    if (!data?.pages) return [];
+    return [...data.pages].reverse().flat();
   }, [data?.pages]);
 
+  console.log("Fetched messages: ", fetchedMessages);
+
   const allMessages = useMemo(() => {
-    const combined = [...fetchedMessages, ...messages];
-    const uniqueMessages = combined.reduce((acc, message) => {
-      const id = "message_id" in message ? message.message_id : "temp_id" in message ? message.temp_id : null;
+    const combined = [...fetchedMessages];
 
-      if (id) {
-        const existingIndex = acc.findIndex((m) => ("message_id" in m ? m.message_id : "temp_id" in m ? m.temp_id : null) === id);
-
-        if (existingIndex !== -1) {
-          if ("message_id" in message) {
-            acc[existingIndex] = message;
-          }
-        } else {
-          acc.push(message);
-        }
-      } else {
-        acc.push(message);
-      }
-
-      return acc;
-    }, [] as typeof combined);
-
-    // NOTE: this is probably not the best way to sort messages, fix this later
-    return uniqueMessages.sort((a, b) => {
-      if ("message_id" in a && "message_id" in b) {
-        return a.message_id - b.message_id;
-      }
-      if ("message_id" in a) return -1;
-      if ("message_id" in b) return 1;
-      if ("temp_id" in a && "temp_id" in b) {
-        return a.temp_id.localeCompare(b.temp_id);
-      }
-      return 0;
-    });
-  }, [fetchedMessages, messages]);
+    return combined;
+  }, [fetchedMessages]);
 
   useEffect(() => {
     if (!hasInitializedRef.current && status === "success" && fetchedMessages.length > 0) {
-      setMessages(fetchedMessages);
+      setMessages(workspaceId, fetchedMessages);
       hasInitializedRef.current = true;
       setTimeout(() => {
         bottomRef.current?.scrollIntoView({ behavior: "instant" });
         hasScrolledToBottomRef.current = true;
       }, 100);
     }
-  }, [status, fetchedMessages, setMessages]);
+  }, [workspaceId, status, fetchedMessages, setMessages]);
 
   useEffect(() => {
-    if (hasScrolledToBottomRef.current && messages.length > 0) {
+    if (hasScrolledToBottomRef.current) {
       const container = containerRef.current;
       if (container) {
         const isNearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
@@ -84,7 +56,7 @@ export default function ChatMessageList() {
         }
       }
     }
-  }, [messages.length]);
+  }, []);
 
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
