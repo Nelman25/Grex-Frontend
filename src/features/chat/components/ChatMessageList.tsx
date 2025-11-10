@@ -1,8 +1,8 @@
 import { useAuth } from "@/context/auth-context";
 import { useChatStore } from "@/stores/useChatStore";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useParams } from "react-router";
-import { useFetchMessagesQuery } from "../hooks/queries/useFetchMessagesQuery";
+import { useSyncMessagesToStore } from "../hooks/useSyncMessagesToStore";
 import ChatMessageItem from "./ChatMessageItem";
 
 export default function ChatMessageList() {
@@ -10,50 +10,23 @@ export default function ChatMessageList() {
   const { workspace_id } = useParams<{ workspace_id: string }>();
   const workspaceId = Number(workspace_id);
 
-  const setMessages = useChatStore((s) => s.setMessages);
+  const messagesByWorkspace = useChatStore((s) => s.messagesByWorkspace);
+  const messages = messagesByWorkspace.get(workspaceId)?.messages || [];
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const topRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const hasInitializedRef = useRef(false);
-  const hasScrolledToBottomRef = useRef(false);
 
-  const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useFetchMessagesQuery(workspaceId);
-
-  const fetchedMessages = useMemo(() => {
-    if (!data?.pages) return [];
-    return [...data.pages].reverse().flat();
-  }, [data?.pages]);
-
-  console.log("Fetched messages: ", fetchedMessages);
-
-  const allMessages = useMemo(() => {
-    const combined = [...fetchedMessages];
-
-    return combined;
-  }, [fetchedMessages]);
+  const { error, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useSyncMessagesToStore(workspaceId);
 
   useEffect(() => {
-    if (!hasInitializedRef.current && status === "success" && fetchedMessages.length > 0) {
-      setMessages(workspaceId, fetchedMessages);
-      hasInitializedRef.current = true;
-      setTimeout(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "instant" });
-        hasScrolledToBottomRef.current = true;
-      }, 100);
-    }
-  }, [workspaceId, status, fetchedMessages, setMessages]);
-
-  useEffect(() => {
-    if (hasScrolledToBottomRef.current) {
-      const container = containerRef.current;
-      if (container) {
-        const isNearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
-        if (isNearBottom) {
-          setTimeout(() => {
-            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-          }, 10);
-        }
+    const container = containerRef.current;
+    if (container) {
+      const isNearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
+      if (isNearBottom) {
+        setTimeout(() => {
+          bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 10);
       }
     }
   }, []);
@@ -115,15 +88,15 @@ export default function ChatMessageList() {
           </div>
         )}
 
-        {!hasNextPage && allMessages.length > 0 && (
+        {!hasNextPage && messages?.length > 0 && (
           <div className="flex justify-center py-2">
             <div className="text-xs text-muted-foreground">No more messages</div>
           </div>
         )}
 
-        {allMessages.map((message, index) => {
+        {messages?.map((message, index) => {
           const isUsersMessage = message.sender_id === user?.user_id;
-          const prevMsg = allMessages[index - 1];
+          const prevMsg = messages[index - 1];
           const showMetadata = !prevMsg || prevMsg.sender_id !== message.sender_id;
 
           const key =

@@ -33,7 +33,7 @@ export interface MessageHistoryItem extends IncomingChatMessage {
   is_pinned: boolean;
 }
 
-export type ChatMessage = IncomingChatMessage | MessageHistoryItem | PendingChatMessage;
+export type ChatMessage = IncomingChatMessage | MessageHistoryItem;
 
 export interface PinnedMessage extends MessageHistoryItem {
   pinned_at: Date;
