@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUsers } from "../../api/userApi";
-import type { User } from "@/types/user";
+import type { SearchUser } from "../../schemas/user.schema";
 
 export const useUserSearch = (name: string) => {
-  return useQuery<User[], Error>({
+  return useQuery<SearchUser[], Error>({
     queryKey: ["users", { name }],
     queryFn: () => getUsers(name),
     enabled: name.trim().length > 0,

@@ -1,8 +1,8 @@
 import UserAvatar from "@/components/UserAvatar";
-import type { TaskAssignee } from "@/types/task";
 import { XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useUnassignTaskMemberMutation } from "../hooks/mutations/useUnassignTaskMemberMutation";
+import type { TaskAssignee } from "../schemas/task.schema";
 
 type Props = {
   assignee: TaskAssignee;
@@ -22,7 +22,7 @@ export default function AssigneeItem({ assignee, id, canManageAssignees = false 
 
   return (
     <div className="text-sm flex space-x-1 items-center px-1 rounded-xl bg-dark-muted">
-      <UserAvatar photoUrl={assignee.avatar} name={assignee.name} />
+      <UserAvatar photoUrl={assignee.avatar || undefined} name={assignee.name} />
       <span className="text-dark-text font-medium whitespace-nowrap min-w-20">{assignee.name}</span>
       <button
         onClick={handleRemoveAssignee}

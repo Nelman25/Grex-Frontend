@@ -16,7 +16,6 @@ import { toast } from "sonner";
 import noDocuments from "@/assets/noDocuments.svg";
 import PageLoader from "@/components/PageLoader";
 import { useFetchWorkspaceMembersQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceMembersQuery";
-import type { Task } from "@/types/task";
 import { useCreateSubtaskMutation } from "../hooks/mutations/useCreateSubtaskMutation";
 import { useDeleteTaskMutation } from "../hooks/mutations/useDeleteTaskMutation";
 import { useMarkTaskAsDoneMutation } from "../hooks/mutations/useMarkTaskAsDoneMutation";
@@ -32,6 +31,7 @@ import TaskDueDate from "./TaskDueDate";
 import TaskMenu from "./TaskMenu";
 import TaskPriority from "./TaskPriority";
 import TaskStatus from "./TaskStatus";
+import type { Task } from "../schemas/task.schema";
 
 type Props = PropsWithChildren & {
   task: Task;

@@ -1,10 +1,10 @@
+import noEvents from "@/assets/noEvents.svg";
 import ProjectCalendar from "@/components/calendar/ProjectCalendar";
 import PageLoader from "@/components/PageLoader";
 import { useFetchTasksQuery } from "@/features/tasks/hooks/queries/useFetchTasksQuery";
 import { mapTasksToEvents } from "@/utils";
 import { useParams } from "react-router";
 import { toast } from "sonner";
-import noEvents from "@/assets/noEvents.svg";
 
 export default function CalendarContainer() {
   const { workspace_id } = useParams();

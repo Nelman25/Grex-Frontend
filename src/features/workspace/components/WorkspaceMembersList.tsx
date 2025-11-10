@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import UserAvatar from "@/components/UserAvatar";
-import type { WorkspaceMember } from "@/types/member";
 import { MoreVertical } from "lucide-react";
 import { useParams } from "react-router";
 import { useKickMemberMutation } from "../hooks/mutations/useKickMemberMutation";
 import { usePromoteToLeaderMutation } from "../hooks/mutations/usePromoteToLeaderMutation";
 import { toast } from "sonner";
+import type { WorkspaceMember } from "../schemas/workspace.schema";
 
 export default function WorkspaceMembersList({ members }: { members: WorkspaceMember[] }) {
   const { workspace_id } = useParams();

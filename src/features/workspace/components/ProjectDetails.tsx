@@ -1,8 +1,8 @@
 import { formatDate, getInitials } from "@/utils";
-import type { WorkspaceResponse } from "@/types/project";
+import type { Workspace } from "../schemas/workspace.schema";
 
 type Props = {
-  project: WorkspaceResponse;
+  project: Workspace;
 };
 
 export default function ProjectDetails({ project }: Props) {
@@ -12,9 +12,7 @@ export default function ProjectDetails({ project }: Props) {
     <div className="flex space-x-4">
       <div className="">
         <div className="flex items-center justify-center rounded-md size-12 bg-brand-primary">
-          <span className="text-light-text text-xl font-bold">
-            {getInitials(project.name)}
-          </span>
+          <span className="text-light-text text-xl font-bold">{getInitials(project.name)}</span>
         </div>
       </div>
       <div>

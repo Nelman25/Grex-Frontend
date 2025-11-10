@@ -2,17 +2,16 @@ import PageLoader from "@/components/PageLoader";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/context/auth-context";
 import { useFetchUserProfileQuery } from "@/hooks/queries/useFetchUserProfileQuery";
-import type { User } from "@/types/user";
+import { type User } from "@/schemas/profile.schema";
 import { useEffect, useState } from "react";
 import ProfileAvatar from "./ProfileAvatar";
 import SocialLinksSection from "./SocialLinksSection";
 import UserInfoSection from "./UserInfoSection";
-
 import { useEditUserProfileMutation } from "@/hooks/mutations/useEditUserProfileMutation";
+import { getObjectDiff } from "@/utils";
 import { toast } from "sonner";
 import EditActions from "./EditActions";
 import SkillsSection from "./SkillsSection";
-import { getObjectDiff } from "@/utils";
 
 export default function ProfileCard() {
   const { user: authUser } = useAuth();

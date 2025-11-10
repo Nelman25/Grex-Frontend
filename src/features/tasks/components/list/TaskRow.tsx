@@ -1,12 +1,13 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import UserAvatars from "@/components/UserAvatars";
-import type { Subtask, Task } from "@/types/task";
 import { capitalizeWord, formatDate, getPrioLevelStyle, getProgressPercentage, getStatusStyle } from "@/utils";
 import React from "react";
 import { RiDraggable } from "react-icons/ri";
 import { usePatchSubtaskMutation } from "../../hooks/mutations/usePatchSubtaskMutation";
 import { useFetchSubtasksQuery } from "../../hooks/queries/useFetchSubtasksQuery";
 import { useFetchTaskAssigneesQuery } from "../../hooks/queries/useFetchTaskAssigneesQuery";
+import type { Task } from "../../schemas/task.schema";
+import type { Subtask } from "../../schemas/subtask.schema";
 
 type Props = {
   task: Task;
@@ -35,16 +36,10 @@ export default function TaskRow({ task, isSubtask }: Props) {
               <Checkbox
                 className="rounded-sm"
                 checked={subtaskData.is_done}
-                onCheckedChange={() =>
-                  toggleSubtask({ is_done: !subtaskData.is_done, subtask_id: subtaskData.subtask_id })
-                }
+                onCheckedChange={() => toggleSubtask({ is_done: !subtaskData.is_done, subtask_id: subtaskData.subtask_id })}
               />
             )}
-            <span
-              className={`text-gray-200 text-base font-normal ${
-                isSubtaskRow && subtaskData?.is_done && "line-through"
-              }`}
-            >
+            <span className={`text-gray-200 text-base font-normal ${isSubtaskRow && subtaskData?.is_done && "line-through"}`}>
               {isSubtaskRow ? subtaskData?.description : taskData.title}
             </span>
           </div>

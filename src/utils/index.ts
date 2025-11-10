@@ -1,4 +1,8 @@
 import { sendQueryToGrex } from "@/features/chat/api/chatApi";
+import type { Subtask } from "@/features/tasks/schemas/subtask.schema";
+import type { Task, UserTask } from "@/features/tasks/schemas/task.schema";
+import type { SearchUser } from "@/features/workspace/schemas/user.schema";
+import type { User } from "@/schemas/profile.schema";
 import type { CalendarEvent } from "@/types";
 import type {
   ChatMessage,
@@ -8,8 +12,7 @@ import type {
   PendingChatMessage,
   TextMessage,
 } from "@/types/chat";
-import type { Task, TaskPriority, Subtask, Category, TaskGroups, TaskAssignee, UserTask } from "@/types/task";
-import type { User } from "@/types/user";
+import type { Category, TaskAssignee, TaskGroups, TaskPriority } from "@/types/task";
 
 // MOCK USER IMAGES FOR TESTING
 const USER_IMAGES = [
@@ -277,7 +280,7 @@ export const formatFileSize = (bytes: number): string => {
   return `${size.toFixed(1)}${units[i].toLowerCase()}`;
 };
 
-export const getFullName = (user: User): string => {
+export const getFullName = (user: User | SearchUser): string => {
   return `${user.first_name} ${user.last_name}`.trim();
 };
 

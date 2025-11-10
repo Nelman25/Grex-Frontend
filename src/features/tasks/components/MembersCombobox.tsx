@@ -6,8 +6,8 @@ import { type PropsWithChildren } from "react";
 import { useParams } from "react-router";
 import { useAssignTaskMemberMutation } from "../hooks/mutations/useAssignTaskMemberMutation";
 import { useFetchTaskAssigneesQuery } from "../hooks/queries/useFetchTaskAssigneesQuery";
-import type { WorkspaceMember } from "@/types/member";
 import { toast } from "sonner";
+import type { WorkspaceMember } from "@/features/workspace/schemas/workspace.schema";
 
 type Props = PropsWithChildren & {
   id: number;

@@ -1,3 +1,5 @@
+import type { Task } from "@/features/tasks/schemas/task.schema";
+
 export type TaskPriority = "low" | "medium" | "high";
 export type TaskStatus = "pending" | "done" | "overdue";
 
@@ -13,19 +15,19 @@ export interface NewTask {
   category: string;
 }
 
-export interface Task extends NewTask {
-  task_id: number;
-  created_at: Date;
-  marked_done_at: Date | null;
-  workspace_id: number;
-}
+// export interface Task extends NewTask {
+//   task_id: number;
+//   created_at: Date;
+//   marked_done_at: Date | null;
+//   workspace_id: number;
+// }
 
 export type EditableTaskFields = {
   title: string;
   subject: string;
   description: string;
-  deadline: Date;
-  start_date: Date;
+  deadline: string;
+  start_date: string;
   priority_level: TaskPriority;
   category?: string;
   status?: TaskStatus;

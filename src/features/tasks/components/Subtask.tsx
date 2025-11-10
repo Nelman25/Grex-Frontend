@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
-import type { Subtask } from "@/types/task";
+import type { Subtask } from "../schemas/subtask.schema";
 
 type Props = {
   subtask: Subtask;

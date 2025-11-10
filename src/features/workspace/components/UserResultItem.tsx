@@ -1,15 +1,15 @@
-import UserAvatar from "@/components/UserAvatar";
-import type { User } from "@/types/user";
-import { useInviteUserMutation } from "../hooks/mutations/useInviteUserMutation";
-import { useParams } from "react-router";
 import { Button } from "@/components/ui/button";
-import { Loader2Icon } from "lucide-react";
-import { toast } from "sonner";
+import UserAvatar from "@/components/UserAvatar";
 import { useAuth } from "@/context/auth-context";
 import { getFullName } from "@/utils";
+import { Loader2Icon } from "lucide-react";
+import { useParams } from "react-router";
+import { toast } from "sonner";
+import { useInviteUserMutation } from "../hooks/mutations/useInviteUserMutation";
+import type { SearchUser } from "../schemas/user.schema";
 
 type Props = {
-  user: User;
+  user: SearchUser;
   isMember: boolean;
 };
 
@@ -36,7 +36,7 @@ export default function UserResultItem({ user, isMember }: Props) {
 }
 
 interface UserInfoProps {
-  user: User;
+  user: SearchUser;
 }
 
 function UserInfo({ user }: UserInfoProps) {

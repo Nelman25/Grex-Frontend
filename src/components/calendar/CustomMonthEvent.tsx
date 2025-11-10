@@ -181,7 +181,7 @@ function CustomMonthEvent({ calendarEvent, mode = "workspace" }: CustomMonthEven
                     className="relative"
                   >
                     <Avatar className="size-5 border border-white/30">
-                      <AvatarImage src={assignee.avatar} alt={assignee.name} />
+                      <AvatarImage src={assignee.avatar ?? undefined} alt={assignee.name} />
                       <AvatarFallback className="bg-white/20 text-white text-xs">{getInitials(assignee.name)}</AvatarFallback>
                     </Avatar>
                   </motion.div>

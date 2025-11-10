@@ -1,6 +1,6 @@
 import { useQueries } from "@tanstack/react-query";
 import { getAssignees } from "../../api/taskApi";
-import type { Task, TaskAssignee } from "@/types/task";
+import type { Task, TaskAssignee } from "../../schemas/task.schema";
 
 export const useWorkspaceAssignees = (tasks: Task[]) => {
   const results = useQueries({

@@ -1,11 +1,11 @@
 import { PencilIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/utils";
-import type { User } from "@/types/user";
 import { useRef, useState } from "react";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "@/constants/cloudinary";
 import { uploadImageToCloudinary } from "@/api/cloudinary";
 import { toast } from "sonner";
+import type { User } from "@/schemas/profile.schema";
 
 interface ProfileAvatarProps {
   user: User;

@@ -1,12 +1,12 @@
 import type { JSX } from "react";
 
 export interface SocialLinks {
-  github?: string;
-  linkedin?: string;
-  portfolio?: string;
-  twitter?: string;
-  discord?: string;
-  email?: string;
+  github: string | null | undefined;
+  linkedin: string | null | undefined;
+  portfolio: string | null | undefined;
+  twitter: string | null | undefined;
+  discord: string | null | undefined;
+  email: string | null | undefined;
 }
 
 export interface Workspace {
@@ -38,7 +38,7 @@ export interface Achievement {
 
 export interface EditUser {
   email?: string;
-  phone_number?: string;
+  phone_number?: string | undefined;
   first_name?: string;
   last_name?: string;
   profile_picture?: string | null;

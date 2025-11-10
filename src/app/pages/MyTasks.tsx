@@ -1,7 +1,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/context/auth-context";
 import { useFetchUserTasksQuery } from "@/features/tasks/hooks/queries/useFetchUserTasksQuery";
-import type { TaskStatus, UserTask } from "@/types/task";
+import type { UserTask } from "@/features/tasks/schemas/task.schema";
+import type { TaskStatus } from "@/types/task";
 import { formatDate, timeAgo } from "@/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Calendar, CircleAlert } from "lucide-react";

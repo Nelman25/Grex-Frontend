@@ -1,8 +1,8 @@
 import ProjectCalendar from "@/components/calendar/ProjectCalendar";
 import { useAuth } from "@/context/auth-context";
 import { useFetchUserTasksQuery } from "@/features/tasks/hooks/queries/useFetchUserTasksQuery";
+import type { UserTask } from "@/features/tasks/schemas/task.schema";
 import type { CalendarEvent } from "@/types";
-import type { UserTask } from "@/types/task";
 
 export default function MyCalendar() {
   const { user } = useAuth();

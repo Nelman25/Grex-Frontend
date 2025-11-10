@@ -1,4 +1,4 @@
-import type { UserTask } from "@/types/task";
+import type { UserTask } from "@/features/tasks/schemas/task.schema";
 import { type ChartOptions, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
 import { Bar } from "react-chartjs-2";
 

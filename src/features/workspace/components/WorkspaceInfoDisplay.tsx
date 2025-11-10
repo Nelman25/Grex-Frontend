@@ -1,13 +1,13 @@
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import type { WorkspaceResponse } from "@/types/project";
 import { Image as ImageIcon } from "lucide-react";
+import type { Workspace } from "../schemas/workspace.schema";
 
 export default function WorkspaceInfoDisplay({
   workspace,
   progress,
   daysLeft,
 }: {
-  workspace: WorkspaceResponse;
+  workspace: Workspace;
   progress: number;
   daysLeft: string | number;
 }) {
@@ -27,9 +27,7 @@ export default function WorkspaceInfoDisplay({
         )}
         <DialogTitle>{workspace?.name ?? "Workspace Name"}</DialogTitle>
       </div>
-      <DialogDescription className="mb-2">
-        {workspace?.description ?? "Workspace description goes here."}
-      </DialogDescription>
+      <DialogDescription className="mb-2">{workspace?.description ?? "Workspace description goes here."}</DialogDescription>
       <div>
         <div className="text-sm text-muted-foreground">Project Nature</div>
         <div>{workspace?.project_nature ?? "N/A"}</div>

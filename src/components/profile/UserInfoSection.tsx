@@ -1,8 +1,8 @@
 // components/ProfileCard/UserInfoSection.tsx
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import type { User } from "@/schemas/profile.schema";
 import { PencilIcon } from "lucide-react";
-import type { User } from "@/types/user";
 
 interface UserInfoSectionProps {
   user: User;

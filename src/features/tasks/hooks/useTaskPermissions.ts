@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/auth-context";
-import type { WorkspaceMember } from "@/types/member";
-import type { Task, TaskAssignee } from "@/types/task";
+import type { WorkspaceMember } from "@/features/workspace/schemas/workspace.schema";
 import { useMemo } from "react";
+import type { Task, TaskAssignee } from "../schemas/task.schema";
 
 export function useTaskPermissions(task: Task | undefined, members: WorkspaceMember[], assignees: TaskAssignee[]) {
   const { user } = useAuth();
@@ -10,7 +10,7 @@ export function useTaskPermissions(task: Task | undefined, members: WorkspaceMem
     () => assignees.some((a) => a.user_id === user?.user_id) || task?.created_by === user?.user_id,
     [assignees, user?.user_id, task?.created_by]
   );
-  
+
   const isLeader = useMemo(
     () => members.some((m) => m.user_id === user?.user_id && m.role === "leader"),
     [members, user?.user_id]

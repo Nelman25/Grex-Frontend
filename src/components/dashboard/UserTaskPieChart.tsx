@@ -1,4 +1,4 @@
-import type { UserTask } from "@/types/task";
+import type { UserTask } from "@/features/tasks/schemas/task.schema";
 import { getTaskSummary } from "@/utils";
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";

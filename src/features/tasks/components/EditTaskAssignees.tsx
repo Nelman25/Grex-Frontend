@@ -12,7 +12,7 @@ import { useFetchWorkspaceMembersQuery } from "@/features/workspace/hooks/querie
 function EditTaskAssignees({ id }: { id: number }) {
   const [newAssignee, setNewAssignee] = useState("");
   const { workspace_id } = useParams();
-  const { data: assignees } = useFetchTaskAssigneesQuery(id);
+  const { data: assignees = [] } = useFetchTaskAssigneesQuery(id);
   const { mutate: addAssignee } = useAssignTaskMemberMutation(id);
   const { data: members } = useFetchWorkspaceMembersQuery(Number(workspace_id));
 

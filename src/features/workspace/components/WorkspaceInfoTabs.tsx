@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import WorkspaceMembersList from "./WorkspaceMembersList";
-import type { WorkspaceMember } from "@/types/member";
+import type { WorkspaceMember } from "../schemas/workspace.schema";
 
 export default function WorkspaceInfoTabs({ members }: { members: WorkspaceMember[] }) {
   return (

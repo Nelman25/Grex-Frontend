@@ -4,11 +4,12 @@ import SelectComponent from "@/components/SelectComponent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import type { EditableTaskFields, Task } from "@/types/task";
+import type { EditableTaskFields } from "@/types/task";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { useParams } from "react-router";
-import { usePatchTaskMutation } from "../hooks/mutations/usePatchTaskMutation";
 import { toast } from "sonner";
+import { usePatchTaskMutation } from "../hooks/mutations/usePatchTaskMutation";
+import type { Task } from "../schemas/task.schema";
 
 type Props = {
   task: Task;

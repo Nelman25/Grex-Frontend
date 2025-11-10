@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { BsDiscord, BsGithub, BsGlobe, BsLinkedin, BsTwitterX } from "react-icons/bs";
 import { Mail } from "lucide-react";
-import type { User } from "@/types/user";
+import type { User } from "@/schemas/profile.schema";
 
 interface SocialLinksSectionProps {
   user: User;

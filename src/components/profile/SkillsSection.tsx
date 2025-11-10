@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
-import type { User } from "@/types/user";
+import type { User } from "@/schemas/profile.schema";
 
 interface SkillsSectionProps {
   user: User;

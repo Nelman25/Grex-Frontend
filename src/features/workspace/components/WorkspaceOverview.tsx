@@ -1,10 +1,10 @@
+import { useFetchTasksQuery } from "@/features/tasks/hooks/queries/useFetchTasksQuery";
 import { useParams } from "react-router";
+import { useFetchWorkspaceRecentActivitiesQuery } from "../hooks/queries/useFetchWorkspaceRecentActivitiesQuery";
+import ChartCard from "./ChartCard";
+import TaskAssigneeDistributionChart from "./TaskAssigneeDistributionChart";
 import TaskPieChart from "./TaskPieChart";
 import TaskPriorityChart from "./TaskPriorityChart";
-import { useFetchTasksQuery } from "@/features/tasks/hooks/queries/useFetchTasksQuery";
-import TaskAssigneeDistributionChart from "./TaskAssigneeDistributionChart";
-import ChartCard from "./ChartCard";
-import { useFetchWorkspaceRecentActivitiesQuery } from "../hooks/queries/useFetchWorkspaceRecentActivitiesQuery";
 
 export default function WorkspaceOverview() {
   const { workspace_id } = useParams();

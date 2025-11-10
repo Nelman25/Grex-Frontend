@@ -1,7 +1,7 @@
-import type { Task } from "@/types/task";
 import { Label } from "@radix-ui/react-label";
 import { formatDate } from "@/utils/index";
 import { Calendar } from "lucide-react";
+import type { Task } from "../schemas/task.schema";
 
 export default function TaskDueDate({ task }: { task: Task }) {
   return (

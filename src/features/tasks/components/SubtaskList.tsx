@@ -1,9 +1,10 @@
 import { useFetchWorkspaceMembersQuery } from "@/features/workspace/hooks/queries/useFetchWorkspaceMembersQuery";
-import SubtaskItem from "./Subtask";
-import type { Subtask, Task } from "@/types/task";
+import { useParams } from "react-router";
 import { useFetchTaskAssigneesQuery } from "../hooks/queries/useFetchTaskAssigneesQuery";
 import { useTaskPermissions } from "../hooks/useTaskPermissions";
-import { useParams } from "react-router";
+import type { Subtask } from "../schemas/subtask.schema";
+import type { Task } from "../schemas/task.schema";
+import SubtaskItem from "./Subtask";
 
 type Props = {
   task: Task;

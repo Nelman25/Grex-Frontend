@@ -1,17 +1,18 @@
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/UserAvatar";
-import type { EditProject, WorkspaceResponse } from "@/types/project";
+import type { EditProject } from "@/types/project";
 import { formatDateForAPI, timeAgo } from "@/utils";
 import { Edit } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useEditWorkspaceMutation } from "../hooks/mutations/useEditWorkspaceMutation";
+import type { Workspace } from "../schemas/workspace.schema";
+import QuickLinksSection from "./QuickLinksSection";
 import WorkspaceInfoDisplay from "./WorkspaceInfoDisplay";
 import WorkspaceInfoEdit from "./WorkspaceInfoEdit";
-import QuickLinksSection from "./QuickLinksSection";
 
 type Props = {
-  workspace: WorkspaceResponse;
+  workspace: Workspace;
   progress: number;
   daysLeft: string | number;
   activities: {

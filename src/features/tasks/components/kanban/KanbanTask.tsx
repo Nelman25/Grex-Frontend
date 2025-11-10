@@ -1,7 +1,6 @@
 import PageLoader from "@/components/PageLoader";
 import { Progress } from "@/components/ui/progress";
 import UserAvatars from "@/components/UserAvatars";
-import type { Task } from "@/types/task";
 import { capitalizeWord, formatDate, getPrioLevelStyle, getProgressPercentage } from "@/utils";
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 import { BiCommentDetail } from "react-icons/bi";
@@ -15,6 +14,7 @@ import TaskSheet from "../TaskSheet";
 import { editTask } from "../../api/taskApi";
 import { useParams } from "react-router";
 import { toast } from "sonner";
+import type { Task } from "../../schemas/task.schema";
 
 type Props = {
   task: Task;

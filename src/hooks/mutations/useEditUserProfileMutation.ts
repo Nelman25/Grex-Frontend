@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editUserProfile } from "@/api/profileApi";
-import type { EditUser } from "@/types/user";
+import type { EditUser } from "@/schemas/profile.schema";
 
 type Arg = {
   user_id: number;

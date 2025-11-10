@@ -1,5 +1,14 @@
 import { z } from "zod";
 
+export const socialLinksSchema = z.object({
+  github: z.string().nullable().optional(),
+  linkedin: z.string().nullable().optional(),
+  portfolio: z.string().nullable().optional(),
+  twitter: z.string().nullable().optional(),
+  discord: z.string().nullable().optional(),
+  email: z.string().nullable().optional(),
+});
+
 export const userProfileSchema = z.object({
   user_id: z.number(),
   email: z.email(),
@@ -10,14 +19,9 @@ export const userProfileSchema = z.object({
   role: z.string().nullable(),
   bio: z.string().nullable(),
   skills: z.array(z.string()),
-  social_links: z.object({
-    github: z.string().nullable().optional(),
-    linkedin: z.string().nullable().optional(),
-    portfolio: z.string().nullable().optional(),
-    twitter: z.string().nullable().optional(),
-    discord: z.string().nullable().optional(),
-    email: z.string().nullable().optional(),
-  }),
+  social_links: socialLinksSchema,
 });
 
+export type SocialLinks = z.infer<typeof socialLinksSchema>;
 export type User = z.infer<typeof userProfileSchema>;
+export type EditUser = Partial<z.infer<typeof userProfileSchema>>;
