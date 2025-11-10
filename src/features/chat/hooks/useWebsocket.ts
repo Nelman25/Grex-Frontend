@@ -6,37 +6,39 @@ import { useCallback, useEffect } from "react";
 // THIS IS FOR HANDLING THE SINGLETON PATTERN PROPERLY
 class WebSocketManager {
   private ws: WebSocket | null = null;
-  private connectionCount = 0;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private currentWorkspaceId: number | null = null;
   private currentUserId: number | null = null;
   private setConnectionStatus: ((status: boolean) => void) | null = null;
 
-  connect(workspaceId: number, userId: number, setConnectionStatusFn: (status: boolean) => void) {
-    // STORE THE CONNECTION STATUS SETTER
-    this.setConnectionStatus = setConnectionStatusFn;
+  connect(workspaceId: number, userId: number) {
+    console.log("Attempting to connect WebSocket...");
 
-    // IF WE ALREADY HAVE A CONNECTION FOR THE SAME WORKSPACE/USER, JUST INCREMENT COUNTER
     if (
       this.ws &&
       this.ws.readyState === WebSocket.OPEN &&
       this.currentWorkspaceId === workspaceId &&
       this.currentUserId === userId
     ) {
-      this.connectionCount++;
-      setConnectionStatusFn(true);
+      console.log("_____WebSocket already connected._____");
       return;
     }
 
     // CLOSE EXISTING CONNECTION IF WORKSPACE/USER CHANGED
     if (this.ws && (this.currentWorkspaceId !== workspaceId || this.currentUserId !== userId)) {
-      this.ws.close();
-      this.ws = null;
+      console.log("Closing existing WebSocket connection for different workspace/user.");
+      console.log("Previous workspace:", this.currentWorkspaceId, "New workspace:", workspaceId);
+      console.log("Previous user:", this.currentUserId, "New user:", userId);
+
+      this.disconnect();
+      return;
     }
 
     this.currentWorkspaceId = workspaceId;
     this.currentUserId = userId;
+
+    console.log("Connecting to WebSocket for workspace:", workspaceId, "as user:", userId);
 
     try {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -44,21 +46,21 @@ class WebSocketManager {
       const wsUrl = `${protocol}//localhost:8000/workspace/${workspaceId}/${userId}?token=${token}`;
 
       this.ws = new WebSocket(wsUrl);
-      this.connectionCount = 1;
 
       this.ws.onopen = () => {
         console.log("WebSocket connected!");
-        setConnectionStatusFn(true);
+        console.log("Connected to workspace:", workspaceId, "as user:", userId);
         this.reconnectAttempts = 0;
       };
 
       this.ws.onmessage = (event) => {
         try {
-          const message: IncomingChatMessage = JSON.parse(event.data);
-          useChatStore.getState().addMessage(message);
+          if (!this.currentWorkspaceId || !this.currentUserId) {
+            throw new Error("Workspace ID or User ID is not set.");
+          }
 
-          // get user role, imma use string for now since I don't know where to get this from, will fix later
-          // this should also check if the role is not falsy, add nalang later
+          const message: IncomingChatMessage = JSON.parse(event.data);
+          useChatStore.getState().addMessage(this.currentWorkspaceId, message);
 
           if (
             message.sender_id === this.currentUserId &&
@@ -74,13 +76,12 @@ class WebSocketManager {
 
       this.ws.onclose = () => {
         console.log("WebSocket disconnected.");
-        setConnectionStatusFn(false);
 
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
           const delay = Math.pow(2, this.reconnectAttempts) * 1000;
           this.reconnectAttempts++;
           setTimeout(() => {
-            this.connect(workspaceId, userId, setConnectionStatusFn);
+            this.connect(workspaceId, userId);
           }, delay);
         } else {
           this.cleanup();
@@ -96,11 +97,7 @@ class WebSocketManager {
   }
 
   disconnect() {
-    this.connectionCount--;
-
-    if (this.connectionCount <= 0) {
-      this.cleanup();
-    }
+    this.cleanup();
   }
 
   private cleanup() {
@@ -108,8 +105,6 @@ class WebSocketManager {
       this.ws.close();
       this.ws = null;
     }
-    this.connectionCount = 0;
-    // this.listeners.clear();
     this.currentWorkspaceId = null;
     this.currentUserId = null;
     if (this.setConnectionStatus) {
@@ -137,16 +132,13 @@ interface UseWebsocketProps {
 }
 
 export const useWebsocket = ({ workspaceId, userId }: UseWebsocketProps) => {
-  const addMessage = useChatStore((state) => state.addMessage);
-  const setConnectionStatus = useChatStore((state) => state.setConnectionStatus);
-
   useEffect(() => {
-    wsManager.connect(workspaceId, userId, setConnectionStatus);
+    wsManager.connect(workspaceId, userId);
 
     return () => {
       wsManager.disconnect();
     };
-  }, [workspaceId, userId, addMessage, setConnectionStatus]);
+  }, [workspaceId, userId]);
 
   const sendMessage = useCallback((message: OutgoingChatMessage) => {
     return wsManager.sendMessage(message);
