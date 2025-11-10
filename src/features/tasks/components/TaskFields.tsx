@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import type { Task } from "@/types/task";
 import { capitalizeWord, getPrioLevelStyle, getStatusStyle } from "@/utils";
 import { Clock, Flag } from "lucide-react";
+import type { Task } from "../schemas/task.schema";
 
 export default function TaskFields({ task }: { task: Task }) {
   return (
@@ -26,10 +26,7 @@ export default function TaskFields({ task }: { task: Task }) {
           <span className="text-sm">Priority</span>
         </div>
         <div className="col-span-4 p-2">
-          <Badge
-            variant="default"
-            className={getPrioLevelStyle(task.priority_level)}
-          >
+          <Badge variant="default" className={getPrioLevelStyle(task.priority_level)}>
             {capitalizeWord(task.priority_level)}
           </Badge>
         </div>

@@ -110,7 +110,7 @@ export default function NewTaskModal({ children, category }: Props) {
                 rules={{ required: "Start date is required" }}
                 render={({ field }) => (
                   <div className="flex-1">
-                    <DatePicker label="Start date" value={field.value} onChange={(date) => field.onChange(date)} />
+                    <DatePicker label="Start date" value={field.value.toISOString()} onChange={(date) => field.onChange(date)} />
                     <p className="text-error text-xs">{errors.start_date?.message}</p>
                   </div>
                 )}
@@ -121,7 +121,7 @@ export default function NewTaskModal({ children, category }: Props) {
                 rules={{ required: "Deadline is required" }}
                 render={({ field }) => (
                   <div className="flex-1">
-                    <DatePicker label="Deadline" value={field.value} onChange={(date) => field.onChange(date)} />
+                    <DatePicker label="Deadline" value={field.value.toISOString()} onChange={(date) => field.onChange(date)} />
                     <p className="text-error text-xs">{errors.deadline?.message}</p>
                   </div>
                 )}

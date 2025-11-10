@@ -1,8 +1,8 @@
-import type { Task } from "@/types/task";
+import type { Task } from "../schemas/task.schema";
 import TaskAssignees from "./TaskAssignees";
 import TaskDueDate from "./TaskDueDate";
-import TaskWorkspace from "./TaskWorkspace";
 import TaskFields from "./TaskFields";
+import TaskWorkspace from "./TaskWorkspace";
 
 type Props = {
   task: Task;

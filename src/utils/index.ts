@@ -1,18 +1,11 @@
 import { sendQueryToGrex } from "@/features/chat/api/chatApi";
 import type { Subtask } from "@/features/tasks/schemas/subtask.schema";
-import type { Task, UserTask } from "@/features/tasks/schemas/task.schema";
+import type { Task, TaskAssignee, UserTask } from "@/features/tasks/schemas/task.schema";
 import type { SearchUser } from "@/features/workspace/schemas/user.schema";
 import type { User } from "@/schemas/profile.schema";
 import type { CalendarEvent } from "@/types";
-import type {
-  ChatMessage,
-  GrexPayload,
-  IncomingChatMessage,
-  MessageHistoryItem,
-  PendingChatMessage,
-  TextMessage,
-} from "@/types/chat";
-import type { Category, TaskAssignee, TaskGroups, TaskPriority } from "@/types/task";
+import type { ChatMessage, GrexPayload, IncomingChatMessage, MessageHistoryItem, TextMessage } from "@/types/chat";
+import type { Category, TaskGroups, TaskPriority } from "@/types/task";
 
 // MOCK USER IMAGES FOR TESTING
 const USER_IMAGES = [
@@ -166,11 +159,7 @@ export const mapTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
 };
 
 export function isIncomingChatMessage(msg: ChatMessage): msg is IncomingChatMessage {
-  return "message_id" in msg;
-}
-
-export function isPendingChatMessage(msg: ChatMessage): msg is PendingChatMessage {
-  return "temp_id" in msg;
+  return !("is_pinned" in msg);
 }
 
 export function isMessageHistoryItem(msg: ChatMessage): msg is MessageHistoryItem {
@@ -360,7 +349,7 @@ export const aggregateAssignees = (assignees: TaskAssignee[]) => {
 
   for (const a of assignees) {
     if (!map[a.user_id]) {
-      map[a.user_id] = { name: a.name, avatar: a.avatar, count: 0 };
+      map[a.user_id] = { name: a.name, avatar: a.avatar || "", count: 0 };
     }
     map[a.user_id].count++;
   }

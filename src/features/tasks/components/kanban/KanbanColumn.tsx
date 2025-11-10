@@ -1,4 +1,3 @@
-import type { Task } from "@/types/task";
 import { capitalizeWord } from "@/utils";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { useState } from "react";
@@ -6,6 +5,7 @@ import { GoKebabHorizontal } from "react-icons/go";
 import CategoryDropdown from "../CategoryDropdown";
 import KanbanTask from "./KanbanTask";
 import NewCategoryInput from "./NewCategoryInput";
+import type { Task } from "../../schemas/task.schema";
 
 interface Props {
   type: string;

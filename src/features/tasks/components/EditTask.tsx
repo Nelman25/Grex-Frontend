@@ -30,8 +30,8 @@ export default function EditTask({ task, onCancel }: Props) {
       title: task.title,
       subject: task.subject,
       description: task.description,
-      start_date: new Date(task.start_date),
-      deadline: new Date(task.deadline),
+      start_date: task.start_date,
+      deadline: task.deadline,
       priority_level: task.priority_level,
     },
   });

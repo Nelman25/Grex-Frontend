@@ -65,17 +65,11 @@ export function NewProjectModal({ children }: PropsWithChildren) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Create New Project</DialogTitle>
-            <DialogDescription>
-              Set up your project details below. You can update these anytime
-            </DialogDescription>
+            <DialogDescription>Set up your project details below. You can update these anytime</DialogDescription>
           </DialogHeader>
 
           <div className="grid grid-cols-2 gap-4 py-8">
-            <img
-              src={newProjectHero}
-              alt="New Project Hero"
-              className="size-[400px]"
-            />
+            <img src={newProjectHero} alt="New Project Hero" className="size-[400px]" />
             <div className="flex flex-col space-y-6">
               <RHFFormField id="name" label="Name" error={errors.name?.message}>
                 <Input
@@ -86,11 +80,7 @@ export function NewProjectModal({ children }: PropsWithChildren) {
                   })}
                 />
               </RHFFormField>
-              <RHFFormField
-                id="description"
-                label="Description"
-                error={errors?.description?.message}
-              >
+              <RHFFormField id="description" label="Description" error={errors?.description?.message}>
                 <Textarea
                   id="description"
                   placeholder="Tell us what your project is about..."
@@ -99,11 +89,7 @@ export function NewProjectModal({ children }: PropsWithChildren) {
                   })}
                 />
               </RHFFormField>
-              <RHFFormField
-                id="project_nature"
-                label="Project nature"
-                error={errors.project_nature?.message}
-              >
+              <RHFFormField id="project_nature" label="Project nature" error={errors.project_nature?.message}>
                 <Input
                   id="project_nature"
                   placeholder="Software Development"
@@ -122,12 +108,10 @@ export function NewProjectModal({ children }: PropsWithChildren) {
                     <div>
                       <DatePicker
                         label="Start date"
-                        value={field.value}
+                        value={field.value.toISOString()}
                         onChange={(date) => field.onChange(date)}
                       />
-                      <p className="text-error text-xs">
-                        {errors.start_date?.message}
-                      </p>
+                      <p className="text-error text-xs">{errors.start_date?.message}</p>
                     </div>
                   )}
                 />
@@ -137,14 +121,8 @@ export function NewProjectModal({ children }: PropsWithChildren) {
                   rules={{ required: "End date is required" }}
                   render={({ field }) => (
                     <div>
-                      <DatePicker
-                        label="End date"
-                        value={field.value}
-                        onChange={(date) => field.onChange(date)}
-                      />
-                      <p className="text-error text-xs">
-                        {errors.due_date?.message}
-                      </p>
+                      <DatePicker label="End date" value={field.value.toISOString()} onChange={(date) => field.onChange(date)} />
+                      <p className="text-error text-xs">{errors.due_date?.message}</p>
                     </div>
                   )}
                 />

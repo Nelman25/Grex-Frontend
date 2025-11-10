@@ -15,14 +15,14 @@ import { usePinMessageMutation } from "../hooks/mutations/usePinMessageMutation"
 import { useFetchRepliedMessageQuery } from "../hooks/queries/useFetchRepliedMessageQuery";
 
 const getMessageId = (message: ChatMessage): number | undefined => {
-  if (isIncomingChatMessage(message)) return message.message_id;
   if (isMessageHistoryItem(message)) return message.message_id;
+  if (isIncomingChatMessage(message)) return message.message_id;
   return undefined;
 };
 
 const getRepliedTo = (message: ChatMessage): number | null => {
-  if (isIncomingChatMessage(message)) return message.reply_to;
   if (isMessageHistoryItem(message)) return message.reply_to;
+  if (isIncomingChatMessage(message)) return message.reply_to;
   return null;
 };
 

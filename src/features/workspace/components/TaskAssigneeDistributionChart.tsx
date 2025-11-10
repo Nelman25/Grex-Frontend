@@ -1,5 +1,5 @@
 import { useWorkspaceAssignees } from "@/features/tasks/hooks/queries/useFetchWorkspaceAssignees";
-import type { Task } from "@/types/task";
+import type { Task } from "@/features/tasks/schemas/task.schema";
 import { aggregateAssignees } from "@/utils";
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
 import { Bar } from "react-chartjs-2";
@@ -39,7 +39,7 @@ export default function WorkspaceAssigneeChart({ tasks }: Props) {
         ],
         borderColor: "#",
         borderWidth: 2,
-        borderRadius: 5
+        borderRadius: 5,
       },
     ],
   };
