@@ -6,7 +6,6 @@ type Schema<T> = z.ZodType<T, any>;
 
 export const fetchAndValidate = async <T>(url: string, schema: Schema<T>): Promise<T> => {
   const { data } = await api.get<T>(url);
-  console.log("raw data: ", data);
   const parsed = schema.safeParse(data);
 
   if (!parsed.success) {
