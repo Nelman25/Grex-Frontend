@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { IUser } from "./AuthProvider";
+import type { IUser } from "../components/AuthProvider";
 import type { IUserCredentials } from "@/types";
 
 interface AuthContextType {
@@ -11,9 +11,7 @@ interface AuthContextType {
   logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const authContext = useContext(AuthContext);

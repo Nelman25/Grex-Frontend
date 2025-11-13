@@ -1,7 +1,7 @@
 import { uploadFileToCloudinary, uploadImageToCloudinary } from "@/api/cloudinary";
 import { Input } from "@/components/ui/input";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "@/constants/cloudinary";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import type { NewComment, NewCommentAttachment } from "@/types/comment";
 import { useRef, useState } from "react";
 import { CiImageOn } from "react-icons/ci";

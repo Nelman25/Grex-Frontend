@@ -1,5 +1,5 @@
 import { Card, CardContent } from "../ui/card";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { useFetchAllWorkspacesQuery } from "@/features/workspace/hooks/queries/useFetchAllWorkspacesQuery";
 import { Badge } from "../ui/badge";
 
@@ -11,7 +11,7 @@ export default function UserWorkspaces() {
     if (created_by === user?.user_id) return "Leader";
     else return "Member";
   };
-  
+
   return (
     <div>
       <h3 className="text-lg font-medium mb-4">My Workspaces</h3>

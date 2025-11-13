@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { useChatReplyStore } from "@/stores/useChatReplyStore";
 import { isTextMessageContent } from "@/utils/typeGuards";
 import { IoCloseOutline } from "react-icons/io5";

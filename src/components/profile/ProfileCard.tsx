@@ -1,6 +1,6 @@
 import PageLoader from "@/components/PageLoader";
 import { Card, CardContent } from "@/components/ui/card";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { useFetchUserProfileQuery } from "@/hooks/queries/useFetchUserProfileQuery";
 import { type User } from "@/schemas/profile.schema";
 import { useEffect, useState } from "react";

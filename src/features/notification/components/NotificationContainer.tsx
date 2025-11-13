@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { PropsWithChildren } from "react";
 import { useFetchNotificationsQuery } from "../hooks/useFetchNotificationsQuery";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { Label } from "@/components/ui/label";
 import NotificationItem from "./NotificationItem";
 import { useNotificationPolling } from "../hooks/useNotificationPolling";

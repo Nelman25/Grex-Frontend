@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/UserAvatar";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { getFullName } from "@/utils";
 import { Loader2Icon } from "lucide-react";
 import { useParams } from "react-router";

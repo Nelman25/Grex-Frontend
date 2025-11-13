@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/DatePicker";
 import type { NewProject } from "@/types/project";
 import RHFFormField from "@/components/RHFFormField";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { Navigate } from "react-router";
 import { useCreateWorkspace } from "../hooks/mutations/useCreateWorkspace";
 
@@ -108,7 +108,7 @@ export function NewProjectModal({ children }: PropsWithChildren) {
                     <div>
                       <DatePicker
                         label="Start date"
-                        value={field.value.toISOString()}
+                        value={field.value?.toISOString() ?? null}
                         onChange={(date) => field.onChange(date)}
                       />
                       <p className="text-error text-xs">{errors.start_date?.message}</p>
@@ -121,7 +121,11 @@ export function NewProjectModal({ children }: PropsWithChildren) {
                   rules={{ required: "End date is required" }}
                   render={({ field }) => (
                     <div>
-                      <DatePicker label="End date" value={field.value.toISOString()} onChange={(date) => field.onChange(date)} />
+                      <DatePicker
+                        label="End date"
+                        value={field.value?.toISOString() ?? null}
+                        onChange={(date) => field.onChange(date)}
+                      />
                       <p className="text-error text-xs">{errors.due_date?.message}</p>
                     </div>
                   )}

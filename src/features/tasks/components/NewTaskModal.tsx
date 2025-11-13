@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import type { NewTask } from "@/types/task";
 import { useState, type PropsWithChildren } from "react";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";

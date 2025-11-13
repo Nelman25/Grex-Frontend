@@ -1,5 +1,5 @@
 import UserAvatar from "@/components/UserAvatar";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { useChatReplyStore } from "@/stores/useChatReplyStore";
 import type { ChatMessage } from "@/types/chat";
 import { formatChatDate, formatFileSize, getFileExtension, isIncomingChatMessage, isMessageHistoryItem } from "@/utils";

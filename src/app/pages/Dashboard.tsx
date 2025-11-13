@@ -2,7 +2,7 @@ import UserTaskPieChart from "@/components/dashboard/UserTaskPieChart";
 import WeeklyProgressChart from "@/components/dashboard/WeeklyProgressChart";
 import WorkspaceTasksDistribution from "@/components/dashboard/WorkspaceTasksDistribution";
 import NoProject from "@/components/NoProject";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { useFetchUserTasksQuery } from "@/features/tasks/hooks/queries/useFetchUserTasksQuery";
 import ChartCard from "@/features/workspace/components/ChartCard";
 import { useFetchAllWorkspacesQuery } from "@/features/workspace/hooks/queries/useFetchAllWorkspacesQuery";
