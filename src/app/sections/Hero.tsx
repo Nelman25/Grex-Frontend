@@ -7,10 +7,7 @@ import { Link } from "react-router";
 
 export default function Hero({ onScrollToFeatures }: { onScrollToFeatures: () => void }) {
   return (
-    <motion.div
-      variants={staggerContainer}
-      className="relative mt-20 mx-auto px-6 w-full md:w-2xl lg:w-3xl xl:w-5xl flex-col space-x-8"
-    >
+    <motion.div variants={staggerContainer} className="relative mt-20 mx-auto px-6 w-full md:w-2xl lg:w-3xl xl:w-5xl flex-col">
       <motion.div variants={slideInLeft} className="flex-1 flex flex-col space-y-4">
         <motion.h1 className=" mx-auto text-dark-text text-center text-4xl md:text-5xl font-bold" variants={fadeInUp}>
           All-in-One Collaboration for Teams That

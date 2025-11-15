@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { SIDEBAR_ITEMS } from "@/constants";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { useFetchAllWorkspacesQuery } from "@/features/workspace/hooks/queries/useFetchAllWorkspacesQuery";
 import { GoPlus } from "react-icons/go";
 import { IoIosHelpCircleOutline, IoIosInformationCircleOutline } from "react-icons/io";

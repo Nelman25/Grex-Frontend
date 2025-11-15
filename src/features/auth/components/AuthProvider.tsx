@@ -1,7 +1,7 @@
 import api from "@/lib/axios";
 import type { IUserCredentials } from "@/types";
 import { useLayoutEffect, useState, type PropsWithChildren } from "react";
-import { AuthContext } from "./auth-context";
+import { AuthContext } from "../hooks/auth-context";
 
 export interface IUser {
   email: string;

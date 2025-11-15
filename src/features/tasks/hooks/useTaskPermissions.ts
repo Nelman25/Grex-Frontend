@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import type { WorkspaceMember } from "@/features/workspace/schemas/workspace.schema";
 import { useMemo } from "react";
 import type { Task, TaskAssignee } from "../schemas/task.schema";

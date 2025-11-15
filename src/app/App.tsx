@@ -1,6 +1,6 @@
 import PageLoader from "@/components/PageLoader";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/context/AuthProvider";
+import { AuthProvider } from "@/features/auth/components/AuthProvider";
 import WorkspaceContainer from "@/features/workspace/components/WorkspaceContainer";
 import { queryClient } from "@/lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";

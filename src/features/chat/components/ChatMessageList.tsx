@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/features/auth/hooks/auth-context";
 import { useChatStore } from "@/stores/useChatStore";
 import { useCallback, useEffect, useRef } from "react";
 import { useParams } from "react-router";
