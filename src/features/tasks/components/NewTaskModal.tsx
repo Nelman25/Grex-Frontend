@@ -47,16 +47,22 @@ export default function NewTaskModal({ children, category }: Props) {
     formState: { errors },
   } = useForm<NewTask>({ defaultValues });
 
-  const { mutate, isPending, error: createTaskError } = useCreateTaskMutation(Number(workspace_id));
-
-  if (createTaskError) toast(createTaskError.message);
+  const { mutate, isPending } = useCreateTaskMutation(Number(workspace_id));
 
   const onSubmit: SubmitHandler<NewTask> = (task) => {
-    if (!user) throw new Error("No user authenticated"); // Find better solution for this, this is getting repetitive
+    if (!user) {
+      toast("No user authenticated");
+      return;
+    }
+
+    if (task.start_date > task.deadline) {
+      toast.error("Start date cannot be later than deadline");
+      return;
+    }
 
     mutate({
       ...task,
-      created_by: user?.user_id,
+      created_by: user.user_id,
       status: "pending",
       category: category,
     });
@@ -72,7 +78,6 @@ export default function NewTaskModal({ children, category }: Props) {
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Create a Task</DialogTitle>
-          {/* TODO: come up with better description later */}
           <DialogDescription>
             Add a new task by providing its title, description, and other details. Newly created tasks will automatically be set
             to Pending.
@@ -110,7 +115,7 @@ export default function NewTaskModal({ children, category }: Props) {
                 rules={{ required: "Start date is required" }}
                 render={({ field }) => (
                   <div className="flex-1">
-                    <DatePicker label="Start date" value={field.value.toISOString()} onChange={(date) => field.onChange(date)} />
+                    <DatePicker label="Start date" value={field.value} onChange={(date) => field.onChange(date)} />
                     <p className="text-error text-xs">{errors.start_date?.message}</p>
                   </div>
                 )}
@@ -121,7 +126,7 @@ export default function NewTaskModal({ children, category }: Props) {
                 rules={{ required: "Deadline is required" }}
                 render={({ field }) => (
                   <div className="flex-1">
-                    <DatePicker label="Deadline" value={field.value.toISOString()} onChange={(date) => field.onChange(date)} />
+                    <DatePicker label="Deadline" value={field.value} onChange={(date) => field.onChange(date)} />
                     <p className="text-error text-xs">{errors.deadline?.message}</p>
                   </div>
                 )}
