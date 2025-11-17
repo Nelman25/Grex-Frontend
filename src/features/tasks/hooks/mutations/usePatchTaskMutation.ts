@@ -2,12 +2,19 @@ import type { EditableTaskFields } from "@/types/task";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editTask } from "../../api/taskApi";
 import type { Task } from "../../schemas/task.schema";
+import { toast } from "sonner";
 
 export const usePatchTaskMutation = (workspace_id: number) => {
   const queryCient = useQueryClient();
 
   return useMutation<Task, Error, { id: number; payload: EditableTaskFields }>({
     mutationFn: ({ id, payload }) => editTask(workspace_id, id, payload),
-    onSuccess: () => queryCient.invalidateQueries({ queryKey: ["tasks", { workspace_id }] }),
+    onSuccess: () => {
+      queryCient.invalidateQueries({ queryKey: ["tasks", { workspace_id }] });
+      toast.success("Task edited successfully");
+    },
+    onError: (error) => {
+      toast.error(`Error editing task: ${error.message}`);
+    },
   });
 };
