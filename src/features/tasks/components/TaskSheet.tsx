@@ -79,20 +79,14 @@ export default function TaskSheet({ children, task }: Props) {
   const handleAddSubtask = () => {
     if (!newSubtask.trim()) return;
 
-    createSubtask(
-      { description: newSubtask },
-      {
-        onSuccess: () => toast.success("Subtask added"),
-        onError: (err) => toast.error(err.message),
-      }
-    );
+    createSubtask({ description: newSubtask });
 
     setNewSubtask("");
     setIsAddingSubtask(false);
   };
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet modal={false} open={open} onOpenChange={setOpen}>
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent className="px-2">
         <div
