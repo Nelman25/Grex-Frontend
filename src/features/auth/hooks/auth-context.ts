@@ -3,6 +3,7 @@ import type { IUser } from "../components/AuthProvider";
 import type { IUserCredentials } from "@/types";
 
 interface AuthContextType {
+  isLoading: boolean;
   token: string | null;
   user: IUser | null;
   setToken: (value: React.SetStateAction<string | null>) => void;

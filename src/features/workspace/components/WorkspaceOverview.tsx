@@ -23,7 +23,7 @@ export default function WorkspaceOverview() {
 
   return (
     <div className="flex-1 max-w-7xl grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <ChartCard title="Priority Breakdown" subtitle="Get a holistic view of how work is being prioritized">
+      <ChartCard title="Task Status Overview" subtitle="See how work is progressing across pending, completed, and overdue tasks">
         <TaskPieChart tasks={tasks} />
       </ChartCard>
 
@@ -35,7 +35,7 @@ export default function WorkspaceOverview() {
         <TaskPriorityChart tasks={tasks} />
       </ChartCard>
 
-      <ChartCard title="Priority Breakdown" subtitle="Get a holistic view of how work is being prioritized">
+      <ChartCard title="Task Distribution" subtitle="See how tasks are spread across each workspace member">
         <TaskAssigneeDistributionChart tasks={tasks} />
       </ChartCard>
     </div>

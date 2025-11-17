@@ -1,4 +1,5 @@
 import PageLoader from "@/components/PageLoader";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/features/auth/components/AuthProvider";
 import WorkspaceContainer from "@/features/workspace/components/WorkspaceContainer";
@@ -15,6 +16,7 @@ const AppLayout = lazy(() => import("../components/AppLayout"));
 const MyTasks = lazy(() => import("./pages/MyTasks"));
 const MyCalendar = lazy(() => import("./pages/MyCalendar"));
 const Profile = lazy(() => import("./pages/Profile"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const withSuspense = (node: React.ReactElement) => <Suspense fallback={<PageLoader />}>{node}</Suspense>;
 
@@ -30,7 +32,11 @@ export default function App() {
     },
     {
       path: "/",
-      element: withSuspense(<AppLayout />),
+      element: withSuspense(
+        <ProtectedRoute>
+          <AppLayout />
+        </ProtectedRoute>
+      ),
       children: [
         { path: "profile", element: withSuspense(<Profile />) },
         { path: "dashboard", element: withSuspense(<Dashboard />) },
@@ -42,6 +48,7 @@ export default function App() {
         },
       ],
     },
+    { path: "*", element: withSuspense(<NotFound />) },
   ]);
 
   return (

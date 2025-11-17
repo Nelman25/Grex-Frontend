@@ -2,6 +2,7 @@ import api from "@/lib/axios";
 import type { IUserCredentials } from "@/types";
 import { useLayoutEffect, useState, type PropsWithChildren } from "react";
 import { AuthContext } from "../hooks/auth-context";
+import PageLoader from "@/components/PageLoader";
 
 export interface IUser {
   email: string;
@@ -14,11 +15,21 @@ export interface IUser {
 }
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem("access_token"));
-  const [user, setUser] = useState<IUser | null>(() => {
+  const [isLoading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
+
+  useLayoutEffect(() => {
+    const storedToken = localStorage.getItem("access_token");
     const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+
+    if (storedToken && storedUser) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    }
+
+    setLoading(false);
+  }, []);
 
   useLayoutEffect(() => {
     const authInterceptor = api.interceptors.request.use((config) => {
@@ -82,5 +93,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     localStorage.removeItem("user");
   };
 
-  return <AuthContext.Provider value={{ token, setToken, user, setUser, login, logout }}>{children}</AuthContext.Provider>;
+  if (isLoading) return <PageLoader />;
+
+  return (
+    <AuthContext.Provider value={{ isLoading, token, setToken, user, setUser, login, logout }}>{children}</AuthContext.Provider>
+  );
 };
