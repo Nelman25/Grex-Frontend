@@ -115,7 +115,7 @@ export default function KanbanContainer() {
         ) : (
           <button
             onClick={() => setIsAddNewCategory(true)}
-            className="min-w-[160px] mt-6 text-dark-subtle bg-dark-muted/30 rounded py-1 flex space-x-2 self-start justify-center items-center "
+            className="min-w-40 mt-6 text-dark-subtle bg-dark-muted/30 rounded py-1 flex space-x-2 self-start justify-center items-center "
           >
             <RxSection className="size-4 rotate-90" />
             <span>Add Category</span>

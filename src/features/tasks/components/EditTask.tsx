@@ -37,6 +37,11 @@ export default function EditTask({ task, onCancel }: Props) {
   });
 
   const onSubmit: SubmitHandler<EditableTaskFields> = (editedTask) => {
+    if (editedTask.start_date > editedTask.deadline) {
+      toast.error("Start date cannot be later than deadline");
+      return;
+    }
+
     editTask({ id: task.task_id, payload: editedTask });
 
     if (!isPending) onCancel();

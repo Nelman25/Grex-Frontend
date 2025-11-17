@@ -13,7 +13,6 @@ import SubtaskList from "../SubtaskList";
 import TaskSheet from "../TaskSheet";
 import { editTask } from "../../api/taskApi";
 import { useParams } from "react-router";
-import { toast } from "sonner";
 import type { Task } from "../../schemas/task.schema";
 
 type Props = {
@@ -40,8 +39,6 @@ export default function KanbanTask({ task, isDragging, dragHandleProps }: Props)
       marked_done_at: new Date(),
       status: "done",
     });
-
-    toast.success("Task completed!");
   }
 
   return (

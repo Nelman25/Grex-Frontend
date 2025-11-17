@@ -26,8 +26,8 @@ export type EditableTaskFields = {
   title: string;
   subject: string;
   description: string;
-  deadline: string;
-  start_date: string;
+  deadline: Date;
+  start_date: Date;
   priority_level: TaskPriority;
   category?: string;
   status?: TaskStatus;

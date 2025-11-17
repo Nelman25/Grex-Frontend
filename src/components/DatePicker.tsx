@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 type Props = {
   label: string;
-  value: string;
+  value?: Date;
   onChange?: (date: Date | undefined) => void;
 };
 
@@ -23,17 +23,17 @@ export function DatePicker({ label, value, onChange }: Props) {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" id="date" className="w-48 justify-between font-normal">
-            {value ? new Date(value)?.toLocaleDateString() : "Select date"}
+            {value ? value.toLocaleDateString() : "Select date"}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar
             mode="single"
-            selected={new Date(value)}
+            selected={value}
             captionLayout="dropdown"
             onSelect={(date) => {
-              onChange?.(date);
+              onChange?.(date ?? undefined);
               setOpen(false);
             }}
           />

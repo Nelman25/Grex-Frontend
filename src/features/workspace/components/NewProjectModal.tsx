@@ -20,6 +20,7 @@ import RHFFormField from "@/components/RHFFormField";
 import { useAuth } from "@/features/auth/hooks/auth-context";
 import { Navigate } from "react-router";
 import { useCreateWorkspace } from "../hooks/mutations/useCreateWorkspace";
+import { toast } from "sonner";
 
 const defaultValues = {
   name: "",
@@ -45,6 +46,11 @@ export function NewProjectModal({ children }: PropsWithChildren) {
   if (!user) return <Navigate to="/auth/signin" />;
 
   const onSubmit: SubmitHandler<NewProject> = async (project) => {
+    if (project.start_date > project.due_date) {
+      toast.error("Start date cannot be later than end date.");
+      return;
+    }
+    
     const newProject: NewProject = {
       ...project,
       created_by: user?.user_id,
@@ -106,11 +112,7 @@ export function NewProjectModal({ children }: PropsWithChildren) {
                   rules={{ required: "Start date is required" }}
                   render={({ field }) => (
                     <div>
-                      <DatePicker
-                        label="Start date"
-                        value={field.value?.toISOString() ?? null}
-                        onChange={(date) => field.onChange(date)}
-                      />
+                      <DatePicker label="Start date" value={field.value} onChange={(date) => field.onChange(date)} />
                       <p className="text-error text-xs">{errors.start_date?.message}</p>
                     </div>
                   )}
@@ -121,11 +123,7 @@ export function NewProjectModal({ children }: PropsWithChildren) {
                   rules={{ required: "End date is required" }}
                   render={({ field }) => (
                     <div>
-                      <DatePicker
-                        label="End date"
-                        value={field.value?.toISOString() ?? null}
-                        onChange={(date) => field.onChange(date)}
-                      />
+                      <DatePicker label="End date" value={field.value} onChange={(date) => field.onChange(date)} />
                       <p className="text-error text-xs">{errors.due_date?.message}</p>
                     </div>
                   )}
