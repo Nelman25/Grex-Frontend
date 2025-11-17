@@ -41,9 +41,8 @@ class WebSocketManager {
     console.log("Connecting to WebSocket for workspace:", workspaceId, "as user:", userId);
 
     try {
-      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       const token = localStorage.getItem("access_token");
-      const wsUrl = `${protocol}//localhost:8000/workspace/${workspaceId}/${userId}?token=${token}`;
+      const wsUrl = `${import.meta.env.VITE_WS_BASE_URL}/workspace/${workspaceId}/${userId}?token=${token}`;
 
       this.ws = new WebSocket(wsUrl);
 
