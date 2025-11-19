@@ -2,7 +2,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/features/auth/hooks/auth-context";
 import api from "@/lib/axios";
-import { type SignupUser, UserSchema } from "@/schemas/auth.schema";
+import { type SignupUser, UserSchema } from "@/features/auth/schemas/auth.schema";
 import axios from "axios";
 import { Form, Formik } from "formik";
 import { AlertCircleIcon, Loader2 } from "lucide-react";
